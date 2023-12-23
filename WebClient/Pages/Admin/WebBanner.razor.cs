@@ -1,6 +1,7 @@
 ﻿using Blazorise;
 using Contract;
 using Contract.Posts;
+using Contract.Services;
 using Contract.WebBanners;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
@@ -29,9 +30,10 @@ namespace WebClient.Pages.Admin
         public IEnumerable<string> Claims = new List<string>();
         public List<EnumBaseDto> BannerTypes = new List<EnumBaseDto>();
         public List<PostDto> Posts = new List<PostDto>();
-
+        public List<ServiceDto> Services = new List<ServiceDto>();
         public int? SelectedBannerType;
-        public Guid?  SelectedPost;
+        public Guid? SelectedService, SelectedPost;
+
         public IBrowserFile? WebsiteBannerFile { get; set; }
         public IBrowserFile? MobileBannerFile { get; set; }
         public string Base64EncodedWebsiteBannerData { set; get; }
@@ -204,7 +206,12 @@ namespace WebClient.Pages.Admin
             {
                 SelectedPost = !string.IsNullOrEmpty(EditingWebBanner.UrlRef) ? Guid.Parse(EditingWebBanner.UrlRef) : null;
             }
-          
+            else if (EditingWebBanner.BannerType == (int)WebBannerType.Service)
+            {
+                SelectedService = !string.IsNullOrEmpty(EditingWebBanner.UrlRef) ? Guid.Parse(EditingWebBanner.UrlRef) : null;
+            }
+
+
             if (!string.IsNullOrEmpty(service.WebsiteBannerUrl))
             {
                 using (HttpClient client = new HttpClient())
@@ -287,7 +294,30 @@ namespace WebClient.Pages.Admin
                     throw new FailedOperation(@L["FileSoBig"]);
             }, ActionType.UploadFile, false);
         }
-
+        public async Task GetServices(string filterText = "", int skip = 0, int take = 10)
+        {
+            try
+            {
+                var result = await _serviceService.GetListPagingAsync(new BaseFilterPagingDto()
+                {
+                    FilterText = filterText,
+                    Skip = skip,
+                    Take = take
+                });
+                if (result.IsSuccess)
+                {
+                    Services = result.Data;
+                }
+                else
+                {
+                    NotifyMessage(NotificationSeverity.Error, result.Message, 4000);
+                }
+            }
+            catch (Exception ex)
+            {
+                NotifyMessage(NotificationSeverity.Error, ex.Message, 4000);
+            }
+        }
         public async Task OnChangeSelectWebBanner(object value)
         {
             SelectedBannerType = (int)value;
@@ -299,7 +329,12 @@ namespace WebClient.Pages.Admin
                     HidePost = true;
                     HideService = true;
                     break;
-              
+                case (int)WebBannerType.Service:
+                    await GetServices();
+                    HideUrlTextBox = true;
+                    HidePost = true;
+                    HideService = false;
+                    break;
                 case (int)WebBannerType.News:
                     await GetPosts();
                     HideUrlTextBox = true;
@@ -318,7 +353,22 @@ namespace WebClient.Pages.Admin
             });
         }
 
-     
+
+
+        void ServiceOnLoadData(string value)
+        {
+            InvokeAsync(async () => {
+                await GetServices(value);
+                StateHasChanged();
+            });
+        }
+
+        public async Task ServiceOnLoadData(object value)
+        {
+            var argLoadData = (Radzen.LoadDataArgs)value;
+            string serviceFilterText = argLoadData.Filter;
+            await GetServices(serviceFilterText);
+        }
 
         public async Task OnChangeSelect(object value)
         {

@@ -1,10 +1,6 @@
 ﻿using Domain.AppConfigs;
 using Domain.AppHistories;
 using Domain.Departments;
-using Domain.DocumentFiles;
-using Domain.DocumentTypes;
-using Domain.FileFolders;
-using Domain.FileVersions;
 using Domain.Identity.RoleClaims;
 using Domain.Identity.Roles;
 using Domain.Identity.UserClaim;
@@ -15,6 +11,8 @@ using Domain.Identity.UserTokens;
 using Domain.Positions;
 using Domain.PostCategories;
 using Domain.Posts;
+using Domain.Services;
+using Domain.ServiceTypes;
 using Domain.StaticFiles;
 using Domain.UserDepartments;
 using Domain.WebBanners;
@@ -35,10 +33,9 @@ namespace SqlServ4r.EntityFramework
         public DbSet<Post> Posts { get; set; }
         public DbSet<WebBanner> WebBanners { get; set; }
         public DbSet<WebMenu> WebMenus { get; set; }
-        public DbSet<DocumentFile> DocumentFiles { get; set; }
-        public DbSet<FileFolder> FileFolders { get; set; }
+        public DbSet<ServiceType> ServiceTypes { get; set; }
+        public DbSet<Service> Services { get; set; }
         public DbSet<StaticFile> StaticFiles { get; set; }
-        public DbSet<DocumentType> DocumentTypes { get; set; }
         public MeworkCoreContext(DbContextOptions<MeworkCoreContext> options):base(options)
         {
         }
@@ -87,40 +84,6 @@ namespace SqlServ4r.EntityFramework
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            //FILE MANAGER
-            // if have a foreign key references to FileFolder then forbidden Deletetion
-            builder.Entity<DocumentFile>().HasOne<FileFolder>(x => x.FileFolder)
-                .WithMany(x => x.Files)
-                .HasForeignKey(x => x.DocumentFolderId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
-
-
-            builder.Entity<DocumentFile>().HasOne<User>(x => x.User)
-                .WithMany(x => x.CreatedFiles)
-                .HasForeignKey(x => x.CreatedBy)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<DocumentFile>().HasOne<DocumentType>(x => x.DocumentType)
-                .WithMany(x => x.DocumentFiles)
-                .HasForeignKey(x => x.DocumentTypeId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            builder.Entity<FileVersion>().
-                HasOne<DocumentFile>(x => x.DocumentFile)
-                .WithMany(x => x.FileVersions)
-                .HasForeignKey(x => x.FileId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-
-            builder.Entity<FileVersion>().HasOne<User>(x => x.User)
-                .WithMany(x => x.EditedFileVersions)
-                .HasForeignKey(x => x.EditBy)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
 
             //================SS2
 
@@ -164,6 +127,48 @@ namespace SqlServ4r.EntityFramework
                 .HasForeignKey(x => x.ModifiedBy)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+
+            //service 
+            builder.Entity<Service>().HasKey(sc => new { sc.Id });
+            builder.Entity<Service>().HasOne<StaticFile>(x => x.ImageFile)
+                .WithMany(x => x.Services)
+                .HasForeignKey(x => x.ImageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Service>().HasKey(sc => new { sc.Id });
+            builder.Entity<Service>().HasOne<ServiceType>(x => x.ServiceType)
+                .WithMany(x => x.Services)
+                .HasForeignKey(x => x.ServiceTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Service>().HasKey(sc => new { sc.Id });
+            builder.Entity<Service>().HasOne<User>(x => x.CreatedUser)
+                .WithMany(x => x.CreatedUserServices)
+                .HasForeignKey(x => x.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Service>().HasKey(sc => new { sc.Id });
+            builder.Entity<Service>().HasOne<User>(x => x.ModifiedUser)
+                .WithMany(x => x.ModifiedUserServices)
+                .HasForeignKey(x => x.ModifiedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //service type
+            builder.Entity<ServiceType>().HasKey(sc => new { sc.Id });
+            builder.Entity<ServiceType>().HasOne<StaticFile>(x => x.ImageFile)
+                .WithMany(x => x.ServiceTypes)
+                .HasForeignKey(x => x.ImageId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<ServiceType>().HasOne<User>(x => x.CreatedUser)
+                .WithMany(x => x.CreatedUserServiceTypes)
+                .HasForeignKey(x => x.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ServiceType>().HasOne<User>(x => x.ModifiedUser)
+                .WithMany(x => x.ModifiedUserServiceTypes)
+                .HasForeignKey(x => x.ModifiedBy)
+                .OnDelete(DeleteBehavior.Restrict);
 
             SetUniqueForProperties(builder);
         }

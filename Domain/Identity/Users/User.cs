@@ -1,10 +1,10 @@
 ﻿using Core.Enum;
 using Domain.AppHistories;
-using Domain.DocumentFiles;
-using Domain.FileVersions;
 using Domain.Positions;
 using Domain.PostCategories;
 using Domain.Posts;
+using Domain.Services;
+using Domain.ServiceTypes;
 using Domain.UserDepartments;
 using Domain.WebBanners;
 using Domain.WebMenus;
@@ -49,8 +49,6 @@ namespace Domain.Identity.Users
 
 
 
-        public List<FileVersion> EditedFileVersions { get; set; }
-        public List<DocumentFile> CreatedFiles { get; set; }
         public List<PostCategory> CreatedUserPostCategories { get; set; }
         public List<PostCategory> ModifiedUserPostCategories { get; set; }
 
@@ -68,5 +66,13 @@ namespace Domain.Identity.Users
 
         public Position Position { get; set; }
         public List<UserDepartment> UserDepartments { get; set;}
+
+
+
+        public List<ServiceType> CreatedUserServiceTypes { get; set; }
+        public List<ServiceType> ModifiedUserServiceTypes { get; set; }
+
+        public List<Service> CreatedUserServices { get; set; }
+        public List<Service> ModifiedUserServices { get; set; }
     }
 }

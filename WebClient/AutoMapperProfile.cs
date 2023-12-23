@@ -2,14 +2,13 @@
 using Contract;
 using Contract.AppConfigs;
 using Contract.Departments;
-using Contract.DocumentFiles;
-using Contract.DocumentTypes;
-using Contract.FileFolders;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Contract.Positions;
 using Contract.PostCategories;
 using Contract.Posts;
+using Contract.Services;
+using Contract.ServiceTypes;
 using Contract.WebBanners;
 using Contract.WebMenus;
 
@@ -31,23 +30,19 @@ namespace WebClient
            
             CreateMap<UserDto, CreateUserDto>().ReverseMap();
 
-
-
             CreateMap<CreateUpdatePositionDto, PositionDto>().ReverseMap();
 
             CreateMap<DepartmentDto, CreateUpdateDepartmentDto>().ReverseMap();
 
-            CreateMap<FileFolderDto, CreateUpdateFileFolderDto>().ReverseMap();
-
-        
-
-            CreateMap<DocumentTypeDto, CreateUpdateDocumentTypeDto>().ReverseMap();
-            CreateMap<DocumentFileDto, CreateUpdateDocumentFileDto>().ReverseMap();
-
             CreateMap<AppConfigDto, CreateUpdateAppConfigDto>().ReverseMap();
 
 
-       
+
+            CreateMap<ServiceTypeDto, Domain.ServiceTypes.ServiceType>().ReverseMap();
+            CreateMap<ServiceTypeDto, CreateUpdateServiceTypeDto>().ReverseMap();
+
+            CreateMap<ServiceDto, Domain.Services.Service>().ReverseMap();
+            CreateMap<ServiceDto, CreateUpdateServiceDto>().ReverseMap();
             CreateMap<UserDto, UserIdentityDto>();
             CreateMap<UserDto, UpdateUserProfileRequestDto>();
 

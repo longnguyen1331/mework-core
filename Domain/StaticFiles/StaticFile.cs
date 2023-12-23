@@ -1,5 +1,7 @@
 ﻿using Core.Enum;
 using Domain.AppConfigs;
+using Domain.Services;
+using Domain.ServiceTypes;
 
 namespace Domain.StaticFiles
 {
@@ -12,6 +14,8 @@ namespace Domain.StaticFiles
         public string Path { get; set; }
         public FileTypes FileType { get; set; } = FileTypes.Unknown;
 
+        public List<Service> Services { get; set; }
+        public List<ServiceType> ServiceTypes { get; set; }
         public List<AppConfig> AppConfigLogos { get; set; }
         
         public List<AppConfig> AppConfigIcons { get; set; }

@@ -1,0 +1,185 @@
+﻿@page "/services/{id}"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject ServiceService _serviceService;
+@inject ServiceTypeService _serviceTypeService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.ServiceTypes;
+@using WebClient.Service.Services
+@using Contract.Services;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+@inject IJSRuntime JSRuntime;
+@inject NavigationManager _navigationManager;
+
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 5px">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RadzenCard>
+    <EditForm Model="EditingService" OnValidSubmit="async () => { await UpdateService(); }">
+        <DataAnnotationsValidator />
+        <RadzenFieldset Text="@L["Service.Information"]">
+            <RadzenStack Gap="1rem">
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenCard  Style="height:220px;border: 2px dotted var(--rz-on-info-lighter)">
+                            <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 100%;max-width: 250px; max-height:200px" />
+                            <RZInputFile Icon="upload"
+                                         Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                         Style="display: flex;align-items: center; ;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                         Event="async (e) => { await OnChangeImageFile(e); }">
+                            </RZInputFile>
+                        </RadzenCard>
+                        <RZBR></RZBR>
+                         <RadzenRow>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">@L["IsHighLight"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingService.IsHighLight />
+                                <ValidationMessage For="@(() => EditingService.IsHighLight)" />
+                            </RadzenColumn>
+
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline">@L["IsVisibled"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingService.IsVisibled />
+                                <ValidationMessage For="@(() => EditingService.IsVisibled)" />
+                            </RadzenColumn>
+                            </RadzenRow>
+                            <RadzenRow>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["VIEWS"]</RadzenText>
+                                <RadzenNumeric Class="w-100" Disabled @bind-Value="EditingService.Views" />
+                                <ValidationMessage For="@(() => EditingService.Views)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="EditingService.ODX" />
+                                <ValidationMessage For="@(() => EditingService.ODX)" />
+                            </RadzenColumn>
+                             </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingService.Code" />
+                                <ValidationMessage For="@(() => EditingService.Code)" />
+
+                            </RadzenColumn>
+                            <RadzenColumn Size="5">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingService.Name" />
+                                <ValidationMessage For="@(() => EditingService.Name)" />
+
+                            </RadzenColumn>
+                            <RadzenColumn Size="5">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ServiceType"]</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@SelectedServiceTypeId Multiple="false"
+                                                TextProperty="Name"
+                                                ValueProperty="Id"
+                                                Placeholder="Select..."
+                                                Data=@ServiceTypes
+                                                Class="w-100" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow>
+                            <RadzenColumn Size="2">
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["OldCharges"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="EditingService.OldCharges" />
+                                <ValidationMessage For="@(() => EditingService.OldCharges)" />
+
+                            </RadzenColumn>
+                            <RadzenColumn Size="2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Service.Charges"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="EditingService.Charges" />
+                                <ValidationMessage For="@(() => EditingService.Charges)" />
+
+                            </RadzenColumn>
+
+                           
+                        </RadzenRow>
+                        <RadzenRow>
+                           
+                              <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Tags"]</RadzenText>
+                                <RadzenTextArea Name="txtarea_tag" Placeholder="Nhập vào đây..." @bind-Value="EditingService.Tags" Rows="1" Cols="30" Class="w-100" Change=@(args => TagOnChange(args)) />
+                                @foreach (string item in Tags)
+                                {
+                                    <RadzenButton Text="@item" Icon="delete" Click=@(() => RemoveTag(item)) />
+                                }
+
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+              <RadzenStack Gap="1rem">
+                <RZBR></RZBR>
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="@L["Service.Note"]">
+                             <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["Description"]</RadzenText>
+                                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingService.Description" Rows="5" Cols="30" Class="w-100" />
+
+                            </RadzenColumn>
+                            <RadzenRow>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["Note"]</RadzenText>
+                                    <RadzenHtmlEditor @bind-Value="@EditingService.Note" style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="@L["Service.SeoInformation"]">
+
+                            <RadzenRow>
+                                <RadzenColumn Size="12">
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingService.SeoTitle" />
+                                    <ValidationMessage For="@(() => EditingService.SeoTitle)" />
+                                </RadzenColumn>
+
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingService.Slug" />
+                                    <ValidationMessage For="@(() => EditingService.Slug)" />
+                                </RadzenColumn>
+
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["SeoKeyword"]</RadzenText>
+                                    <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingService.SeoKeyword" Rows="3" Cols="30" Class="w-100" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                                    <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingService.SeoDescription" Rows="3" Cols="30" Class="w-100" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+                <RZBR></RZBR>
+                <RadzenRow>
+                    <RadzenColumn Size="12">
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="back" Click="@BackToList" Text="@L["BackToList"]" />
+                        <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" />
+                    </RadzenColumn>
+                </RadzenRow>
+                  </RadzenStack>
+        </RadzenFieldset>
+      
+    </EditForm>
+</RadzenCard>
+
+

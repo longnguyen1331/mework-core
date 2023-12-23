@@ -2,6 +2,8 @@
 using Contract;
 using Contract.PostCategories;
 using Contract.Posts;
+using Contract.Services;
+using Contract.ServiceTypes;
 using Contract.WebMenus;
 using Core.Enum;
 using Core.Extension;
@@ -23,10 +25,11 @@ namespace WebClient.Pages.Admin
         public CreateUpdateWebMenuDto EditingWebMenu = new CreateUpdateWebMenuDto();
 
         public List<PostDto> Posts = new List<PostDto>();
+        public List<ServiceDto> Services = new List<ServiceDto>();
+        public List<ServiceTypeDto> ServiceTypes = new List<ServiceTypeDto>();
         public List<PostCategoryDto> PostCategories = new List<PostCategoryDto>();
 
-
-        public Guid?  SelectedPostCategory, SelectedPostDetail;
+        public Guid? SelectedServiceType, SelectedPostCategory, SelectedPostDetail, SelectedServiceDetail;
         public Guid EditingWebMenuId { get; set; }
          [Inject]  IMessageService _messageService { get; set; }
         public string Base64EncodedImageData { set; get; }
@@ -40,6 +43,8 @@ namespace WebClient.Pages.Admin
         public string UrlRef { set; get; } = string.Empty;
         private bool HideUrlTextBox { get; set; } = false;
         private bool HidePostCategory { get; set; } = true;
+        private bool HideServiceType { get; set; } = true;
+        private bool HideServiceDetail { get; set; } = true;
         private bool HidePostDetail { get; set; } = true;
         public WebMenu()
         {
@@ -351,9 +356,34 @@ namespace WebClient.Pages.Admin
                     HideUrlTextBox = false;
                     HidePostCategory = true;
                     HidePostDetail = true;
+                    HideServiceType = true;
+                    HideServiceDetail = true;
 
                     NewWebMenu.MenuSuffix = EditingWebMenu.MenuSuffix = "";
 
+                    break;
+                case (int)WebMenuType.ServiceType:
+                    HideServiceType = false;
+                    await GetServiceType();
+                    //Getservice
+
+                    HideUrlTextBox = true;
+                    HidePostCategory = true;
+                    HidePostDetail = true;
+                    HideServiceDetail = true;
+                    NewWebMenu.MenuSuffix = EditingWebMenu.MenuSuffix = WebMenuType.ServiceType.GetDescriptionOrName();
+                    break;
+
+                case (int)WebMenuType.ServiceDetail:
+                    HideServiceDetail = false;
+                    await GetServices();
+                    //get service detail
+
+                    HideUrlTextBox = true;
+                    HidePostCategory = true;
+                    HideServiceType = true;
+                    HidePostDetail = true;
+                    NewWebMenu.MenuSuffix = EditingWebMenu.MenuSuffix = WebMenuType.ServiceDetail.GetDescriptionOrName();
                     break;
 
                 case (int)WebMenuType.PostCategory:
@@ -362,7 +392,9 @@ namespace WebClient.Pages.Admin
                     //get posts
 
                     HideUrlTextBox = true;
+                    HideServiceType = true;
                     HidePostDetail = true;
+                    HideServiceDetail = true;
                     NewWebMenu.MenuSuffix = EditingWebMenu.MenuSuffix = WebMenuType.PostCategory.GetDescriptionOrName();
                     break;
 
@@ -371,14 +403,51 @@ namespace WebClient.Pages.Admin
                     //get post detail
                     await GetPosts();
                     HideUrlTextBox = true;
+                    HideServiceType = true;
+                    HideServiceDetail = true;
                     HidePostCategory = true;
                     NewWebMenu.MenuSuffix = EditingWebMenu.MenuSuffix = WebMenuType.PostDetail.GetDescriptionOrName();
                     break;
-
                 default: break;
             }
         }
+        void ServiceOnLoadData(string value)
+        {
+            InvokeAsync(async () => {
+                await GetServices(value);
+                StateHasChanged();
+            });
+        }
 
+        public async Task GetServiceType()
+        {
+            ServiceTypes = await _serviceTypeService.GetListAsync();
+        }
+
+        public async Task GetServices(string filterText = "", int skip = 0, int take = 10)
+        {
+            try
+            {
+                var result = await _serviceService.GetListPagingAsync(new BaseFilterPagingDto()
+                {
+                    FilterText = filterText,
+                    Skip = skip,
+                    Take = take
+                });
+                if (result.IsSuccess)
+                {
+                    Services = result.Data;
+                }
+                else
+                {
+                    NotifyMessage(NotificationSeverity.Error, result.Message, 4000);
+                }
+            }
+            catch (Exception ex)
+            {
+                NotifyMessage(NotificationSeverity.Error, ex.Message, 4000);
+            }
+        }
         public async Task OnChangeSelect(object value)
         {
             if (value != null)

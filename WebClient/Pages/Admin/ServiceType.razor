@@ -1,0 +1,202 @@
+﻿@page "/service-types"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject ServiceTypeService _serviceTypeService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.ServiceTypes
+@using Contract.ServiceTypes;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+<h3>@HeaderTitle</h3>
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@ServiceTypes" TItem="ServiceTypeDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="Image" TextAlign="TextAlign.Center" Title="@L["Image"]" Frozen="true" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.ImageUrl" Style="max-width:120px; max-height:60px" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="100px" />
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="Description" TextAlign="TextAlign.Center" Title="@L["Description"]" Frozen="true" Width="160px" />
+
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="IsHighLight" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsHighLight"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsHighLight />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="IsVisibled" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsVisibled"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsVisibled />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="ServiceTypeDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ServiceType"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewServiceType" OnValidSubmit="async () => { await CreateServiceType(); }">
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter); min-height:180px;">
+                                <RZInputFile Icon="upload"
+                                             Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                             Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                             Event="async (e) => { await OnChangeImageFileAtNewModal(e); }">
+                                </RZInputFile>
+                            </RadzenCard>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="4">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewServiceType.Code" />
+                                <ValidationMessage For="@(() => NewServiceType.Code)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="8">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewServiceType.Name" />
+                                <ValidationMessage For="@(() => NewServiceType.Name)" />
+
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Description"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewServiceType.Description" />
+                                <ValidationMessage For="@(() => NewServiceType.Description)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsHighLight"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@NewServiceType.IsHighLight />
+                                <ValidationMessage For="@(() => NewServiceType.IsHighLight)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@NewServiceType.IsVisibled />
+                                <ValidationMessage For="@(() => NewServiceType.IsVisibled)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="NewServiceType.ODX" />
+                                <ValidationMessage For="@(() => NewServiceType.ODX)" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ServiceType"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingServiceType" OnValidSubmit="async () => { await UpdateServiceType(); }">
+
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter); min-height:180px;">
+                                <RZInputFile Icon="upload"
+                                             Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                             Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: #20c997"
+                                             Event="async (e) => { await OnChangeImageFileAtEditingModal(e); }">
+                                </RZInputFile>
+                            </RadzenCard>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="4">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingServiceType.Code" />
+                                <ValidationMessage For="@(() => EditingServiceType.Code)" />
+                            </RadzenColumn>
+                             <RadzenColumn Size="8">
+
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingServiceType.Name" />
+                                <ValidationMessage For="@(() => EditingServiceType.Name)" />
+                            </RadzenColumn>
+                             <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Description"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingServiceType.Description" />
+                                <ValidationMessage For="@(() => EditingServiceType.Description)" />
+                            </RadzenColumn>
+                             <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsHighLight"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingServiceType.IsHighLight />
+                                <ValidationMessage For="@(() => EditingServiceType.IsHighLight)" />
+                            </RadzenColumn>
+                             <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" >@L["IsVisibled"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingServiceType.IsVisibled />
+                                <ValidationMessage For="@(() => EditingServiceType.IsVisibled)" />
+                            </RadzenColumn>
+                             <RadzenColumn Size="3">
+                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                <RadzenNumeric Class="w-100" @bind-Value="EditingServiceType.ODX" />
+                <ValidationMessage For="@(() => EditingServiceType.ODX)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

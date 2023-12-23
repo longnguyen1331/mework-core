@@ -1,0 +1,77 @@
+﻿@page "/services"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject ServiceService _serviceService;
+@inject ServiceTypeService _serviceTypeService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.ServiceTypes;
+@using WebClient.Service.Services
+@using Contract.Services;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+@inject IJSRuntime JSRuntime;
+@inject NavigationManager _navigationManager;
+
+<h3>@HeaderTitle</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="async () => { await GoToCreatePage(); }" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Services" TItem="ServiceDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="ServiceDto" Property="Image" TextAlign="TextAlign.Center" Title="@L["Image"]" Frozen="false" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.ImageUrl" Style="max-width:140px" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="false" Width="100px" />
+            <RadzenDataGridColumn TItem="ServiceDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="false" Width="260px" />
+            <RadzenDataGridColumn TItem="ServiceDto" Property="ServiceTypeName" TextAlign="TextAlign.Center" Title="@L["ServiceTypeName"]" Frozen="false" Width="200px" />
+            <RadzenDataGridColumn TItem="ServiceDto" Property="IsHighLight" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsHighLight"]" Width="115px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsHighLight />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceDto" Property="IsVisibled" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsVisibled"]" Width="100px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsVisibled />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ServiceDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="false" Width="80px" />
+            <RadzenDataGridColumn TItem="ServiceDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="false" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await GoToEditPage(data.Id.ToString()); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+

@@ -3,12 +3,16 @@
 @using ButtonType = Radzen.ButtonType
 @inject WebMenuService _webMenuService;
 @inject PostCategoryService _postCategoryService;
+@inject ServiceService _serviceService;
+@inject ServiceTypeService _serviceTypeService;
 @inject PostService _postService;
 @inherits BaseBlazorPage
 @using Core.Const
 @using WebClient.Service.PostCategories;
 @using WebClient.Service.Posts;
 @using WebClient.Service.WebMenus
+@using WebClient.Service.ServiceTypes;
+@using WebClient.Service.Services;
 @using Contract.WebMenus;
 @using Variant = Radzen.Variant
 @using WebClient.Service.Upload
@@ -121,6 +125,18 @@
                                                             ValueProperty="Id"
                                                             Placeholder="Select..."
                                                             Data=@Posts
+                                                                Class="w-100" />
+                                            }
+                                            @if (!HideServiceType)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ServiceType"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                                @bind-Value=@SelectedServiceType Multiple="false"
+                                                                Change="async (e) => { await OnChangeSelect(e); }"
+                                                                TextProperty="Name"
+                                                                ValueProperty="Id"
+                                                                Placeholder="Select..."
+                                                                Data=@ServiceTypes
                                                                 Class="w-100" />
                                             }
                                             @if (!HidePostCategory)
@@ -277,6 +293,20 @@
                                                             Data=@Posts
                                                                 Class="w-100" />
                                             }
+                                            @if (!HideServiceDetail)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Service"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                                @bind-Value=@SelectedServiceDetail Multiple="false"
+                                                                SearchTextChanged="@(args => ServiceOnLoadData(args))"
+                                                                Change="async (e) => { await OnChangeSelect(e); }"
+                                                                TextProperty="Name"
+                                                                ValueProperty="Id"
+                                                                Placeholder="Select..."
+                                                                Data=@Services
+                                                                Class="w-100" />
+                                            }
+
                                             @if (!HidePostCategory)
                                             {
                                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostCategory"]</RadzenText>

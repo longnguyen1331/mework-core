@@ -2,9 +2,11 @@
 @attribute [Authorize(Roles = "ADMIN,WEBSITE")]
 @using ButtonType = Radzen.ButtonType
 @inject WebBannerService _webBannerService;
+@inject ServiceService _serviceService;
 @inject PostService _postService;
 @inherits BaseBlazorPage
 @using Core.Const
+@using WebClient.Service.Services;
 @using WebClient.Service.Posts;
 @using WebClient.Service.WebBanners
 @using Contract.WebBanners;
@@ -146,7 +148,19 @@
                                         <RadzenTextBox Class="w-100" @bind-Value="NewWebBanner.UrlRef" />
                                         <ValidationMessage For="@(() => NewWebBanner.UrlRef)" />
                                     }
-                                    
+                                    @if (!HideService)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Service"]</RadzenText>
+                                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                        @bind-Value=@SelectedService Multiple="false"
+                                                        SearchTextChanged="@(args => ServiceOnLoadData(args))"
+                                                        Change="async (e) => { await OnChangeSelect(e); }"
+                                                        TextProperty="Name"
+                                                        ValueProperty="Id"
+                                                        Placeholder="Select..."
+                                                        Data=@Services
+                                                        Class="w-100" />
+                                    }
                                     @if (!HidePost)
                                     {
                                         <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post"]</RadzenText>

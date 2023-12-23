@@ -2,27 +2,28 @@ using AutoMapper;
 using Contract.AppConfigs;
 using Contract.AppHistories;
 using Contract.Departments;
-using Contract.DocumentFiles;
-using Contract.DocumentTypes;
 using Contract.Files;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
 using Contract.Positions;
 using Contract.PostCategories;
 using Contract.Posts;
+using Contract.Services;
+using Contract.ServiceTypes;
 using Contract.WebBanners;
 using Contract.WebMenus;
+using Core.Extension;
 using Core.Helper;
 using Domain.AppConfigs;
 using Domain.AppHistories;
 using Domain.Departments;
-using Domain.DocumentFiles;
-using Domain.DocumentTypes;
 using Domain.Identity.Roles;
 using Domain.Identity.Users;
 using Domain.Positions;
 using Domain.PostCategories;
 using Domain.Posts;
+using Domain.Services;
+using Domain.ServiceTypes;
 using Domain.StaticFiles;
 using Domain.WebBanners;
 using Domain.WebMenus;
@@ -109,14 +110,27 @@ namespace Application
                 .ForMember(dest => dest.PictureUrl,
                     opt => opt.MapFrom(src => src.Picture != null ? src.Picture.URL : string.Empty));
             CreateMap<CreateUpdatePostDto, Post>().ReverseMap();
+            CreateMap<ServiceTypeDto, ServiceType>();
+            CreateMap<ServiceType, ServiceTypeDto>()
+                .ForMember(dest => dest.ImageUrl,
+                    opt => opt.MapFrom(src => src.ImageFile.URL))
+                .ForMember(dest => dest.Slug,
+                    opt => opt.MapFrom(src => src.Name.GenerateSlug()));
 
-            CreateMap<DocumentType, DocumentTypeDto>().ReverseMap();
-            CreateMap<CreateUpdateDocumentTypeDto, DocumentType>().ReverseMap();
 
-            CreateMap<DocumentFile, DocumentFileDto>().ReverseMap();
-            CreateMap<CreateUpdateDocumentFileDto, DocumentFile>().ReverseMap();
+            CreateMap<ServiceDto, Service>();
+            CreateMap<Service, ServiceDto>()
+                .ForMember(dest => dest.ServiceTypeCode,
+                    opt => opt.MapFrom(src => src.ServiceType.Code))
+                .ForMember(dest => dest.ServiceTypeName,
+                    opt => opt.MapFrom(src => src.ServiceType.Name))
+                .ForMember(dest => dest.ImageUrl,
+                    opt => opt.MapFrom(src => src.ImageFile.URL));
+            CreateMap<CreateUpdateServiceDto, Service>().ReverseMap();
 
-            CreateMap<DocumentFileWithNavProperties, DocumentFileWithNavPropertiesDto>().ReverseMap();
+
+            CreateMap<CreateUpdateServiceTypeDto, ServiceType>().ReverseMap();
+
         }
     }
 }
