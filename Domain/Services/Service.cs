@@ -34,7 +34,6 @@ namespace Domain.Services
         public string? SeoKeyword { get; set; }
         [Column(TypeName = "ntext")]
         public string? SeoDescription { get; set; }
-        public Gender? Gender { get; set; }
         [Column(TypeName = "ntext")]
         public string? Note { get; set; }
         public int Views { get; set; } = 0;

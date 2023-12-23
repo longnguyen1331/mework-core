@@ -128,7 +128,7 @@ namespace Application.Services
                                           ImageId = image.Id,
                                           ServiceTypeId = serviceType.Id,
                                           ServiceTypeName = serviceType.Name,
-                                          GenderText = ((Gender)service.Gender).ToString(),
+                                          
                                           Charges = service.Charges,
                                           OldCharges = service.OldCharges,
                                           Description = service.Description,
@@ -174,7 +174,6 @@ namespace Application.Services
                                           ImageId = image.Id,
                                           ServiceTypeId = serviceType.Id,
                                           ServiceTypeName = serviceType.Name,
-                                          GenderText = ((Gender)service.Gender).ToString(),
                                           Charges = service.Charges,
                                           OldCharges = service.OldCharges,
                                           Description = service.Description,
@@ -229,7 +228,7 @@ namespace Application.Services
                                           ImageId = imgs.Id,
                                           ServiceTypeId = svt.Id,
                                           ServiceTypeName = svt.Name,
-                                          GenderText = ((Gender)service.Gender).ToString(),
+                                          
                                           Charges = service.Charges,
                                           OldCharges = service.OldCharges,
                                           Description = service.Description,
@@ -263,7 +262,6 @@ namespace Application.Services
             try
             {
                 List<string> tags = filter.Tag != null && !string.IsNullOrEmpty(filter.Tag) ? filter.Tag.Split(',').ToList() : new List<string>();
-                List<string> iCD10s = filter.ICD10 != null && !string.IsNullOrEmpty(filter.ICD10) ? filter.ICD10.Split(',').ToList() : new List<string>();
 
                 result.Data = new ServiceSearchResultDto();
 
@@ -291,7 +289,7 @@ namespace Application.Services
                                     ImageId = imgs.Id,
                                     ServiceTypeId = svt.Id,
                                     ServiceTypeName = svt.Name,
-                                    GenderText = ((Gender)service.Gender).ToString(),
+                                    
                                     Charges = service.Charges,
                                     OldCharges = service.OldCharges,
                                     Description = service.Description,
@@ -317,8 +315,6 @@ namespace Application.Services
 
                 if (tags.Any())
                     services = services.Where(x => x.Tags.Split(',').Intersect(tags).Count() > 0);
-                if (iCD10s.Any())
-                    services = services.Where(x => x.Icd10.Split(',').Intersect(iCD10s).Count() > 0);
 
                 result.Data.TotalItems = services.Count();
 
@@ -371,7 +367,7 @@ namespace Application.Services
                         ImageId = service.ImageFile?.Id,
                         ServiceTypeId = service.ServiceType.Id,
                         ServiceTypeName = service.ServiceType.Name,
-                        GenderText = ((Gender)service.Gender).ToString(),
+                        
                         Charges = service.Charges,
                         OldCharges = service.OldCharges,
                         Description = service.Description ?? string.Empty,
