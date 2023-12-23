@@ -1,0 +1,38 @@
+﻿@page "/login"
+@layout DefaultLayout
+@inject UserManagerService _userManagerService;
+@inject NavigationManager _navigationManager;
+@inherits BaseBlazorPage
+@using System
+@using WebClient.Service.Users
+@using Color = MudBlazor.Color
+
+<div class="bg_login">
+<RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden; height:660px">
+    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-info rz-p-12" style="text-align: center;">
+        <RadzenText TextStyle="TextStyle.DisplayH4" TagName="TagName.H4" Class="rz-color-white mb-4">Welcome!</RadzenText>
+            <RadzenText TextStyle="TextStyle.H6" Class="rz-color-white">HỆ THỐNG THÔNG TIN NỘI BỘ</RadzenText>
+           @* <RadzenText TextStyle="TextStyle.Overline" Class="rz-color-white">
+                Admin: 0965329866 password: 123456 <br />
+                Employees: 0906262621 password: 0906262621
+
+
+            </RadzenText>*@
+    </RadzenCard>
+    <RadzenCard Class="rz-shadow-0 rz-p-12">
+        <RadzenTemplateForm Data=@("SimpleLogin")>
+            <RadzenLogin AllowResetPassword="false" PasswordText="true"
+                         AllowRegister="false" AllowRememberMe="true" RememberMe="true"
+                         Login=@(async (args) => await OnLogin(args, "Simple login")) />
+        </RadzenTemplateForm>
+    </RadzenCard>
+</RadzenStack>
+
+
+
+
+@if (IsLoading)
+{
+    <MudProgressLinear Color="Color.Primary" Striped="true"  Indeterminate="true"   Style="border-radius: 5px;position: absolute;top: 0;"/>
+}
+</div>

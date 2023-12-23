@@ -1,0 +1,44 @@
+﻿@page "/report"
+@attribute [Authorize(Roles = "ADMIN")]
+@inherits BaseBlazorPage
+
+@using Core.Const
+@using Core.Enum
+@using Color = MudBlazor.Color
+@using Variant = Radzen.Variant
+@using System.Globalization
+@using Size = MudBlazor.Size
+@inject NavigationManager _navigationManager;
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 10px">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+
+<RZBR></RZBR>
+
+<RadzenPanel AllowCollapse="true" Collapsed="false" Class="rz-col-12 rz-col-md-6 rz-col-lg-4 rz-mx-auto">
+    <HeaderTemplate>
+    </HeaderTemplate>
+    <ChildContent>
+        <Blazorise.Row>
+            <Blazorise.Column ColumnSize="ColumnSize.Is12">
+                <RadzenRow RowGap="0">
+                </RadzenRow>
+                <RadzenRow RowGap="0">
+                    <RadzenColumn SizeSM="12">
+                        <RadzenCard>
+                        </RadzenCard>
+                    </RadzenColumn>
+                </RadzenRow>
+            </Blazorise.Column>
+        </Blazorise.Row>
+    </ChildContent>
+</RadzenPanel>
+

@@ -1,0 +1,708 @@
+﻿@page "/app-config"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using WebClient.Service.AppConfigs
+@using ButtonType = Radzen.ButtonType
+@inject AppConfigService _appConfigService;
+@inherits BaseBlazorPage
+@using Contract.AppConfigs;
+@using WebClient.Service.JS
+@using WebClient.Service.Upload
+@using Variant = Radzen.Variant
+@using Color = MudBlazor.Color
+@inject NavigationManager _navigationManager;
+@inject UploadService _uploadService;
+<h3>@L["AppConfig"]</h3>
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Icon="post_add" Click="@ShowNewModal" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+<MudOverlay Visible="IsVisible" DarkBackground="true" Absolute="true">
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+</MudOverlay>
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@AppConfigs" TItem="AppConfigDto" ColumnWidth="300px"
+                    FilterMode="FilterMode.Advanced"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowColumnPicking="true"
+                    Style="width: 100%">
+        <Columns>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="CompanyName" Title="@L["AppConfig.Trigger"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSelectBar @bind-Value="@data.IsApply" Change="async (e) => { await OnChangeSelectBar(e, data.Id); }" TValue="bool" class="mb-5">
+                        <Items>
+                            <RadzenSelectBarItem Text="On" Value="true" />
+                            <RadzenSelectBarItem Text="Off" Value="false" />
+                        </Items>
+                    </RadzenSelectBar>
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="CompanyName" Title="@L["AppConfig.CompanyName"]" Width="160px" />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="Code" Title="@L["Code"]" Width="160px" />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="IsApply" Title="@L["Logo"]" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.LogoURL" class="rz-gravatar" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="IsApply" Title="@L["Icon"]" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.IconURL" class="rz-gravatar" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="EnableNotificationByEmail" Title="@L["AppConfig.EnableNotificationByEmail"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.EnableNotificationByEmail Disabled="true" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="MailHost" Title="@L["AppConfig.MailHost"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="MailPort" Title="@L["AppConfig.MailPort"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="MailName" Title="@L["AppConfig.MailName"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="Password" Title="@L["Password"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="Firebase" Title="@L["AppConfig.Firebase"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="APIKey" Title="@L["AppConfig.APIKey"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="AuthDomain" Title="@L["AppConfig.AuthDomain"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="MessagingSenderId" Title="@L["AppConfig.MessagingSenderId"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="APPID" Title="@L["AppConfig.APPID"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="ServerKey" Title="@L["AppConfig.ServerKey"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="EnableJobAssignment" Title="@L["AppConfig.EnableJobAssignment"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.EnableJobAssignment Disabled="true" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="SeoTitle" Title="@L["AppConfig.SeoTitle"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="SeoKeyword" Title="@L["AppConfig.SeoKeyword"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="SeoDescription" Title="@L["AppConfig.SeoDescription"]" Width="160px" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="PrimaryColor" Title="@L["AppConfig.PrimaryColor"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenTextBox Disabled="true" class="w-100" Style="@("background-color: " + data.PrimaryColor)" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="SecondaryColor" Title="@L["AppConfig.SecondaryColor"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenTextBox Disabled="true" class="w-100" Style="@("background-color: " + data.SecondaryColor)" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="HeaderCode" TextAlign="TextAlign.Center" Title="@L["AppConfig.HeaderCode"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Phone" TextAlign="TextAlign.Center" Title="@L["AppConfig.Phone"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Email" TextAlign="TextAlign.Center" Title="@L["AppConfig.Email"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Address" TextAlign="TextAlign.Center" Title="@L["AppConfig.Address"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="GoogleAnalytic" TextAlign="TextAlign.Center" Title="@L["AppConfig.GoogleAnalytic"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="GoogleAppName" TextAlign="TextAlign.Center" Title="@L["AppConfig.GoogleAppName"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="GoogleAPIKey" TextAlign="TextAlign.Center" Title="@L["AppConfig.GoogleAPIKey"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="GoogleClientId" TextAlign="TextAlign.Center" Title="@L["AppConfig.GoogleClientId"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="GoogleClientSecret" TextAlign="TextAlign.Center" Title="@L["AppConfig.GoogleClientSecret"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="GoogleEnable" Title="@L["AppConfig.GoogleEnable"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.GoogleEnable Disabled="true" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="FacebookAppName" TextAlign="TextAlign.Center" Title="@L["AppConfig.FacebookAppName"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="FacebookAPIKey" TextAlign="TextAlign.Center" Title="@L["AppConfig.FacebookAPIKey"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="FacebookPixel" TextAlign="TextAlign.Center" Title="@L["AppConfig.FacebookPixel"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="FacebookAppSecret" TextAlign="TextAlign.Center" Title="@L["AppConfig.FacebookAppSecret"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" TextAlign="TextAlign.Center" Property="FacebookEnable" Title="@L["AppConfig.FacebookEnable"]" Width="160px" Visible=false>
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.FacebookEnable Disabled="true" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Latitude" TextAlign="TextAlign.Center" Title="@L["AppConfig.Latitude"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Longitude" TextAlign="TextAlign.Center" Title="@L["AppConfig.Longitude"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Terms" TextAlign="TextAlign.Center" Title="@L["AppConfig.Terms"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Conditions" TextAlign="TextAlign.Center" Title="@L["AppConfig.Conditions"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="Introduction" TextAlign="TextAlign.Center" Title="@L["AppConfig.Introduction"]" Width="160px" Filterable="false" Visible=false />
+            <RadzenDataGridColumn TItem="AppConfigDto" Property="CompanyName" TextAlign="TextAlign.Center" Title="@L["Action"]" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<RZModel @ref="CreateModal" Width="70vw" Title="@L["AppConfig"]" ShowTitle="true">
+    <EditForm Model="NewAppConfig" OnValidSubmit="async () => { await CreateAppConfig(); }">
+        <FluentValidator TValidator="AppConfigValidator" />
+
+        <RadzenTabs RenderMode="TabRenderMode.Client">
+            <Tabs>
+                <RadzenTabsItem Text="@L["AppConfig.General"]">
+                    <table id="myTable" style="width: 100%;  border-collapse: separate; border-spacing: 10px;">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.CompanyName"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.CompanyName" />
+                                    <ValidationMessage For="@(() => NewAppConfig.CompanyName)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.Firebase"]</RadzenText>
+                                    <RadzenSwitch @bind-Value="NewAppConfig.Firebase" />
+                                    <ValidationMessage For="@(() => NewAppConfig.Firebase)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["Code"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Code" />
+                                    <ValidationMessage For="@(() => NewAppConfig.Code)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.APIKey"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.APIKey" />
+                                    <ValidationMessage For="@(() => NewAppConfig.APIKey)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.EnableNotificationByEmail"]</RadzenText>
+                                    <RadzenSwitch @bind-Value="NewAppConfig.EnableNotificationByEmail" />
+                                    <ValidationMessage For="@(() => NewAppConfig.EnableNotificationByEmail)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.AuthDomain"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.AuthDomain" />
+                                    <ValidationMessage For="@(() => NewAppConfig.AuthDomain)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailHost"]</RadzenText>
+                                    <RadzenNumeric Class="w-100" @bind-Value="NewAppConfig.MailHost" />
+                                    <ValidationMessage For="@(() => NewAppConfig.MailHost)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MessagingSenderId"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.MessagingSenderId" />
+                                    <ValidationMessage For="@(() => NewAppConfig.MessagingSenderId)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailPort"]</RadzenText>
+                                    <RadzenNumeric Class="w-100" @bind-Value="NewAppConfig.MailPort" />
+                                    <ValidationMessage For="@(() => NewAppConfig.MailPort)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.APPID"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.APPID" />
+                                    <ValidationMessage For="@(() => NewAppConfig.APPID)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailName"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.MailName" />
+                                    <ValidationMessage For="@(() => NewAppConfig.MailName)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.ServerKey"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.ServerKey" />
+                                    <ValidationMessage For="@(() => NewAppConfig.ServerKey)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["Password"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Password" />
+                                    <ValidationMessage For="@(() => NewAppConfig.Password)" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.EnableJobAssignment"]</RadzenText>
+                                        <RadzenSwitch @bind-Value="NewAppConfig.EnableJobAssignment" />
+                                        <ValidationMessage For="@(() => NewAppConfig.EnableJobAssignment)" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RZInputFile Icon="workspace_premium"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadLogo"]"
+                                                 Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: #20c997"
+                                                 Event="async (e) => { await OnChangeLogoFileAtNewModal(e); }">
+                                    </RZInputFile>
+                                </td>
+                                <td>
+                                    <RZInputFile Icon="insert_emoticon"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadIcon"]"
+                                                 Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: indigo"
+                                                 Event="async (e) => { await OnChangeIconFileAtNewModal(e); }">
+                                    </RZInputFile>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.SendingContentEmail"]</RadzenText>
+                        <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewAppConfig.SendingEmailContent" Rows="10" Cols="30" Class="w-100" />
+                    </div>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.WebsiteInformation"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.HeaderCode"]</RadzenText>
+                            <RadzenTextArea  Class="w-100" @bind-Value="NewAppConfig.HeaderCode" Rows="5" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Phone"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Phone" />
+                            <ValidationMessage For="@(() => NewAppConfig.Phone)" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Email"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Email" />
+                            <ValidationMessage For="@(() => NewAppConfig.Email)" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Address"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Address" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.SEOInformation"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoTitle"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.SeoTitle" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoKeyword"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.SeoKeyword" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is8" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoDescription"]</RadzenText>
+                            <RadzenTextArea Class="w-100" @bind-Value="NewAppConfig.SeoDescription" Rows="5" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is2" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.PrimaryColor"]</RadzenText>
+                            <RadzenColorPicker @bind-Value=@NewAppConfig.PrimaryColor ShowHSV=true ShowRGBA=true />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is2" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SecondaryColor"]</RadzenText>
+                            <RadzenColorPicker @bind-Value=@NewAppConfig.SecondaryColor ShowHSV=true ShowRGBA=true />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.GoogleAuth"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAnalytic"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.GoogleAnalytic" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAppName"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.GoogleAppName" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAPIKey"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.GoogleAPIKey" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleClientId"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.GoogleClientId" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleClientSecret"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.GoogleClientSecret" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="d-flex align-items-end mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" class="mr-2">@L["AppConfig.GoogleEnable"]</RadzenText>
+                            <RadzenSwitch @bind-Value="NewAppConfig.GoogleEnable" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.FacebookAuth"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAppName"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.FacebookAppName" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAPIKey"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.FacebookAPIKey" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookPixel"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.FacebookPixel" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAppSecret"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.FacebookAppSecret" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="d-flex align-items-end mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" class="mr-2">@L["AppConfig.FacebookEnable"]</RadzenText>
+                            <RadzenSwitch @bind-Value="NewAppConfig.FacebookEnable" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.Other"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Latitude"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Latitude" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Longitude"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewAppConfig.Longitude" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Terms"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@NewAppConfig.Terms style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Conditions"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@NewAppConfig.Conditions style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Introduction"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@NewAppConfig.Introduction style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+
+
+        <div class="Row" style="float: right">
+            <div class="col">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </div>
+        </div>
+    </EditForm>
+
+</RZModel>
+
+
+<RZModel @ref="EditingModal" Width="70vw" Title="@L["AppConfig"]" ShowTitle="true">
+    <EditForm Model="EditingAppConfig" OnValidSubmit="async () => { await UpdateAppConfig(); }">
+        <FluentValidator TValidator="AppConfigValidator" />
+
+        <RadzenTabs RenderMode="TabRenderMode.Client">
+            <Tabs>
+                <RadzenTabsItem Text="@L["AppConfig.General"]">
+                    <table id="myTable" style="width: 100%;  border-collapse: separate; border-spacing: 10px;">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.CompanyName"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.CompanyName" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.CompanyName)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.Firebase"]</RadzenText>
+                                    <RadzenSwitch @bind-Value="EditingAppConfig.Firebase" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.Firebase)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["Code"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Code" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.Code)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.APIKey"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.APIKey" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.APIKey)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.EnableNotificationByEmail"]</RadzenText>
+                                    <RadzenSwitch @bind-Value="EditingAppConfig.EnableNotificationByEmail" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.EnableNotificationByEmail)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.AuthDomain"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.AuthDomain" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.AuthDomain)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailHost"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.MailHost" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.MailHost)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MessagingSenderId"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.MessagingSenderId" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.MessagingSenderId)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailPort"]</RadzenText>
+                                    <RadzenNumeric Class="w-100" @bind-Value="EditingAppConfig.MailPort" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.MailPort)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.APPID"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.APPID" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.APPID)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.MailName"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.MailName" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.MailName)" />
+                                </td>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.ServerKey"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.ServerKey" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.ServerKey)" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["Password"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Password" />
+                                    <ValidationMessage For="@(() => EditingAppConfig.Password)" />
+                                </td>
+                                <td>
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.EnableJobAssignment"]</RadzenText>
+                                        <RadzenSwitch @bind-Value="EditingAppConfig.EnableJobAssignment" />
+                                        <ValidationMessage For="@(() => EditingAppConfig.EnableJobAssignment)" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <RZInputFile Icon="workspace_premium"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadLogo"]"
+                                                 Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: #20c997"
+                                                 Event="async (e) => { await OnChangeLogoFileAtEditingModal(e); }">
+                                    </RZInputFile>
+                                </td>
+                                <td>
+                                    <RZInputFile Icon="insert_emoticon"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadIcon"]"
+                                                 Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: indigo"
+                                                 Event="async (e) => { await OnChangeIconFileAtEditingModal(e); }">
+                                    </RZInputFile>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" Style="display: inline;margin-right: 5px">@L["AppConfig.SendingContentEmail"]</RadzenText>
+                        <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingAppConfig.SendingEmailContent" Rows="10" Cols="30" Class="w-100" />
+                    </div>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.WebsiteInformation"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.HeaderCode"]</RadzenText>
+                            <RadzenTextArea Class="w-100" @bind-Value="EditingAppConfig.HeaderCode" Rows="5" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Phone"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Phone" />
+                            <ValidationMessage For="@(() => EditingAppConfig.Phone)" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Email"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Email" />
+                            <ValidationMessage For="@(() => EditingAppConfig.Email)" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is4" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Address"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Address" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.SEOInformation"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoTitle"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.SeoTitle" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoKeyword"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.SeoKeyword" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SeoDescription"]</RadzenText>
+                            <RadzenTextArea Class="w-100" @bind-Value="EditingAppConfig.SeoDescription" Rows="3" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is3" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.PrimaryColor"]</RadzenText>
+                            <RadzenColorPicker @bind-Value=@EditingAppConfig.PrimaryColor ShowHSV=true ShowRGBA=true />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is3" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.SecondaryColor"]</RadzenText>
+                            <RadzenColorPicker @bind-Value=@EditingAppConfig.SecondaryColor ShowHSV=true ShowRGBA=true />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.GoogleAuth"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAnalytic"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.GoogleAnalytic" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAppName"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.GoogleAppName" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleAPIKey"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.GoogleAPIKey" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleClientId"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.GoogleClientId" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.GoogleClientSecret"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.GoogleClientSecret" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="d-flex align-items-end mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" class="mr-2">@L["AppConfig.GoogleEnable"]</RadzenText>
+                            <RadzenSwitch @bind-Value="EditingAppConfig.GoogleEnable" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.FacebookAuth"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAppName"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.FacebookAppName" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAPIKey"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.FacebookAPIKey" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookPixel"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.FacebookPixel" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.FacebookAppSecret"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.FacebookAppSecret" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="d-flex align-items-end mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3" class="mr-2">@L["AppConfig.FacebookEnable"]</RadzenText>
+                            <RadzenSwitch @bind-Value="EditingAppConfig.FacebookEnable" />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="@L["AppConfig.Other"]">
+                    <Blazorise.Row>
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Latitude"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Latitude" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is6" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Longitude"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingAppConfig.Longitude" />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Terms"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@EditingAppConfig.Terms style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Conditions"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@EditingAppConfig.Conditions style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+
+                        <Blazorise.Column ColumnSize="ColumnSize.Is12" Class="mt-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagCompanyName="TagCompanyName.H3">@L["AppConfig.Introduction"]</RadzenText>
+                            <RadzenHtmlEditor @bind-Value=@EditingAppConfig.Introduction style="height: 300px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                        </Blazorise.Column>
+                    </Blazorise.Row>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+        <RZBR></RZBR>
+        <div class="Row" style="float: right">
+            <div class="col">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </div>
+        </div>
+    </EditForm>
+
+</RZModel>

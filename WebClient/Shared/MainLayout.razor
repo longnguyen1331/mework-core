@@ -1,0 +1,221 @@
+@using System.Security.Claims
+@using AutoMapper.Internal.Mappers
+@using Core.Const
+@using Core.Enum
+@using Microsoft.AspNetCore.Components
+@using WebClient.Exceptions
+@using WebClient.LanguageResources
+@using WebClient.Service.AppConfigs
+@using WebClient.Service.JS
+@using WebClient.Setting
+@using Color = MudBlazor.Color
+@using NotificationType = Core.Enum.NotificationType
+@using Variant = MudBlazor.Variant
+@using DialogPosition = MudBlazor.DialogPosition
+@using Size = MudBlazor.Size
+@inherits LayoutComponentBase
+@inject NavigationManager _navManager
+@inject NavigationManager _navigationManager;
+@inject JsonStringLocalizer _localizer;
+@inject AppConfigService _appConfigService;
+@inject JsService _jsService;
+
+<RadzenLayout class="rz-shadow-3">
+    <RadzenHeader>
+        <MudThemeProvider/>
+        <RadzenRow Gap="0">
+            <RadzenColumn Size="3">
+                <RadzenImage Path="@BlazorSetting.BrandURL" Class="img_logo" Style="max-width:190px;align-items: center; padding:4px" Click="@(() => sidebar1Expanded = !sidebar1Expanded)"></RadzenImage>
+                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)"/>
+            </RadzenColumn>
+            <RadzenColumn Size="9">
+                <div style="display: flex">
+                    <div style="flex: 1"></div>
+                    <div>
+                        @if (!_navManager.Uri.Contains("bv-199"))
+                        {
+                            <AuthorizeView>
+                                <Authorized>
+                                    <div style="display: flex;justify-content: space-between;align-items: center;gap: 2vw">
+                                        <div>
+                                            <RadzenDropDown @bind-Value=@SelectedCulture.Value Data=@Cultures Style="width: 60px;" Change="OnChangeCulture">
+                                                <Template Context="data">
+                                                    <RadzenImage Path="@(SetCultureImage(data))" Style="width: 100%;"/>
+                                                </Template>
+                                                <ValueTemplate Context="data">
+                                                    <Image src="@(SetCultureImage(data))" Style="width: 100%"> </Image>
+
+                                                </ValueTemplate>
+                                            </RadzenDropDown>
+                                        </div>
+                                        <div @onclick="ToggleNotification" style="cursor: pointer">
+                                           @*  <MudBadge Content="UserInfo.NotificationCount" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
+                                                <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Default"/>
+                                                <MudOverlay @bind-Visible="isVisible" OnClick="ToggleNotification" DarkBackground="false" ZIndex="99" AutoClose="true"/>
+                                                <MudPopover Open="ShowNotification"
+                                                            OverflowBehavior="OverflowBehavior.FlipAlways"
+                                                            Style="color: red"
+                                                            AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+                                                            Paper="false">
+                                                    <MudPaper Outlined="true" Style="width: 30vw;padding:10px">
+
+                                                    </MudPaper>
+                                                </MudPopover>
+                                            </MudBadge> *@
+                                        </div>
+
+                                        <RadzenProfileMenu Style="float: right">
+                                            <Template>
+                                                <div style="display: flex;justify-content: center;align-items: center;gap: 5px">
+                                                    <span>
+                                                        @context.User.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value
+                                                    </span>
+                                                 @*    <MudBadge Color="Color.Success" Overlap="true" Bordered="true" >
+                                                        <MudAvatar Image="@UserInfo.Avatar" Size="Size.Medium"/>
+                                                    </MudBadge>
+                                                    *@
+                                                </div>
+                                            </Template>
+                                            <ChildContent>
+                                                <RadzenProfileMenuItem Text="My Profile" Path="my-profile" Icon="manage_accounts"></RadzenProfileMenuItem>
+                                                <RadzenProfileMenuItem Text="Logout" Path="logout" Icon="announcement"></RadzenProfileMenuItem>
+                                            </ChildContent>
+                                        </RadzenProfileMenu>
+
+                                    </div>
+                                </Authorized>
+                            </AuthorizeView>
+                        }
+                    </div>
+                </div>
+
+
+            </RadzenColumn>
+        </RadzenRow>
+
+
+    </RadzenHeader>
+    @if (!_navManager.Uri.Contains("bv-199"))
+    {
+        <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenPanelMenu>
+                        <CascadingValue Value="_localizer">
+                            <Menu></Menu>
+                        </CascadingValue>
+                    </RadzenPanelMenu>
+                </Authorized>
+                <NotAuthorized>
+                </NotAuthorized>
+            </AuthorizeView>
+
+        </RadzenSidebar>
+    }
+
+    <RadzenBody Style="transform: none !important;">
+        <CascadingValue Value="_localizer">
+            @Body
+        </CascadingValue>
+
+    </RadzenBody>
+
+
+    <RadzenFooter Style="height:20px;display: flex;align-items: center">
+        <div>
+            V2.0.1 Copyright ©2022 Me-Work. All Rights Reserved
+        </div>
+    </RadzenFooter>
+</RadzenLayout>
+<RadzenNotification Style="z-index: 9999"/>
+<RadzenDialog/>
+<RadzenTooltip/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+
+@code {
+    bool sidebar1Expanded = true;
+    bool sidebar2Expanded = true;
+    bool sidebar3Expanded = true;
+    bool sidebar4Expanded = true;
+    bool sidebar5Expanded = true;
+    bool sidebar6Expanded = true;
+    bool ShowNotification = false;
+    bool isVisible = false;
+    public bool IsLoading { get; set; } = true;
+
+    public List<string> Cultures = new List<string>()
+    {
+        CultureType.VI,
+        CultureType.EN
+    };
+
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var auth = await AuthState;
+                if (auth.User.Identity.IsAuthenticated)
+                {
+                    await GetAppConfig();
+                    StateHasChanged();
+                }
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
+    }
+
+    public async Task GetAppConfig()
+    {
+        var config = await _appConfigService.GetAppliedConfigAsync();
+        BlazorSetting.BrandURL = config?.LogoURL;
+        BlazorSetting.IconURL = config?.IconURL;
+        _jsService.setFavicon(BlazorSetting.IconURL);
+    }
+
+    public string SetCultureImage(string value)
+    {
+        if (CultureType.VI == value) return "Images/Cultures/dong_lao.png";
+        if (CultureType.EN == value) return "Images/Cultures/mi_den.png";
+        return "";
+    }
+
+    public async Task ToggleNotification()
+    {
+        ShowNotification = !ShowNotification;
+        isVisible = false;
+        if (ShowNotification)
+        {
+            isVisible = true;
+        }
+    }
+
+
+    public async Task<string> GetUserNameAsync()
+    {
+        var authState = await AuthState;
+        var user = authState.User;
+
+        return user.Identity.Name;
+    }
+
+    public void OnChangeCulture()
+    {
+        _localizer.LoadResources(SelectedCulture.Value);
+    // StateHasChanged();
+    }
+
+
+}

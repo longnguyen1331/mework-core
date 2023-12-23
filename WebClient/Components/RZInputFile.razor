@@ -1,0 +1,14 @@
+﻿<InputFile class="file-input"
+           multiple="@IsMultiple"
+           OnChange="async (e) => { await OnChangeFileAtEditModal(e); }" 
+           accept="@Accept" id="@FileID" hidden/>
+<RZBR></RZBR>
+<div style="display: flex;align-items: center" class="rz-col-12">
+    <div >
+        <label for="@FileID" style="@Style" class="file-label">
+            <RadzenIcon Icon="@Icon"></RadzenIcon>
+            <p style="margin-bottom: 0">@Text</p>
+        </label>
+    </div>
+    @*<p id="file-chosen">@((MarkupString)_fileName)</p>*@
+</div>

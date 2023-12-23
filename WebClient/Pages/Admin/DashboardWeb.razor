@@ -1,0 +1,41 @@
+@page "/dashboard-web"
+@attribute [Authorize]
+@inherits BaseBlazorPage
+
+@using Core.Const
+@using Core.Enum
+@using System.Globalization;
+@using Color = MudBlazor.Color
+@using Variant = Radzen.Variant
+@inject NavigationManager _navigationManager;
+
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 5px">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+
+<RadzenPanel AllowCollapse="true" Collapsed="false" Class="rz-col-12 rz-col-md-6 rz-col-lg-4 rz-mx-auto">
+    <HeaderTemplate>
+    </HeaderTemplate>
+    <ChildContent>
+        <Blazorise.Row>
+            <Blazorise.Column ColumnSize="ColumnSize.Is12">
+                <RadzenRow RowGap="0">
+                </RadzenRow>
+                <RadzenRow RowGap="0">
+                    <RadzenColumn SizeSM="12">
+                        <RadzenCard>
+                        </RadzenCard>
+                    </RadzenColumn>
+                </RadzenRow>
+            </Blazorise.Column>
+        </Blazorise.Row>
+    </ChildContent>
+</RadzenPanel>
+

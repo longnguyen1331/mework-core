@@ -1,0 +1,6 @@
+﻿@inherits LayoutComponentBase
+@using WebClient.LanguageResources
+@inject JsonStringLocalizer _localizer;
+<CascadingValue Value="_localizer">
+    @Body
+</CascadingValue>

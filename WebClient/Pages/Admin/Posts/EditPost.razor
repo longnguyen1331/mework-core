@@ -1,0 +1,157 @@
+﻿@page "/posts/edit/{id}"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject PostService _postService;
+@inject PostCategoryService _poseCategoryService
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.PostCategories;
+@using WebClient.Service.Posts;
+@using Contract.Posts;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+@inject NavigationManager _navigationManager;
+@inject IJSRuntime JSRuntime;
+
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 5px">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@L["Web.Post"]" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RadzenCard>
+    <EditForm Model="EditingPost" OnValidSubmit="async () => { await OnEditPost(); }">
+        <DataAnnotationsValidator />
+        <RadzenFieldset Text="@L["Post.Information"]">
+            <RadzenStack Gap="1rem">
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                            <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style=" width:100%; height:240px;max-width:350px;" />
+                            <RZInputFile Icon="upload"
+                                         Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                         Style="display: flex;align-items: center; width:100%;max-width:350px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                         Event="async (e) => { await OnChangeImageFile(e); }">
+                            </RZInputFile>
+                        </RadzenCard>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Title"]</RadzenText>
+                                <RadzenTextBox Class="w-100" Name="Post.Title" @bind-Value="EditingPost.Title" />
+                                <ValidationMessage For="@(() => EditingPost.Title)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostCategory"]</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@EditingPost.PostCategoryId
+                                                Multiple="false"
+                                                TextProperty="Name"
+                                                ValueProperty="Id"
+                                                Placeholder="Select..."
+                                                Data=@PostCategories
+                                                Class="w-100" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Tags"]</RadzenText>
+                                <RadzenTextArea Name="txtarea_tag" Placeholder="Nhập vào đây..." @bind-Value="EditingPost.Tags" Rows="1" Cols="30" Class="w-100" Change=@(args => TagOnChange(args)) />
+                                @foreach (string item in Tags)
+                                {
+                                    <RadzenButton Text="@item" Icon="delete" Click=@(() => RemoveTag(item)) />
+                                }
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post.SortDescription"]</RadzenText>
+                                <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingPost.SortDescription" Rows="3" Cols="30" Class="w-100" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+                <RadzenRow>
+                    <RadzenColumn Size="12">
+                        <RadzenTabs RenderMode="TabRenderMode.Client">
+                            <Tabs>
+                                <RadzenTabsItem Text="@L["Post.Information"]">
+                                    <RadzenRow Gap="1rem">
+
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post.Description"]</RadzenText>
+                                            <RadzenHtmlEditor @bind-Value=@EditingPost.Description style="height: 450px;" UploadUrl=@(AppSetting.API_Base_ADRESS + "upload/save-image") />
+                                            <ValidationMessage For="@(() => EditingPost.Description)" />
+                                        </RadzenColumn>
+
+                                        <RadzenColumn Size="2">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsHighLight"]</RadzenText>
+                                            <RadzenSwitch @bind-Value=@EditingPost.IsHighLight />
+                                            <ValidationMessage For="@(() => EditingPost.IsHighLight)" />
+                                        </RadzenColumn>
+
+                                        <RadzenColumn Size="2">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                            <RadzenSwitch @bind-Value=@EditingPost.IsVisibled />
+                                            <ValidationMessage For="@(() => EditingPost.IsVisibled)" />
+                                        </RadzenColumn>
+
+                                        <RadzenColumn Size="2">
+
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                            <RadzenNumeric Class="w-100" @bind-Value="EditingPost.ODX" />
+                                            <ValidationMessage For="@(() => EditingPost.ODX)" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+
+                                        </RadzenColumn>
+                                    </RadzenRow>
+                                </RadzenTabsItem>
+
+                                <RadzenTabsItem Text="@L["Post.SeoInformation"]">
+
+                                    <RadzenRow>
+                                        <RadzenColumn Size="12">
+
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                                            <RadzenTextBox Class="w-100" @bind-Value="EditingPost.SeoTitle" />
+                                            <ValidationMessage For="@(() => EditingPost.SeoTitle)" />
+                                        </RadzenColumn>
+
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                                            <RadzenTextBox Class="w-100" @bind-Value="EditingPost.Slug" />
+                                            <ValidationMessage For="@(() => EditingPost.Slug)" />
+                                        </RadzenColumn>
+
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["SeoKeyword"]</RadzenText>
+                                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingPost.SeoKeyword" Rows="3" Cols="30" Class="w-100" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingPost.SeoDescription" Rows="3" Cols="30" Class="w-100" />
+                                        </RadzenColumn>
+                                    </RadzenRow>
+                                </RadzenTabsItem>
+                            </Tabs>
+                        </RadzenTabs>
+
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+
+        </RadzenFieldset>
+
+
+      
+        <RZBR></RZBR>
+        <RadzenRow>
+            <RadzenColumn Size="12">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="list" Click="@BackToList" Text="@L["BackToList"]" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" />
+            </RadzenColumn>
+        </RadzenRow>
+    </EditForm>
+</RadzenCard>

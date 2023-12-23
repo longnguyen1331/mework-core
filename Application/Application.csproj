@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Agoras\**" />
+      <Compile Remove="UserTasks\**" />
+      <EmbeddedResource Remove="Agoras\**" />
+      <EmbeddedResource Remove="UserTasks\**" />
+      <None Remove="Agoras\**" />
+      <None Remove="UserTasks\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Contract\Contract.csproj" />
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\SqlServ4r\SqlServ4r.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="CorePush" Version="3.1.1" />
+      <PackageReference Include="EPPlus" Version="6.1.2" />
+    </ItemGroup>
+
+</Project>

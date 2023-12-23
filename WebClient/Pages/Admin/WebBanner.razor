@@ -1,0 +1,312 @@
+﻿@page "/web-banners"
+@attribute [Authorize(Roles = "ADMIN,WEBSITE")]
+@using ButtonType = Radzen.ButtonType
+@inject WebBannerService _webBannerService;
+@inject PostService _postService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.Posts;
+@using WebClient.Service.WebBanners
+@using Contract.WebBanners;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+
+
+<h3>@HeaderTitle</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@WebBanners" TItem="WebBannerDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="WebsiteBannerUrl" TextAlign="TextAlign.Center" Title="@L["WebsiteBanner"]" Frozen="false" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.WebsiteBannerUrl" Style="max-width:140px" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="MobileBannerUrl" TextAlign="TextAlign.Center" Title="@L["MobileBanner"]" Frozen="false" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.MobileBannerUrl" Style="max-width:140px" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="Title" TextAlign="TextAlign.Center" Title="@L["Title"]" Frozen="false" Width="160px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="BannerType" TextAlign="TextAlign.Center" Title="@L["BannerType"]" Frozen="false" Width="160px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="ButtonText" TextAlign="TextAlign.Center" Title="@L["ButtonText"]" Frozen="false" Width="160px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="UrlRef" TextAlign="TextAlign.Center" Title="@L["UrlRef"]" Frozen="false" Width="160px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="Description" TextAlign="TextAlign.Center" Title="@L["Description"]" Frozen="false" Width="160px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="IsVisibled" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsVisibled"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsVisibled />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="false" Width="80px" />
+            <RadzenDataGridColumn TItem="WebBannerDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="false" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["WebBanner"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewWebBanner" OnValidSubmit="async () => { await CreateWebBanner(); }">
+            <ModalBody>
+
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenColumn Size="12">
+                                <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerDesktop"]</RadzenText>
+                                    <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedWebsiteBannerData}")" Style=" width:100%; height:100px;max-width: 220px;" />
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["Upload"]"
+                                                 Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color:var(--rz-on-info-lighter)"
+                                                 Event="async (e) => { await OnChangeWebsiteFileAtModal(e); }">
+                                    </RZInputFile>
+                                </RadzenCard>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerMobile"]</RadzenText>
+                                    <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedMobileBannerData}")" Style=" width:100%; height:150px;max-width: 220px;" />
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["Upload"]"
+                                                 Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                 Event="async (e) => { await OnChangeMobileFileAtModal(e); }">
+                                    </RZInputFile>
+                                </RadzenCard>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenFieldset Text="@L["WebBanner"]">
+                            <RadzenRow>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Title"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewWebBanner.Title" />
+                                    <ValidationMessage For="@(() => NewWebBanner.Title)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ButtonText"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="NewWebBanner.ButtonText" />
+                                    <ValidationMessage For="@(() => NewWebBanner.ButtonText)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="6">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerType"]</RadzenText>
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    @bind-Value=@SelectedBannerType Multiple="false"
+                                                    Change="async (e) => { await OnChangeSelectWebBanner(e); }"
+                                                    TextProperty="Text"
+                                                    ValueProperty="Value"
+                                                    Placeholder="Select..."
+                                                    Data=@BannerTypes
+                                                    Class="w-100" />
+
+                                </RadzenColumn>
+                                <RadzenColumn Size="6">
+                                  
+                                    @if (!HideUrlTextBox)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UrlRef"]</RadzenText>
+                                        <RadzenTextBox Class="w-100" @bind-Value="NewWebBanner.UrlRef" />
+                                        <ValidationMessage For="@(() => NewWebBanner.UrlRef)" />
+                                    }
+                                    
+                                    @if (!HidePost)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post"]</RadzenText>
+                                        <RadzenDropDown AllowClear="true"
+                                                    AllowFiltering="true"
+                                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    FilterOperator="StringFilterOperator.StartsWith"
+                                                    @bind-Value=@SelectedPost Multiple="false"
+                                                    SearchTextChanged="@(args => PostOnLoadData(args))"
+                                                    Change="async (e) => { await OnChangeSelect(e); }"
+                                                    TextProperty="Title"
+                                                    ValueProperty="Id"
+                                                    Placeholder="Select..."
+                                                    Data=@Posts
+                                                        Class="w-100" />
+                                    }
+                                </RadzenColumn>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["Description"]</RadzenText>
+                                    <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWebBanner.Description" Rows="3" Cols="30" Class="w-100" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="3">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                    <RadzenSwitch @bind-Value=@NewWebBanner.IsVisibled />
+                                    <ValidationMessage For="@(() => NewWebBanner.IsVisibled)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="3">
+
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                    <RadzenNumeric Class="w-100" @bind-Value="NewWebBanner.ODX" />
+                                    <ValidationMessage For="@(() => NewWebBanner.ODX)" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenFieldset>
+                    </RadzenColumn>
+                </RadzenRow>
+                <RZBR></RZBR>
+
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["WebBanner"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingWebBanner" OnValidSubmit="async () => { await UpdateWebBanner(); }">
+
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenColumn Size="12">
+                                <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerDesktop"]</RadzenText>
+                                    <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedWebsiteBannerData}")" Style=" width:100%; height:100px;max-width: 220px;" />
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["Upload"]"
+                                                 Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                 Event="async (e) => { await OnChangeWebsiteFileAtModal(e); }">
+                                    </RZInputFile>
+                                </RadzenCard>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerMobile"]</RadzenText>
+                                    <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedMobileBannerData}")" Style=" width:100%; height:150px;max-width: 220px;" />
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["Upload"]"
+                                                 Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                 Event="async (e) => { await OnChangeMobileFileAtModal(e); }">
+                                    </RZInputFile>
+                                </RadzenCard>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenFieldset Text="@L["WebBanner"]">
+                            <RadzenRow>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Title"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingWebBanner.Title" />
+                                    <ValidationMessage For="@(() => EditingWebBanner.Title)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ButtonText"]</RadzenText>
+                                    <RadzenTextBox Class="w-100" @bind-Value="EditingWebBanner.ButtonText" />
+                                    <ValidationMessage For="@(() => EditingWebBanner.ButtonText)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="6">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["BannerType"]</RadzenText>
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    @bind-Value=@SelectedBannerType Multiple="false"
+                                                    Change="async (e) => { await OnChangeSelectWebBanner(e); }"
+                                                    TextProperty="Text"
+                                                    ValueProperty="Value"
+                                                    Placeholder="Select..."
+                                                    Data=@BannerTypes
+                                                    Class="w-100" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="6">
+                                    @if (!HideUrlTextBox)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UrlRef"]</RadzenText>
+                                        <RadzenTextBox Class="w-100" @bind-Value="EditingWebBanner.UrlRef" />
+                                        <ValidationMessage For="@(() => EditingWebBanner.UrlRef)" />
+                                    }
+                                    @if (!HidePost)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post"]</RadzenText>
+                                        <RadzenDropDown AllowClear="true"
+                                                    AllowFiltering="true"
+                                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    FilterOperator="StringFilterOperator.StartsWith"
+                                                    @bind-Value=@SelectedPost Multiple="false"
+                                                    SearchTextChanged="@(args => PostOnLoadData(args))"
+                                                    Change="async (e) => { await OnChangeSelect(e); }"
+                                                    TextProperty="Title"
+                                                    ValueProperty="Id"
+                                                    Placeholder="Select..."
+                                                    Data=@Posts
+                                                        Class="w-100" />
+                                    }
+
+                                </RadzenColumn>
+                                <RadzenColumn Size="12">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["Description"]</RadzenText>
+                                    <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingWebBanner.Description" Rows="5" Cols="30" Class="w-100" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="3">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                    <RadzenSwitch @bind-Value=@EditingWebBanner.IsVisibled />
+                                    <ValidationMessage For="@(() => EditingWebBanner.IsVisibled)" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="3">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                    <RadzenNumeric Class="w-100" @bind-Value="EditingWebBanner.ODX" />
+                                    <ValidationMessage For="@(() => EditingWebBanner.ODX)" />
+
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenFieldset>
+                    </RadzenColumn>
+                </RadzenRow>
+                <RZBR></RZBR>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+

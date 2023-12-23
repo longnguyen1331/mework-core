@@ -1,0 +1,115 @@
+﻿@page "/positions"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject PositionService _positionService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.Positions
+@using Contract.Positions;
+@using Variant = Radzen.Variant
+
+<h3>Position</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Positions" TItem="PositionDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="PositionDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="PositionDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="PositionDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="true" Width="160px"/>
+
+            <RadzenDataGridColumn TItem="PositionDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Position"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewPosition" OnValidSubmit="async () => { await CreatePosition(); }">
+            <ModalBody>
+
+                <DataAnnotationsValidator/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewPosition.Name"/>
+                <ValidationMessage For="@(() => NewPosition.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewPosition.Code"/>
+                <ValidationMessage For="@(() => NewPosition.Code)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                <RadzenNumeric Class="w-100" @bind-Value="NewPosition.ODX"/>
+                <ValidationMessage For="@(() => NewPosition.ODX)"/>
+                
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Position"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingPosition" OnValidSubmit="async () => { await UpdatePosition(); }">
+
+            <ModalBody>
+                <DataAnnotationsValidator/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Name"/>
+                <ValidationMessage For="@(() => EditingPosition.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingPosition.Code"/>
+                <ValidationMessage For="@(() => EditingPosition.Code)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                <RadzenNumeric Class="w-100" @bind-Value="EditingPosition.ODX"/>
+                <ValidationMessage For="@(() => EditingPosition.ODX)"/>
+
+                
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

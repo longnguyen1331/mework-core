@@ -1,0 +1,258 @@
+﻿@page "/post-categories"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject PostCategoryService _postCategoryService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.PostCategories;
+@using Contract.PostCategories;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+<h3>@L["Web.Category"]</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@L["Web.Category"]" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@PostCategories" TItem="PostCategoryDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="Image" TextAlign="TextAlign.Center" Title="@L["Image"]" Frozen="true" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.ImageUrl" Style="max-width:120px; max-height:60px" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="SeoTitle" TextAlign="TextAlign.Center" Title="@L["SeoTitle"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="Slug" TextAlign="TextAlign.Center" Title="@L["Slug"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="SeoKeyword" TextAlign="TextAlign.Center" Title="@L["SeoKeyword"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="SeoDescription" TextAlign="TextAlign.Center" Title="@L["SeoDescription"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="IsHighLight" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsHighLight"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsHighLight />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="IsVisibled" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsVisibled"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsVisibled />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="PostCategoryDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["PostCategory"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewPostCategory" OnValidSubmit="async () => { await CreatePostCategory(); }">
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenColumn Size="12">
+                                <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                    @if (Base64EncodedImageData != null)
+                                    {
+                                        <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 200px; height:200px" />
+                                    }
+                                    else
+                                    {
+                                        <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 200px; height:200px" />
+                                    }
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                                 Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: #20c997"
+                                                 Event="async (e) => { await OnChangeImageFileAtNewModal(e); }">
+                                    </RZInputFile>
+                                </RadzenCard>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                <RadzenTextBox Class="w-100" Name="PostCategory.Name" @bind-Value="NewPostCategory.Name" />
+                                <ValidationMessage For="@(() => NewPostCategory.Name)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostParentCategory"]</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@NewPostCategory.ParentCategoryId
+                                                Multiple="false"
+                                                TextProperty="Name"
+                                                ValueProperty="Id"
+                                                Placeholder="Select..."
+                                                Data=@PostCategories
+                                                Class="w-100" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewPostCategory.SeoTitle" />
+                                <ValidationMessage For="@(() => NewPostCategory.SeoTitle)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewPostCategory.Slug" />
+                                <ValidationMessage For="@(() => NewPostCategory.Slug)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoKeyword"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewPostCategory.SeoKeyword" />
+                                <ValidationMessage For="@(() => NewPostCategory.SeoKeyword)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="NewPostCategory.SeoDescription" />
+                                <ValidationMessage For="@(() => NewPostCategory.SeoDescription)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsHighLight"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@NewPostCategory.IsHighLight />
+                                <ValidationMessage For="@(() => NewPostCategory.IsHighLight)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@NewPostCategory.IsVisibled />
+                                <ValidationMessage For="@(() => NewPostCategory.IsVisibled)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="NewPostCategory.ODX" />
+                                <ValidationMessage For="@(() => NewPostCategory.ODX)" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["PostCategory"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingPostCategory" OnValidSubmit="async () => { await UpdatePostCategory(); }">
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenRow>
+                            <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                @if (Base64EncodedImageData != null)
+                                {
+                                    <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 200px; height:200px" />
+                                }
+
+                                <RZInputFile Icon="workspace_premium"
+                                             Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                             Style="display: flex;align-items: center;min-width:123px;max-width: 150px;margin-top: 0;cursor: pointer;background-color: #20c997"
+                                             Event="async (e) => { await OnChangeImageFileAtEditingModal(e); }">
+                                </RZInputFile>
+                            </RadzenCard>
+                        </RadzenRow>
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenRow>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingPostCategory.Name" />
+                                <ValidationMessage For="@(() => EditingPostCategory.Name)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostParentCategory"]</RadzenText>
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                @bind-Value=@EditingPostCategory.ParentCategoryId
+                                                Multiple="false"
+                                                TextProperty="Name"
+                                                ValueProperty="Id"
+                                                Placeholder="Select..."
+                                                Data=@PostCategories.Where(x => x.Id != EditPostCategoryId)
+                                                Class="w-100" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingPostCategory.SeoTitle" />
+                                <ValidationMessage For="@(() => EditingPostCategory.SeoTitle)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="6">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingPostCategory.Slug" />
+                                <ValidationMessage For="@(() => EditingPostCategory.Slug)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoKeyword"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingPostCategory.SeoKeyword" />
+                                <ValidationMessage For="@(() => EditingPostCategory.SeoKeyword)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                                <RadzenTextBox Class="w-100" @bind-Value="EditingPostCategory.SeoDescription" />
+                                <ValidationMessage For="@(() => EditingPostCategory.SeoDescription)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsHighLight"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingPostCategory.IsHighLight />
+                                <ValidationMessage For="@(() => EditingPostCategory.IsHighLight)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                <RadzenSwitch @bind-Value=@EditingPostCategory.IsVisibled />
+                                <ValidationMessage For="@(() => EditingPostCategory.IsVisibled)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="3">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                <RadzenNumeric Class="w-100" @bind-Value="EditingPostCategory.ODX" />
+                                <ValidationMessage For="@(() => EditingPostCategory.ODX)" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenColumn>
+                </RadzenRow>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>

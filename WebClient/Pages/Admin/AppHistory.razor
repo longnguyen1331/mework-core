@@ -1,0 +1,54 @@
+﻿@page "/app-history"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject AppHistoryService _appHistoryService;
+@inherits BaseBlazorPage
+@using Color = MudBlazor.Color
+@using Contract.AppHistories;
+@using Variant = Radzen.Variant
+@using WebClient.Service.AppHistories;
+
+<h3>@L["AppHistory"]</h3>
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+<RadzenCard>
+    <RadzenDataGrid
+                    AllowFiltering="true"
+                    AllowColumnResize="true"
+                    AllowAlternatingRows="false"
+                    AllowSorting="true"
+                    PageSize="@DefaultPageSize"
+                    AllowPaging="true"
+                    PagerHorizontalAlign="HorizontalAlign.Left"
+                    ShowPagingSummary="true"
+                    Count="@TotalItem"
+                    Data="@AppHistories"
+                    LoadData="@GetAppHistories"
+                    TItem="AppHistoryDto"
+                    ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Simple"
+                    PageSizeOptions="PageSizeOptions"
+                    IsLoading="IsLoading"
+                    Style="width: 100%">
+        <Columns>
+            <RadzenDataGridColumn TItem="AppHistoryDto" Property="Operation" TextAlign="TextAlign.Center" Title="@L["AppHistory.Operation"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="AppHistoryDto" Property="Functions" TextAlign="TextAlign.Center" Title="@L["AppHistory.Functions"]" Frozen="true" Width="*" />
+            <RadzenDataGridColumn TItem="AppHistoryDto" Property="IpAddress" TextAlign="TextAlign.Center" Title="@L["AppHistory.IpAddress"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="AppHistoryDto" Property="Date" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["AppHistory.Date"]" Width="160px">
+                <Template Context="data">
+                    @($"{data.Date:dd/MM/yyyy HH:mm:ss}")
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AppHistoryDto" Property="FullName" TextAlign="TextAlign.Center" Title="@L["AppHistory.FullName"]" Width="250px" />
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>

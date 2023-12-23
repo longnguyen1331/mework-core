@@ -1,0 +1,122 @@
+﻿@page "/roles"
+@attribute [Authorize(Roles = "ADMIN")]
+@using ButtonType = Radzen.ButtonType
+@inject RoleManagerService _roleManagerService;
+@inherits BaseBlazorPage
+@using Contract.Identity.RoleManager;
+@using Core.Const
+@using WebClient.LanguageResources
+@using WebClient.Service.Roles
+@using Variant = Radzen.Variant
+@using System.Globalization
+
+<h3>@L["Role"]</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
+    </div>
+</div>
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true"
+                    PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Roles" TItem="RoleDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    PageSizeOptions="PageSizeOptions"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="RoleDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="NewModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Role"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewRole" OnValidSubmit="async () => { await CreateRole(); }">
+            <ModalBody>
+
+                @* <DataAnnotationsValidator/> *@
+                <FluentValidator TValidator="RoleValidator"></FluentValidator>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewRole.Name"/>
+                <ValidationMessage For="@(() => NewRole.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="NewRole.Code"/>
+                <ValidationMessage For="@(() => NewRole.Code)"/>
+
+                @* <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none"> *@
+                @*     <Items > *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/> *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/> *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/> *@
+                @*     </Items> *@
+                @* </RadzenCheckBoxList> *@
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Role"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingRole" OnValidSubmit="async () => { await UpdateRole(); }">
+
+            <ModalBody>
+                <DataAnnotationsValidator/>
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingRole.Name"/>
+                <ValidationMessage For="@(() => EditingRole.Name)"/>
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                <RadzenTextBox Class="w-100" @bind-Value="EditingRole.Code"/>
+                <ValidationMessage For="@(() => EditingRole.Code)"/>
+                @* <RadzenCheckBoxList @bind-Value=@Claims TValue="string" AllowSelectAll="true" SelectAllText="Select all items" Class="mb-5" Style="outline:none"> *@
+                @*     <Items > *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.READ" Value="@ClaimNameTypes.READ"/> *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.WRITE" Value="@ClaimNameTypes.WRITE"/> *@
+                @*         <RadzenCheckBoxListItem Text="@ClaimNameTypes.CREATE" Value="@ClaimNameTypes.CREATE"/> *@
+                @*     </Items> *@
+                @* </RadzenCheckBoxList> *@
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditingModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+

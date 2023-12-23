@@ -1,0 +1,99 @@
+﻿@page "/posts"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject PostService _postService;
+@inject PostCategoryService _poseCategoryService
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.PostCategories;
+@using WebClient.Service.Posts;
+@using Contract.Posts;
+@using Color = MudBlazor.Color
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject NavigationManager _navigationManager;
+@inject IJSRuntime JS
+
+<style>
+    .postModal {
+        z-index: 1000;
+    }
+
+    .modal-backdrop {
+        z-index: 990;
+    }
+</style>
+
+@if (IsLoading)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+
+<h3>@L["Web.Post"]</h3>
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Path="/posts" Text="@L["Web.Post"]" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div class="d-flex gap-2">
+        <RZInputFile Icon="upload"
+                     Text="@L["Import"]"
+                     Style="display: flex;align-items: center; width:100%;max-width:350px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter); margin-bottom: 20px;"
+                     Event="async (e) => { await ImportFromExcel(e); }"
+                     Accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        </RZInputFile>
+        <RadzenButton Text="@L["Export"]" Click="async () => { await ExportToExcel(); }" Icon="file_download" Style="margin-bottom: 20px;" />
+        <RadzenButton Text="@L["Create"]" Click="async () => { await GoToCreatePage(); }" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@Posts" TItem="PostDto" ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Advanced"
+                    PageSizeOptions="PageSizeOptions"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Style="width: 100%">
+        <Columns>
+            <RadzenDataGridColumn TItem="PostDto" Property="Image" TextAlign="TextAlign.Center" Title="@L["Image"]" Frozen="true" Width="160px">
+                <Template Context="data">
+                    <RadzenImage Path="@data.PictureUrl" Style="max-width:120px; max-height:60px" />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostDto" Property="Title" TextAlign="TextAlign.Center" Title="@L["Title"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="PostCategoryName" TextAlign="TextAlign.Center" Title="@L["PostCategoryName"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="SeoTitle" TextAlign="TextAlign.Center" Title="@L["SeoTitle"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="Slug" TextAlign="TextAlign.Center" Title="@L["Slug"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="SeoKeyword" TextAlign="TextAlign.Center" Title="@L["SeoKeyword"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="SeoDescription" TextAlign="TextAlign.Center" Title="@L["SeoDescription"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="SortDescription" TextAlign="TextAlign.Center" Title="@L["Post.SortDescription"]" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="Views" TextAlign="TextAlign.Center" Title="@L["Views"]" FormatString="{0:C2}" Width="160px" />
+            <RadzenDataGridColumn TItem="PostDto" Property="IsHighLight" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsHighLight"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsHighLight />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostDto" Property="IsVisibled" FormatString="{0:d}" TextAlign="TextAlign.Center" Title="@L["IsVisibled"]" Width="160px">
+                <Template Context="data">
+                    <RadzenSwitch @bind-Value=@data.IsVisibled />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PostDto" Property="ODX" TextAlign="TextAlign.Center" Title="@L["ODX"]" Frozen="true" Width="80px"/>
+            <RadzenDataGridColumn TItem="PostDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await GoToEditPage(data.Id.ToString()); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>

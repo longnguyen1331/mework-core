@@ -1,0 +1,114 @@
+﻿@page "/my-profile"
+@attribute [Authorize]
+@using Color = MudBlazor.Color
+@using WebClient.Service.Users
+@using ButtonType = Radzen.ButtonType
+@using WebClient.Service.Upload
+@using Size = MudBlazor.Size
+@inherits BaseBlazorPage
+@inject UserManagerService _userDtoManagerService;
+@inject UploadService _uploadService;
+@inject NavigationManager _navigationManager;
+
+
+
+<MudTabs Outlined="true" Position="@Position" Rounded="true" Border="true"
+         ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
+    <MudTabPanel Text="My Profile" Icon="@Icons.Material.Filled.Person" Style="min-width: 0">
+        <RadzenRow Gap="20px" Style="width: 100%">
+
+            <RadzenColumn Size="8">
+                <EditForm Model="NewProfile" OnValidSubmit="async () => { await UpdateProfile(); }">
+
+                    <DataAnnotationsValidator/>
+                    <RadzenRow Gap="20px">
+
+                        <RadzenColumn Size="6">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> First Name </RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.FirstName" Disabled="true"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3"> Last Name </RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.LastName" Disabled="true"/>
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">User Code </RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.UserCode" Disabled="true"/>
+
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Phone Number </RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="UserDto.User.PhoneNumber" Disabled="true"/>
+                            
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">DOB </RadzenText>
+                            <RadzenDatePicker Class="w-100" @bind-Value="NewProfile.DOB" DateFormat="dd/MM/yyyy" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="6">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Position </RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="UserDto.Position.Name" Disabled="true"/>
+
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Departments</RadzenText>
+
+                            @foreach (var item in UserDto.Departments)
+                            {
+                                <RadzenBadge BadgeStyle="BadgeStyle.Info" IsPill="@true" Text="@item.Name" Class="ml-2"/>
+                            }
+
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Roles</RadzenText>
+
+                            @foreach (var item in  UserDto.RoleNames)
+                            {
+                                <RadzenBadge BadgeStyle="BadgeStyle.Primary" IsPill="@true" Text="@item" Class="ml-2"/>
+                            }
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload Avatar</RadzenText>
+                            <div  style="display: flex;align-items: center;gap: 5px">
+                                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                                    <ButtonTemplate Context="data">
+                                        <MudIconButton HtmlTag="label"
+                                                       Color="Color.Info"
+                                                       Icon="@Icons.Material.Filled.PhotoCamera"
+                                                       for="@data">
+                                        </MudIconButton>
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                                <div>@AvatarFile?.Name</div>
+                            </div>
+
+                            <RZBR></RZBR>
+                            <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </EditForm>
+            </RadzenColumn>
+
+
+            <RadzenColumn Size="4">
+                <MudBadge  Overlap="true" Bordered="true" >
+                    <MudAvatar Image="@UserDto.User.AvatarURL" Size="Size.Large" Style="width: 300px;height: 300px"/>
+                </MudBadge>
+            </RadzenColumn>
+        </RadzenRow>
+
+
+    </MudTabPanel>
+    <MudTabPanel Text="Reset Password" Icon="@Icons.Material.Filled.Key">
+
+        <EditForm Model="NewPassword" OnValidSubmit="async () => { await ResetPassword(); }" style="width: 50%">
+
+            <DataAnnotationsValidator/>
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password</RadzenText>
+            <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPassword"/>
+            <ValidationMessage For="@(() => NewPassword.NewPassword)"/>
+
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password Confirm</RadzenText>
+            <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPasswordConfirm"/>
+            <ValidationMessage For="@(() => NewPassword.NewPasswordConfirm)"/>
+
+            <RZBR></RZBR>
+            <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+
+        </EditForm>
+
+    </MudTabPanel>
+</MudTabs>

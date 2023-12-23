@@ -1,0 +1,43 @@
+@page "/"
+@page "/index"
+  
+@attribute [Authorize]
+@inject UserManagerService _userManagerService;
+@inherits BaseBlazorPage
+
+@using System.Web
+@using WebClient.Service.Users
+@using Color = MudBlazor.Color
+@using Variant = MudBlazor.Variant
+
+@code {
+	private bool _isOpen = false;
+
+	public void ToggleOpen() => _isOpen = !_isOpen;
+
+}
+    
+<MudSelect T="string" Label="Search" AnchorOrigin="Origin.CenterLeft" TransformOrigin="Origin.CenterRight" Variant="MudBlazor.Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Search"
+           Text="kaaka"
+           Immediate="true"
+           
+           InputMode="InputMode.text"
+           ReadOnly="false"
+           AdornmentColor="Color.Primary">
+	<h1>hello world</h1>
+	<MudSelectItem Value="@("foo")">Foo</MudSelectItem>
+	<MudSelectItem Value="@("bar")">Bar</MudSelectItem>
+</MudSelect>
+
+
+
+<MudSelect T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+	<MudSelectItem Value="@("Cappuccino")" />
+	<MudSelectItem Value="@("Cafe Latte")" />
+	<MudSelectItem Value="@("Espresso")" />
+</MudSelect>
+<MudSelect T="double" Label="Price" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+	<MudSelectItem T="double" Value="4.50" />
+	<MudSelectItem T="double" Value="4.99" />
+	<MudSelectItem T="double" Value="3.60" />
+</MudSelect>

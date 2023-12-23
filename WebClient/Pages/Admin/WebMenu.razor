@@ -1,0 +1,363 @@
+﻿@page "/web-menus"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject WebMenuService _webMenuService;
+@inject PostCategoryService _postCategoryService;
+@inject PostService _postService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.PostCategories;
+@using WebClient.Service.Posts;
+@using WebClient.Service.WebMenus
+@using Contract.WebMenus;
+@using Variant = Radzen.Variant
+@using WebClient.Service.Upload
+@inject UploadService _uploadService;
+
+@*<h3>@HeaderTitle</h3>
+
+*@
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb>
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px" />
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300" />
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="async (e) => { await ShowNewModal(); }" Icon="post_add" Style="margin-bottom: 20px;" />
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenTree Data=@HierarchicalWebMenus Style="width:100%">
+        <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildWebMenu"
+                         HasChildren=@(e => (e as WebMenuDto).ChildWebMenu.Any())
+                         Expanded="@(value => true)">
+            <Template>
+                <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                    <div style="display: flex">
+                        <RadzenIcon Icon="list" />
+
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@context.Text</RadzenText>
+                    </div>
+
+                    <div>
+                        <RadzenButton Icon="edit" Click="async () => { await ShowEditingModal(context.Value); }" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                        </RadzenButton>
+                        <RadzenButton Click="async () => { await ShowConfirmMessage(context.Value); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                        </RadzenButton>
+                    </div>
+                </div>
+
+            </Template>
+        </RadzenTreeLevel>
+    </RadzenTree>
+</RadzenCard>
+
+
+<Modal @ref="CreateModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["WebMenu.Infomation"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewWebMenu" OnValidSubmit="async () => { await CreateWebMenu(); }">
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="@L["WebMenu.Infomation"]">
+                            <DataAnnotationsValidator />
+                            <RadzenRow>
+                                <RadzenColumn Size="3">
+                                    <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                        <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 15rem; width:200px; height:200px" />
+                                        <RZInputFile Icon="upload"
+                                                     Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                                     Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                     Event="async (e) => { await OnChangeImageFileAtNewModal(e); }">
+                                        </RZInputFile>
+                                    </RadzenCard>
+                                </RadzenColumn>
+                                <RadzenColumn Size="9">
+                                    <RadzenRow>
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                            <RadzenTextBox Class="w-100" @bind-Value="NewWebMenu.Name" />
+                                            <ValidationMessage For="@(() => NewWebMenu.Name)" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["MenuType"]</RadzenText>
+                                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            @bind-Value=@SelectedMenuType Multiple="false"
+                                                            Change="async (e) => { await OnChangeSelectWebMenu(e); }"
+                                                            TextProperty="Text"
+                                                            ValueProperty="Value"
+                                                            Placeholder="Select..."
+                                                            Data=@MenuTypes
+                                                            Class="w-100" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            @if (!HideUrlTextBox)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UrlRef"]</RadzenText>
+                                                <RadzenTextBox Class="w-100" @bind-Value="NewWebMenu.UrlRef" />
+                                                <ValidationMessage For="@(() => NewWebMenu.UrlRef)" />
+                                            }
+                                          
+                                            @if (!HidePostDetail)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            FilterOperator="StringFilterOperator.StartsWith"
+                                                            @bind-Value=@SelectedPostDetail Multiple="false"
+                                                            SearchTextChanged="@(args => PostOnLoadData(args))"
+                                                            Change="async (e) => { await OnChangeSelect(e); }"
+                                                            TextProperty="Title"
+                                                            ValueProperty="Id"
+                                                            Placeholder="Select..."
+                                                            Data=@Posts
+                                                                Class="w-100" />
+                                            }
+                                            @if (!HidePostCategory)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostCategory"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            FilterOperator="StringFilterOperator.StartsWith"
+                                                            @bind-Value=@SelectedPostCategory Multiple="false"
+                                                            Change="async (e) => { await OnChangeSelect(e); }"
+                                                            TextProperty="Name"
+                                                            ValueProperty="Id"
+                                                            Placeholder="Select..."
+                                                            Data=@PostCategories
+                                                                Class="w-100" />
+                                            }
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Note"]</RadzenText>
+                                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWebMenu.Note" Rows="3" Cols="30" Class="w-100" />
+
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+
+                                            <RadzenSwitch @bind-Value=@NewWebMenu.IsVisibled />
+                                            <ValidationMessage For="@(() => NewWebMenu.IsVisibled)" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                            <RadzenNumeric Class="w-100" @bind-Value="NewWebMenu.ODX" />
+                                            <ValidationMessage For="@(() => NewWebMenu.ODX)" />
+                                        </RadzenColumn>
+
+                                    </RadzenRow>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="@L["SeoInfomation"]">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["MenuSuffix"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewWebMenu.MenuSuffix" Disabled />
+                            <ValidationMessage For="@(() => NewWebMenu.MenuSuffix)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewWebMenu.SeoTitle" />
+                            <ValidationMessage For="@(() => NewWebMenu.SeoTitle)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewWebMenu.Slug" />
+                            <ValidationMessage For="@(() => NewWebMenu.Slug)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["SeoKeyword"]</RadzenText>
+                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWebMenu.SeoKeyword" Rows="3" Cols="30" Class="w-100" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="NewWebMenu.SeoDescription" Rows="3" Cols="30" Class="w-100" />
+
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="@L["WebMenu"]">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Parent Menu</RadzenText>
+                            <RadzenTree Data=@HierarchicalWebMenus Style="width:100%" Change="OnChangeNewWebMenu">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildWebMenu"
+                                                 Expanded="(value) => true"
+                                                 HasChildren=@(e => (e as WebMenuDto).ChildWebMenu.Any())>
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="menu" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideNewModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditingModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["WebMenu.Infomation"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="EditingWebMenu" OnValidSubmit="async () => { await UpdateWebMenu(); }">
+            <ModalBody>
+
+                <RadzenTabs RenderMode="TabRenderMode.Client">
+                    <Tabs>
+                        <RadzenTabsItem Text="@L["WebMenu.Infomation"]">
+                            <DataAnnotationsValidator />
+                            <RadzenRow>
+
+                                <RadzenColumn Size="3">
+                                    <RadzenCard Style="border: 2px dotted var(--rz-on-info-lighter)">
+                                        <RadzenImage Path="@($"data:image/jpeg;base64,{Base64EncodedImageData}")" Style="width: 15rem; width:200px; height:200px" />
+                                        <RZInputFile Icon="upload"
+                                                     Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                                     Style="display: flex;align-items: center;min-width:200px;max-width: 200px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                     Event="async (e) => { await OnChangeImageFileAtEditingModal(e); }">
+                                        </RZInputFile>
+                                    </RadzenCard>
+                                </RadzenColumn>
+                                <RadzenColumn Size="9">
+                                    <RadzenRow>
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                                            <RadzenTextBox Class="w-100" @bind-Value="EditingWebMenu.Name" />
+                                            <ValidationMessage For="@(() => EditingWebMenu.Name)" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["MenuType"]</RadzenText>
+                                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            @bind-Value=@SelectedMenuType Multiple="false"
+                                                            Change="async (e) => { await OnChangeSelectWebMenu(e); }"
+                                                            TextProperty="Text"
+                                                            ValueProperty="Value"
+                                                            Placeholder="Select..."
+                                                            Data=@MenuTypes
+                                                            Class="w-100" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            @if (!HideUrlTextBox)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UrlRef"]</RadzenText>
+                                                <RadzenTextBox Class="w-100" @bind-Value="EditingWebMenu.UrlRef" />
+                                                <ValidationMessage For="@(() => EditingWebMenu.UrlRef)" />
+                                            }
+                                          
+                                            @if (!HidePostDetail)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Post"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            FilterOperator="StringFilterOperator.StartsWith"
+                                                            @bind-Value=@SelectedPostDetail Multiple="false"
+                                                            SearchTextChanged="@(args => PostOnLoadData(args))"
+                                                            Change="async (e) => { await OnChangeSelect(e); }"
+                                                            TextProperty="Title"
+                                                            ValueProperty="Id"
+                                                            Placeholder="Select..."
+                                                            Data=@Posts
+                                                                Class="w-100" />
+                                            }
+                                            @if (!HidePostCategory)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["PostCategory"]</RadzenText>
+                                                <RadzenDropDown AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                            FilterOperator="StringFilterOperator.StartsWith"
+                                                            @bind-Value=@SelectedPostCategory Multiple="false"
+                                                            Change="async (e) => { await OnChangeSelect(e); }"
+                                                            TextProperty="Name"
+                                                            ValueProperty="Id"
+                                                            Placeholder="Select..."
+                                                            Data=@PostCategories
+                                                                Class="w-100" />
+                                            }
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="12">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Note"]</RadzenText>
+                                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingWebMenu.Note" Rows="3" Cols="30" Class="w-100" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["IsVisibled"]</RadzenText>
+                                            <RadzenSwitch @bind-Value=@EditingWebMenu.IsVisibled />
+                                            <ValidationMessage For="@(() => EditingWebMenu.IsVisibled)" />
+                                        </RadzenColumn>
+                                        <RadzenColumn Size="6">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["ODX"]</RadzenText>
+                                            <RadzenNumeric Class="w-100" @bind-Value="EditingWebMenu.ODX" />
+                                            <ValidationMessage For="@(() => EditingWebMenu.ODX)" />
+                                        </RadzenColumn>
+                                    </RadzenRow>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="@L["SeoInfomation"]">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["MenuSuffix"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingWebMenu.MenuSuffix" Disabled />
+                            <ValidationMessage For="@(() => EditingWebMenu.MenuSuffix)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoTitle"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingWebMenu.SeoTitle" />
+                            <ValidationMessage For="@(() => EditingWebMenu.SeoTitle)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Slug"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="EditingWebMenu.Slug" />
+                            <ValidationMessage For="@(() => EditingWebMenu.Slug)" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="display: inline;margin-right: 5px">@L["SeoKeyword"]</RadzenText>
+                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingWebMenu.SeoKeyword" Rows="3" Cols="30" Class="w-100" />
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["SeoDescription"]</RadzenText>
+                            <RadzenTextArea Placeholder="Nhập vào đây..." @bind-Value="EditingWebMenu.SeoDescription" Rows="3" Cols="30" Class="w-100" />
+
+                        </RadzenTabsItem>
+
+                        <RadzenTabsItem Text="@L["WebMenu"]">
+                            <RadzenTree Data=@HierarchicalWebMenus Style="width:100%" Change="OnChangeUpdateWebMenu">
+                                <RadzenTreeLevel TextProperty="Name" ChildrenProperty="ChildWebMenu"
+                                                 HasChildren=@(e => (e as WebMenuDto).ChildWebMenu.Any())
+                                                 Selected="(value) => (value as WebMenuDto).Id == EditingWebMenuId"
+                                                 Expanded="(value) => true">
+                                    <Template Context="data">
+                                        <div style="display: flex;width:100%;justify-content: space-between;align-items: center">
+                                            <div style="display: flex">
+                                                <RadzenIcon Icon="menu" />
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-bottom: 0">@data.Text</RadzenText>
+                                            </div>
+                                        </div>
+
+                                    </Template>
+                                </RadzenTreeLevel>
+                            </RadzenTree>
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideEditModal" Text="@L["Cancel"]" Disabled="IsDisable" />
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
