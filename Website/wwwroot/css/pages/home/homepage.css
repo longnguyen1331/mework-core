@@ -59,7 +59,7 @@
     font-weight: 300;
     font-size: 3.75rem;
     line-height: 1.2;
-    color: #1d1c1c;
+    color: #ffffff;
     font-weight: 700;
     font-size: 30px;
     line-height: 70px;
@@ -69,13 +69,13 @@
 
 .item-header-content {
     margin: 0;
-    color: #626262;
+  
     line-height: 1.5em;
     letter-spacing: 0.05em;
     font-family: Roboto,sans-serif;
     font-weight: 400;
     font-size: 1rem;
-    color: #262f36;
+    color: #ffffff;
     font-weight: 400;
     font-size: 25px;
     line-height: 50px;

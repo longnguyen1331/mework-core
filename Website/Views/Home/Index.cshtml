@@ -41,9 +41,6 @@
                                         <div class="d-flex justify-content-end item-inline-content-desc">
                                             <a rel="canonical" href="@StringUtil.GenerateBannerHref(item)">
                                                 <div class="d-inline-flex align-items-center justify-content-center item-body-content gap-2">
-                                                    <svg class="button-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CalendarMonthIcon">
-                                                        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
-                                                    </svg>
                                                     <span>@item.ButtonText</span>
                                                 </div>
                                             </a>
@@ -62,72 +59,24 @@
         <div class="container p-0 contact-panel-container">
             <div class="container p-0 contact-panel-background py-2"></div>
             <div class="d-flex justify-content-between contact-panel-body">
-                <div class="contact-panel-item">
-                    <div class="d-flex flex-column justify-content-center align-items-center contact-panel-item-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img alt="hotline" src="~/img/icon/hotline.svg" width="27" height="27" decoding="async" data-nimg="1" loading="lazy" style="color: transparent;">
-                            <span class="contact-panel-item-title">Hotline</span>
+                <!-- Our Service-->
+                <section class="our-service-section">
+                    <div>
+                        <div class="container" style="margin-top: 15px; margin-bottom:15px">
+                            @*    <h3 class="title_center"> DỊCH VỤ CỦA CHÚNG TÔI </h3>
+                            <p class="descript_title"> Các dịch vụ chính để Quý khách hàng và Quý bệnh nhân lựa chọn </p> *@
+                            <div class="row" id="serviceTypesPanel"></div>
                         </div>
-                        <p class="contact-panel-item-content">1900986868</p>
                     </div>
-                </div>
-                <div class="contact-panel-item">
-                    <div class="d-flex flex-column justify-content-center align-items-center contact-panel-item-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img alt="hotline" src="~/img/icon/time_ct.svg" width="27" height="27" decoding="async" data-nimg="1" loading="lazy" style="color: transparent;">
-                            <span class="contact-panel-item-title">THỜI GIAN LÀM VIỆC</span>
-                        </div>
-                        <p class="contact-panel-item-content">
-                            <span>
-                                Thứ 2 - Thứ 6 <br>
-                                <span style="font-size: 14px !important"> Sáng: 7h00 - 11h00 ; Chiều: 13h30 - 16h30 </span>
-                                <br>
-                                <b> CẤP CỨU 24/7</b>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="contact-panel-item">
-                    <div class="d-flex flex-column justify-content-center align-items-center contact-panel-item-body">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img alt="hotline" src="~/img/icon/dcbv.svg" width="22" height="30" decoding="async" data-nimg="1" loading="lazy" style="color: transparent;">
-                            <span class="contact-panel-item-title">Địa chỉ</span>
-                        </div>
-                        <p class="contact-panel-item-content">
-                            <span>
-                                216 Nguyễn Công Trứ <br>
-                                <span style="font-size: 14px !important"> An Hải Đông, Quận Sơn Trà, Đà Nẵng</span>
-                            </span>
-                        </p>
-                    </div>
-                </div>
+                </section>
+                <!-- End Our Service-->
+               
             </div>
         </div>
     </div>
 </section>
 <!-- End Banner -->
-<!-- Our Service-->
-<section class="our-service-section">
-    <div>
-        <div class="container" style="margin-top: 15px; margin-bottom:15px">
-            <h3 class="title_center"> DỊCH VỤ CỦA CHÚNG TÔI </h3>
-            <p class="descript_title"> Các dịch vụ chính để Quý khách hàng và Quý bệnh nhân lựa chọn </p>
-            <div class="row" id="serviceTypesPanel"></div>
-        </div>
-    </div>
-</section>
-<!-- End Our Service-->
-<!-- vr360-->
-<section class="our-service-section">
-    <div>
-        <div class="container" style="margin-top: 15px; margin-bottom:15px">
-            <a href="http://vr360.benhvien199.vn" target="_blank">  
-            <img alt="Vr360" src="~/img/vr360.gif" decoding="async" data-nimg="1" loading="lazy">
-            </a>
-        </div>
-    </div>
-</section>
-<!-- End vr360-->
+
 <!-- News -->
 <div class="news-section">
     <section class="news-section-container">

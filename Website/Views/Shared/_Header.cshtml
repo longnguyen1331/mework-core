@@ -11,6 +11,13 @@
             <div class="top-panel">
                 <!-- Start Atribute Navigation -->
                 <div class="top-header d-flex justify-content-between">
+                    <!-- Start Header Navigation -->
+                    <div class="navbar-header">
+                        <a href="/" class="navbar-brand p-0">
+                            <img alt="logo.png" src="@(!string.IsNullOrEmpty(ViewData["Cfg_LogoURL"]?.ToString()) ? ViewData["Cfg_LogoURL"] : "~/img/logo.png")" width="253" height="56" decoding="async" loading="lazy" style="color: transparent; width: auto;">
+                        </a>
+                    </div>
+                    <!-- End Header Navigation -->
                     <a rel="canonical" href="tel:@(!string.IsNullOrEmpty(ViewData["Cfg_Phone"]?.ToString()) ? ViewData["Cfg_Phone"] : "1900986868")" target="_blank" rel="noreferrer" class="hot-line">
                         <svg focusable="false" aria-hidden="true">
                             <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
@@ -19,48 +26,20 @@
                     </a>
                     <ul class="login-panel gap-3">
                         <li>
-                            @if (ViewData["UserCode"] != null)
-                            {
-                                <div class="d-flex justify-content-between align-items-center user-info">
-                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                        <span class="mr-2">Xin chào</span>
-                                        <a rel="canonical" href="/patient/thong-tin-ca-nhan">@ViewData["UserCode"]</a>
-                                    </div>
-                                    <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="signOut()" tabindex="0" type="button">
-                                        <span class="css-1sdfs1n">Thoát</span>
-                                    </button>
-                                </div>
-                            }
-                            else
-                            {
-                                <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="logon()" tabindex="0" type="button">
-                                    <img alt="icon user" src="~/img/icon/icon_user.svg" width="20" height="20" decoding="async" loading="lazy" style="color: transparent;">
-                                    <span class="css-1sdfs1n">Đăng nhập</span>
-                                </button>
-                            }
+
+                            <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="logon()" tabindex="0" type="button">
+                                <img alt="icon user" src="~/img/icon/icon_user.svg" width="20" height="20" decoding="async" loading="lazy" style="color: transparent;">
+                                <span class="css-1sdfs1n">Đăng nhập</span>
+                            </button>
+
                         </li>
-                        <li>
-                            <div class="d-flex gap-1">
-                                <a  rel="canonical" class="p-0 change-lang" href="/#googtrans(vi)">
-                                    <img alt="flag vi" src="~/img/icon/icon_flag_vn.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
-                                </a>
-                                <a rel="canonical" class="p-0 change-lang" href="/#googtrans(en)">
-                                    <img alt="flag en" src="~/img/icon/icon_flag_en.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
-                                </a>
-                            </div>
-                        </li>
+
                     </ul>
                 </div>
                 <!-- End Atribute Navigation -->
             </div>
             <div class="d-flex main-panel">
-                <!-- Start Header Navigation -->
-                <div class="navbar-header">
-                    <a href="/" class="navbar-brand p-0">
-                        <img alt="logo.png" src="@(!string.IsNullOrEmpty(ViewData["Cfg_LogoURL"]?.ToString()) ? ViewData["Cfg_LogoURL"] : "~/img/logo.png")" width="253" height="56" decoding="async" loading="lazy" style="color: transparent; width: auto;">
-                    </a>
-                </div>
-                <!-- End Header Navigation -->
+
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav navbar-right nav-menu gap-4" data-in="#" data-out="#">
@@ -187,7 +166,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    <a  rel="canonical" role="button" data-parent="" href="@StringUtil.GenerateMenuHref(child.value)">@child.value.Name</a>
+                                                                    <a rel="canonical" role="button" data-parent="" href="@StringUtil.GenerateMenuHref(child.value)">@child.value.Name</a>
                                                                 }
                                                             </div>
                                                         </div>
@@ -252,7 +231,7 @@
     <!-- End mobile menu -->
 </header>
 
-<div class="modal fade logon-modal" id="myModal" role="dialog">
+@* <div class="modal fade logon-modal" id="myModal" role="dialog">
     <div class="modal-dialog modal-md">
         <!-- Modal content-->
         <div class="modal-content">
@@ -306,7 +285,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="d-flex flex-column gap-3 mt-5">
                         <button type="submit" class="btn btn-custom btn-login">Đăng nhập</button>
                         <button type="button" class="btn btn-custom btn-register">Đăng ký</button>
@@ -315,4 +294,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>  *@
