@@ -1,0 +1,27 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/WebClient/obj/Debug/net6.0
+/WebClient/obj
+/Application/obj/Debug/net6.0
+/Application/obj
+/Contract/obj
+/SqlServ4r/obj
+/Localization/obj
+/Domain/obj
+/Core/obj
+/.gitignore
+/WebApi/obj/Debug/net6.0
+/WebApi/obj
+/WebApi/obj/project.assets.json
+/.vs
+/WebApi/bin/Debug/net6.0
+/Application/bin/Debug/net6.0
+/Contract/bin/Debug/net6.0
+/Core/bin/Debug/net6.0
+/Domain/bin/Debug/net6.0
+/SqlServ4r/bin/Debug/net6.0
+/WebClient/bin/Debug/net6.0
+/Website/bin
+/Website/obj
