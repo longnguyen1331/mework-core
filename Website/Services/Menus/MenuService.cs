@@ -1,4 +1,5 @@
-﻿using Contract.WebMenus;
+﻿using Contract;
+using Contract.WebMenus;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Website.Models;
@@ -33,15 +34,15 @@ namespace Website.Services.Menus
             var client = _httpClientFactory.CreateClient("Website");
             var response = await client.GetStringAsync(_remoteOptions.GetWebsiteMenu);
 
-           var menus = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<WebMenuDto>>(response) : null;
+           var menus = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ApiResponseBase<List<WebMenuDto>>>(response) : null;
             List<WebMenuDto> webMenus = new List<WebMenuDto>();
-            if (menus != null && menus.Any())
+            if (menus != null && menus.IsSuccess  &&  menus.Data.Any())
             {
-                result.CurrentMenu = menus.FirstOrDefault(s => !string.IsNullOrEmpty(currentURL) && !currentURL.Equals("/") && StringUtil.GenerateMenuHref(s).Equals(currentURL));
+                result.CurrentMenu = menus.Data.FirstOrDefault(s => !string.IsNullOrEmpty(currentURL) && !currentURL.Equals("/") && StringUtil.GenerateMenuHref(s).Equals(currentURL));
 
-                foreach (var menu in menus.Where(x => x.ParentMenuId == null))
+                foreach (var menu in menus.Data.Where(x => x.ParentMenuId == null))
                 {
-                    webMenus.Add(GetMenus(menu, menus));
+                    webMenus.Add(GetMenus(menu, menus.Data));
                 }
             }
 
