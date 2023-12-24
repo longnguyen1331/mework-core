@@ -1,0 +1,28 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+@if (Model.StatusCode == "404")
+{
+    <section class="error-page" style="background-color: #06bcb0;">
+        <div class="container mt-4 mb-5">
+            <div class="d-flex w-100 align-items-center justify-content-center">
+                <img alt="404" src="/img/404.png" width="1200" height="1200" decoding="async" loading="lazy">
+            </div>
+        </div>
+    </section>
+}
+
+@if (Model.StatusCode == "500")
+{
+    <section class="error-page">
+        <div class="container mt-4 mb-5">
+            <div class="d-flex w-100 align-items-center justify-content-center flex-column">
+                <img alt="404" src="/img/500.png" width="1200" height="1200" decoding="async" loading="lazy">
+                <p class="MuiTypography-root MuiTypography-body1 css-4a6bqe">Oops...Something went wrong.</p>
+                <h6 class="MuiTypography-root MuiTypography-subtitle2 css-9ff005">Sorry for the inconvenience, we are working on it.</h6>
+            </div>
+        </div>
+    </section>
+}

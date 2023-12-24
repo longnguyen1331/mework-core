@@ -1,0 +1,74 @@
+﻿@{
+	var serviceResult = ViewData["ServiceResult"] as Contract.Services.ServiceSearchResultDto;
+	var curPage = ViewData["CurPage"] as Int32? ?? 1;
+	var totalPages = ViewData["TotalPage"] as Int32? ?? 1;
+	var pages = ViewData["Pages"] as List<Int32> ?? new List<int>() { 1 };
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="row row-xs d-flex flex-xs-column flex-wrap layout-grid">
+			@if (serviceResult != null && serviceResult.Items != null && serviceResult.Items.Any())
+			{
+				foreach (var item in serviceResult.Items)
+				{
+					<div class="col-xs-12 col-sm-6 news news-card-full-item mb-4">
+						<div class="service-container">
+							<div class="service-box-1">
+								<a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+									<div class="service-thumb-img">
+										<img alt="service" sizes="100vw" src="@item.ImageUrl" decoding="async" data-nimg="fill" class="imageBox" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+									</div>
+								</a>
+								<div class="service-box-1-body">
+									<a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+										<span class="service-box-1-content-title text-ellipses">@item.Name</span>
+									</a>
+									<a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+										<span class="service-box-1-content-desc text-ellipses text-ellipses-3-line">@item.Description</span>
+									</a>
+									<p class="retail-price">
+										Giá: <span class="price">@item.Charges.ToString("#,##0") đ</span>
+									</p>
+								
+									<p class="retail-price-2 mt-3">
+										Giá: <span class="price"> @item.Charges.ToString("#,##0") đ</span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			}
+		</div>
+	</div>
+	@if (totalPages > 0)
+	{
+		<div class="col-sm-12 d-flex justify-content-center">
+			<ul class="pagination">
+				@{
+					int delta = 1;
+					int range = delta + 4;
+					int numberTruncateLeft = curPage - delta;
+					int numberTruncateRight = curPage + delta;
+
+					pages = pages.Where(x => x == 1 || x == totalPages || (curPage < 5 && x <= 5) || (curPage > totalPages - 4 && x > totalPages - 4) || (x >= numberTruncateLeft && x <= numberTruncateRight)).ToList();
+				}
+				<li class="post-next @(curPage == 1 ? "disabled" : "")"><a class="page-btn" onclick="prevPage(@(curPage - 1))"><svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></a></li>
+				@for (int i = 0; i < pages.Count(); i++)
+				{
+					int pageNum = pages[i];
+
+					<li class="@(pageNum == curPage ? "active" : "")" id="page-@pageNum"><a class="page-btn" onclick="goToPage(@pageNum)">@pageNum</a></li>
+
+					if (i < (pages.Count() - 1) && pageNum + 1 != pages[i + 1])
+					{
+						<li><span class="page-btn">...</span></li>
+					}
+				}
+
+				<li class="post-prev @(curPage == totalPages ? "disabled" : "")"><a class="page-btn" onclick="nextPage(@(curPage + 1))"><svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></a></li>
+			</ul>
+		</div>
+	}
+</div>

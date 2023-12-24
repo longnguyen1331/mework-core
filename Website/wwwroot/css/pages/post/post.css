@@ -1,0 +1,89 @@
+﻿.section-title {
+    margin: 0;
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.167;
+    color: #353535;
+    font-size: 22px;
+    font-weight: 500;
+    text-transform: uppercase;
+    position: relative;
+}
+
+    .section-title:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        min-width: 100px;
+        background: #06bcb0;
+        height: 3px;
+    }
+
+.search-input {
+    flex: 1 1 0%;
+}
+
+    .search-input label {
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .search-input .txt-seatch {
+        width: 100%;
+        padding: 14px;
+        display: block;
+        outline: none;
+        border: 1px solid #06bcb0;
+        font-size: 13px;
+        line-height: 15px;
+        min-height: inherit;
+    }
+
+.btn-search {
+    height: 47px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: 16px;
+    color: #fff;
+    background: #06bcb0 !important;
+}
+
+.btn-search:hover {
+    background-color: rgb(103, 198, 63) !important;
+    color: #fff;
+}
+.news_hot {
+    padding: 0;
+    border-bottom: 1px solid #e6e3e336;
+    display: inline-block;
+    width: 100%;
+}
+.news_hot_content {
+    width: 65%;
+    float: left;
+    padding-left: 10px;
+    text-align: justify;
+}
+.news-item-title:hover {
+    color: rgb(103, 198, 63);
+}
+.new_hot_time {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    padding: 10px 0;
+    color: #06bcb0;
+    margin-top: 0px;
+}
+.avatar_new {
+    width: 35%;
+    float: left;
+    border-radius: 4px;
+    max-height: 80px;
+}

@@ -1,0 +1,94 @@
+﻿@{
+    var postResult = ViewData["PostResult"] as Contract.Posts.PostSearchResultDto;
+    var curPage = ViewData["CurPage"] as Int32? ?? 1;
+    var totalPages = ViewData["TotalPage"] as Int32? ?? 1;
+    var pages = ViewData["Pages"] as List<Int32> ?? new List<int>() { 1 };
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row row-xs d-flex flex-xs-column flex-wrap layout-grid">
+            @if (postResult != null && postResult.Items != null && postResult.Items.Any())
+            {
+                foreach (var item in postResult.Items)
+                {
+                    <div class="col-xs-12 col-sm-6 news news-card-full-item mb-4">
+                        <div>
+                            <div class="news-card-full-thumbnail">
+                                <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                    <img class="imageBox" src="@item.PictureUrl" alt="news">
+                                    <div class="news-category-box">
+                                        <span class="news-category-content">@item.PostCategoryName</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news news-item-box">
+                                <div class="d-flex flex-column gap-3">
+                                    <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                        <span class="news news-item-title text-ellipses text-ellipses-2-line">@item.Title</span>
+                                    </a>
+                                    <div>
+                                        <span class="news news-item-content text-ellipses text-ellipses-3-line">@item.SortDescription</span>
+                                    </div>
+                                    <p class="d-flex gap-5 news-item-author">
+                                        <span class="d-flex justify-content-center align-items-center">
+                                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="Person2OutlinedIcon">
+                                                <path d="M18.39 14.56C16.71 13.7 14.53 13 12 13s-4.71.7-6.39 1.56C4.61 15.07 4 16.1 4 17.22V20h16v-2.78c0-1.12-.61-2.15-1.61-2.66zM18 18H6v-.78c0-.38.2-.72.52-.88C7.71 15.73 9.63 15 12 15c2.37 0 4.29.73 5.48 1.34.32.16.52.5.52.88V18zm-8.22-6h4.44c1.21 0 2.14-1.06 1.98-2.26l-.32-2.45C15.57 5.39 13.92 4 12 4S8.43 5.39 8.12 7.29L7.8 9.74c-.16 1.2.77 2.26 1.98 2.26zm.32-4.41C10.26 6.67 11.06 6 12 6s1.74.67 1.9 1.59l.32 2.41H9.78l.32-2.41z"></path>
+                                            </svg>@item.PosterFullName
+                                        </span>
+                                        <span class="d-flex justify-content-center align-items-center">
+                                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="WatchLaterOutlinedIcon">
+                                                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"></path>
+                                            </svg>@item.PostedDate
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="d-flex justify-content-end mt-4">
+                                    <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                        <div class="news btn-custom-outline news-btn-detail">
+                                            <p class="d-fex gap-3 news-btn-detail-content">
+                                                Chi tiết
+                                                <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AddIcon">
+                                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                                                </svg>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    @if (totalPages > 0)
+    {
+        <div class="col-sm-12 d-flex justify-content-center">
+            <ul class="pagination">
+                @{
+                    int delta = 1;
+                    int range = delta + 4;
+                    int numberTruncateLeft = curPage - delta;
+                    int numberTruncateRight = curPage + delta;
+
+                    pages = pages.Where(x => x == 1 || x == totalPages || (curPage < 5 && x <= 5) || (curPage > totalPages - 4 && x > totalPages - 4) || (x >= numberTruncateLeft && x <= numberTruncateRight)).ToList();
+                }
+                <li class="post-prev @(curPage == 1 ? "disabled" : "")"><a class="page-btn" onclick="prevPage(@(curPage - 1))"><svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateBeforeIcon"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></a></li>
+                @for (int i = 0; i < pages.Count(); i++)
+                {
+                    int pageNum = pages[i];
+
+                    <li class="@(pageNum == curPage ? "active" : "")" id="page-@pageNum"><a class="page-btn" onclick="goToPage(@pageNum)">@pageNum</a></li>
+
+                    if (i < (pages.Count() - 1) && pageNum + 1 != pages[i + 1])
+                    {
+                        <li><span class="page-btn">...</span></li>
+                    }
+                }
+
+                <li class="post-next @(curPage == totalPages ? "disabled" : "")"><a class="page-btn" onclick="nextPage(@(curPage + 1))"><svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="NavigateNextIcon"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></a></li>
+            </ul>
+        </div>
+    }
+</div>

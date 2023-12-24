@@ -1,0 +1,180 @@
+﻿@using Website.Services.Auth;
+@inject IAuthService authService
+@{
+    var service = ViewData["Service"] as Contract.Services.ServiceDto;
+    var serviceRelated = ViewData["ServiceRelated"] as List<Contract.Services.ServiceDto>;
+
+    ViewData["Title"] = service?.Name;
+    ViewData["UserId"] = authService.GetUserId();
+
+    var title = !string.IsNullOrEmpty(service?.SeoTitle) ? service?.SeoTitle : service?.Name;
+    var desc = !string.IsNullOrEmpty(service?.SeoDescription) ? service?.SeoDescription : service?.Description;
+
+    if (!string.IsNullOrEmpty(title))
+        ViewData["SEOTitle"] = title;
+
+    if (!string.IsNullOrEmpty(desc))
+        ViewData["SEODescription"] = desc;
+
+    if (!string.IsNullOrEmpty(service?.SeoKeyword))
+        ViewData["SEOKeyword"] = service?.SeoKeyword;
+}
+
+@section Headers {
+    <link href="~/css/pages/shared/breadcrumb.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/top-banner.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/note-panel.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/service/service.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/service/servicedetail.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/pages/service/service.js"></script>
+}
+
+<!-- Start Banner
+============================================= -->
+<section class="banner-section">
+    <div class="top-banner-carousel owl-carousel owl-theme text-center">
+        <div class="item">
+            <div class="banner-item">
+                <div class="banner-body">
+                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076441726797486.png" alt="Gói dịch vụ">
+                    <div class="banner-body-content">
+                        <div class="container banner-body-content-header">
+                            <div class="banner-title">
+                                <div class="banner-title-content">
+                                    <h2></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="breadcrumb-panel">
+        <div class="container breadcrumb-body">
+            <ul class="breadcrumb">
+                <li>
+                    <a rel="canonical" href="/">
+                        <span>
+                            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="HomeIcon">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+                            </svg>Trang chủ
+                        </span>
+                    </a>
+                </li>
+                <li><span>Gói dịch vụ</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="service-section container d-flex flex-wrap">
+    <div class="d-flex flex-wrap service-info w-100">
+        <div class="img-thumb-panel">
+            <div class="img-thumb">
+                <img alt="@Html.Raw(service?.Name)" sizes="100vw" src="@service?.ImageUrl" decoding="async" data-nimg="fill" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+            </div>
+        </div>
+        <div class="service-info-header">
+            <h1 class="content-title">@Html.Raw(service?.Name)</h1>
+            <div class="retail-price-panel">
+                <p class="retail-price">
+                    Giá: <span class="price">@service?.Charges.ToString("#,##0") đ</span>
+                </p>
+            </div>
+            <div class="button-pannel">
+                <div class="d-flex gap-2">
+                    <button class="btn-custom btn-service" tabindex="0" type="button" data-serviceId="@service?.Id" data-UserId="@ViewData["UserId"]" onclick="registerService(this)">
+                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CalendarMonthIcon">
+                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
+                        </svg>
+                        <span class="btn-content text-ellipses">Đăng ký ngay</span>
+                    </button>
+                    <button class="btn-custom btn-service btn-advise" tabindex="0" type="button" onclick="onShowModal('#noteModal')">
+                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="EditIcon">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+                        </svg>
+                        <span class="btn-content text-ellipses">Nhận tư vấn</span>
+                    </button>
+                </div>
+            </div>
+            <div class="advise-panel">
+                <p>
+                    Nếu bạn đang quan tâm đến dịch vụ hãy<span>Đăng ký ngay</span> hoạc<span>Nhận tư vấn</span>.
+                </p>
+                <p>
+                    Hotline: <span class="hotline">1900986868</span>
+                </p>
+                <p>
+                    Email: <span class="email">cskh@benhvien199.vn</span>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+    <div class="service-detail-panel w-100">
+        <h2 class="section-title">Chi tiết dịch vụ</h2>
+        <div>@Html.Raw(service?.Description)</div>
+    </div>
+
+  
+
+    <div class="other-service-section">
+        <h2 class="section-title">Các dịch vụ khác</h2>
+        <div class="service-related-items-carousel owl-carousel owl-theme text-center mt-4">
+            @if (serviceRelated != null)
+            {
+                foreach (var item in serviceRelated)
+                {
+                    <div class="item ">
+                        <div class="service-container">
+                            <div class="service-box-1">
+                                <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                    <div class="service-thumb-img">
+                                        <img alt="service" sizes="100vw" src="@item.ImageUrl" decoding="async" data-nimg="fill" class="imageBox" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+                                    </div>
+                                </a>
+                                <div class="service-box-1-body">
+                                    <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                        <span class="service-box-1-content-title text-ellipses">@item.Name</span>
+                                    </a>
+                                    <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                        <span class="service-box-1-content-desc text-ellipses text-ellipses-3-line">@item.Description</span>
+                                    </a>
+                                    <p class="retail-price">
+                                        Giá: <span class="price">@item.Charges.ToString("#,##0") đ</span>
+                                    </p>
+                                   
+                                   
+                                    <p class="retail-price-2 mt-3">
+                                        Giá: <span class="price"> @item.Charges.ToString("#,##0") đ</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="noteModal" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header no-border pb-0">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="text-center m-0"><img alt="logo.png" src="~/img/logo.png" width="200" height="50" decoding="async" data-nimg="1" loading="lazy" style="color: transparent;"></h3>
+            </div>
+            <div class="modal-body m-1 mt-0">
+                <iframe width="100%" height="700" src="@ViewData["GetAdviceUrl"]" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

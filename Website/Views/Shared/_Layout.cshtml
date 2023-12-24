@@ -1,0 +1,239 @@
+﻿@using Website.Services.AppConfigs;
+@using Website.Services.Auth;
+@using Website.Services.Menus;
+@inject IAppConfigService appConfigService
+@inject IMenuService menuService
+@inject IAuthService authService
+@{
+    var menuResponse = await menuService.GetListMenuAsync(Context.Request.Path);
+    var appConfigResponse = await appConfigService.GetCurrentAppConfigAsync();
+
+    ViewData["UserCode"] = authService.GetUserCode();
+    ViewData["UserId"] = authService.GetUserId();
+
+    if (string.IsNullOrEmpty(ViewData["SEOTitle"]?.ToString()))
+        ViewData["Title"] = menuResponse?.CurrentMenu?.Name;
+
+    if (string.IsNullOrEmpty(ViewData["SEOTitle"]?.ToString()) && !string.IsNullOrEmpty(menuResponse?.CurrentMenu?.SeoTitle))
+        ViewData["SEOTitle"] = menuResponse?.CurrentMenu?.SeoTitle;
+
+    if (string.IsNullOrEmpty(ViewData["SEODescription"]?.ToString()) && !string.IsNullOrEmpty(menuResponse?.CurrentMenu?.SeoTitle))
+        ViewData["SEODescription"] = menuResponse?.CurrentMenu?.SeoDescription;
+
+    if (string.IsNullOrEmpty(ViewData["SEOKeyword"]?.ToString()) && !string.IsNullOrEmpty(menuResponse?.CurrentMenu?.SeoTitle))
+        ViewData["SEOKeyword"] = menuResponse?.CurrentMenu?.SeoKeyword;
+    if (ViewData["Image"] == null)
+    {
+        if (!string.IsNullOrEmpty(menuResponse?.CurrentMenu?.ImageUrl))
+            ViewData["Image"] = menuResponse?.CurrentMenu?.ImageUrl;
+        else
+        {
+            //ViewData["Image"] = "https://199hospital.vn/bv199.png";
+        }
+    }
+
+    if (appConfigResponse != null)
+    {
+        ViewData["Cfg_CompanyName"] = appConfigResponse.CompanyName;
+        ViewData["Cfg_LogoURL"] = appConfigResponse.LogoURL;
+        ViewData["Cfg_IconURL"] = appConfigResponse.IconURL;
+        ViewData["Cfg_Address"] = appConfigResponse.Address;
+        ViewData["Cfg_Email"] = appConfigResponse.Email;
+        ViewData["Cfg_Phone"] = appConfigResponse.Phone;
+        ViewData["Cfg_Introduction"] = appConfigResponse.Introduction;
+        ViewData["Cfg_Terms"] = appConfigResponse.Terms;
+        ViewData["Cfg_Conditions"] = appConfigResponse.Conditions;
+        ViewData["HeaderCode"] = appConfigResponse.HeaderCode;
+        ViewData["PrimaryColor"] = appConfigResponse.PrimaryColor;
+        ViewData["SecondaryColor"] = appConfigResponse.SecondaryColor;
+
+        ViewData["GoogleAnalytic"] = appConfigResponse.GoogleAnalytic;
+        ViewData["GoogleAPIKey"] = appConfigResponse.GoogleAPIKey;
+        ViewData["GoogleAppName"] = appConfigResponse.GoogleAppName;
+        ViewData["GoogleClientId"] = appConfigResponse.GoogleClientId;
+        ViewData["GoogleClientSecret"] = appConfigResponse.GoogleClientSecret;
+
+        if (string.IsNullOrEmpty(ViewData["SEOTitle"]?.ToString()))
+            ViewData["SEOTitle"] = appConfigResponse.SeoTitle;
+        if (string.IsNullOrEmpty(ViewData["SEOKeyword"]?.ToString()))
+            ViewData["SEOKeyword"] = appConfigResponse.SeoKeyword;
+        if (string.IsNullOrEmpty(ViewData["SEODescription"]?.ToString()))
+            ViewData["SEODescription"] = appConfigResponse.SeoDescription;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link data-n-head="true" rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Html.Raw(ViewData["Cfg_CompanyName"])@Html.Raw(!string.IsNullOrEmpty(ViewData["HeaderCode"]?.ToString()) ? $" - {ViewData["HeaderCode"]}" : "" )@Html.Raw(!string.IsNullOrEmpty(ViewData["Title"]?.ToString()) ? $" | {ViewData["Title"]}" : "" )</title>
+    <meta name="title" content="@Html.Raw(ViewData["SEOTitle"])" />
+    <meta name="description" content="@Html.Raw(ViewData["SEODescription"])" />
+    <meta name="keywords" content="@Html.Raw(ViewData["SEOKeyword"])" />
+    <link rel="canonical" href="@Html.Raw(Context.Request.Host.ToString() + Context.Request.Path)" />
+    <meta name="og:title" content="@Html.Raw(ViewData["SEOTitle"])" />
+    <meta name="og:description" content="@Html.Raw(ViewData["SEODescription"])" />
+    <meta name="og:type" content="website" />
+    <meta name="og:image" content="@ViewData["Image"]" />
+    <meta name="og:url" content="@Context.Request.Host.ToString()" />
+    <meta name="og:locale" content="vi" />
+    <meta name="og:site_name" />
+
+    <!-- ========== Start Stylesheet ========== -->
+    <link href="~/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/flaticon-set.css" rel="stylesheet" />
+    <link href="~/css/magnific-popup.css" rel="stylesheet" />
+    <link href="~/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/css/animate.css" rel="stylesheet" />
+    <link href="~/css/bootsnav.css" rel="stylesheet" />
+
+    <style>
+        .primary {
+            color: @ViewData["PrimaryColor"];
+        }
+
+        .secondary {
+            color: @ViewData["SecondaryColor"];
+        }
+    </style>
+
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/Website.styles.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/pages/shared/service.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/registerServices.css" rel="stylesheet" asp-append-version="true" />
+    @await RenderSectionAsync("Headers", required: false)
+    <!-- ========== End Stylesheet ========== -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="~/js/html5/html5shiv.min.js"></script>
+      <script src="~/js/html5/respond.min.js"></script>
+    <![endif]-->
+    <!-- ========== Google Fonts ========== -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,900" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800" rel="stylesheet" type="text/css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@(ViewData["GoogleClientId"] ?? "G-R892DP9N6T")"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        //Cho nay thay bang ID cua google
+        gtag('config', '@(ViewData["GoogleClientId"] ?? "G-R892DP9N6T")');
+    </script>
+</head>
+
+<body>
+<!-- Messenger Plugin chat Code -->
+    <div id="fb-root"></div>
+
+    <!-- Your Plugin chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
+
+    <script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "183751401770975");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v18.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <!-- Preloader Start -->
+    <div class="se-pre-con"></div>
+    <!-- Preloader Ends -->
+    <!-- Header
+    ============================================= -->
+    @{
+        await Html.RenderPartialAsync("_Header", menuResponse?.Items);
+    }
+    <!-- End Header -->
+    <!-- Main content
+    ============================================= -->
+    <main>
+        @RenderBody()
+    </main>
+    <!--
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="basicToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <strong>Mind Numbing Products</strong> is a force in the manufacturing and production market. Our motto is If it’s not Mind Numbing, it’s not worth it.
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="modal fade" id="bookAppointment" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- Modal content-->
+            <div class="modal-content modal-register-service">
+                <div class="modal-header register-service-header no-border pb-0">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 
+                    <h2 class="title text-center">Đăng ký dịch vụ</h2>
+                    <p class="text-center content">Bộ phận CSKH sẽ phản hồi bạn trong thời gian sớm nhất</p>
+                </div>
+                <div class="register-service-content" id="loadBookingAppointment">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Main content -->
+    <!-- Social
+    ============================================= -->
+    <partial name="_Social">
+        <!-- End Social -->
+        <!-- Footer
+        ============================================= -->
+        <partial name="_Footer">
+            <!-- End Footer -->
+            <!-- jQuery Frameworks
+            ============================================= -->
+            <script src="~/js/jquery-1.12.4.min.js"></script>
+            <script src="~/js/jquery-ui.min.js"></script>
+            <script src="~/js/bootstrap.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
+            <script src="~/js/equal-height.min.js"></script>
+            <script src="~/js/jquery.appear.js"></script>
+            <script src="~/js/jquery.easing.min.js"></script>
+            <script src="~/js/jquery.magnific-popup.min.js"></script>
+            <script src="~/js/modernizr.custom.13711.js"></script>
+            <script src="~/js/owl.carousel.min.js"></script>
+            <script src="~/js/wow.min.js"></script>
+            <script src="~/js/count-to.js"></script>
+            <script src="~/js/bootsnav.js"></script>
+            <script src="~/js/main.js"></script>
+            <script src="~/js/site.js"></script>
+            <script src="~/js/pages/shared/header.js"></script>
+            <script src="~/js/pages/shared/bookingServiceResult.js"></script>
+            <script src="~/js/pages/shared/registerService.js"></script>
+            @await RenderSectionAsync("Scripts", required: false)
+          
+</body>
+</html>

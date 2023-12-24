@@ -1,0 +1,192 @@
+﻿footer {
+    background-image: url(/img/footer-bg.png);
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
+    padding-top: 40px;
+    padding-bottom:10px;
+}
+
+    footer a {
+        text-decoration: none;
+    }
+
+    footer .footer-panel {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    footer .title {
+        color: #353535;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        position: relative;
+        text-transform: uppercase;
+        width: -webkit-max-content;
+        width: -moz-max-content;
+        width: max-content;
+        margin: 0;
+    }
+
+        footer .title:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 50%;
+            height: 3px;
+            background: #06bcb0;
+        }
+
+    footer .title-fot {
+        text-transform: uppercase;
+        margin: 0;
+        font-size: 18px;
+        line-height: 19px;
+        color: #4A4A4A;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    footer .category {
+        margin-bottom: 27px;
+    }
+
+        footer .category li {
+            list-style-type: none;
+            margin-bottom: 10px;
+        }
+
+            footer .category li::before {
+                content: url(/img/icon/right.svg);
+                float: left;
+                margin-right: 10px;
+            }
+
+            footer .category li a {
+                font-family: Roboto;
+                color: #4C4C4C;
+            }
+
+    footer .footer-panel .hospital-info ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 30px;
+    }
+
+        footer .footer-panel .hospital-info ul li .content {
+            font-size: 16px;
+            color: #3e3e3e;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+            footer .footer-panel .hospital-info ul li .content .icon-item {
+                min-width: 35px;
+                min-height: 35px;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: #06bcb0;
+                margin-right: 10px;
+            }
+
+        footer .footer-panel .hospital-info ul li > a {
+            font-size: 16px;
+            color: #3e3e3e;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+            footer .footer-panel .hospital-info ul li > a:hover .content {
+                color: #67c63f;
+            }
+
+    footer .footer-panel .hospital-info .report {
+        margin-top: 1.25rem
+    }
+
+        footer .footer-panel .hospital-info .report .online {
+            background: rgb(6, 188, 176);
+            border-radius: 6px 0px 0px 6px;
+            text-align: center;
+            padding: 12px;
+        }
+
+            footer .footer-panel .hospital-info .report .online p {
+                color: rgb(255, 255, 255);
+                font-weight: 500;
+                text-align: center;
+                font-size: 13px;
+            }
+
+        footer .footer-panel .hospital-info .report .views-total {
+            background: rgb(255, 255, 255);
+            border-radius: 0px 6px 6px 0px;
+            padding: 12px;
+        }
+
+            footer .footer-panel .hospital-info .report .views-total p {
+                color: rgb(38, 47, 54);
+                font-weight: 500;
+                text-align: center;
+                font-size: 13px;
+            }
+
+.copy-right-panel {
+    padding: 14px 0;
+    background: #06bcb0;
+}
+
+    .copy-right-panel .copy-right {
+        font-size: 14px;
+        color: #fff;
+        font-style: italic;
+        line-height: 30px;
+        margin: 0;
+    }
+
+
+.social-panel {
+    position: fixed;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    height: 310px;
+    z-index: 99;
+}
+
+@media screen and (max-width: 960px){
+    footer {
+        padding: 0 0 10px 0;
+    }
+
+    footer .footer-panel > div {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}

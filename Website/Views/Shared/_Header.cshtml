@@ -1,0 +1,318 @@
+﻿@using Contract.WebMenus;
+@using Website.Models.ResponseModels;
+@using Website.Utils;
+
+@model List<WebMenuDto>
+
+<header id="home">
+    <!-- Start Navigation -->
+    <nav class="navbar bootsnav navbar-default navbar-fixed dark no-background pb-1 on-desktop">
+        <div class="container">
+            <div class="top-panel">
+                <!-- Start Atribute Navigation -->
+                <div class="top-header d-flex justify-content-between">
+                    <a rel="canonical" href="tel:@(!string.IsNullOrEmpty(ViewData["Cfg_Phone"]?.ToString()) ? ViewData["Cfg_Phone"] : "1900986868")" target="_blank" rel="noreferrer" class="hot-line">
+                        <svg focusable="false" aria-hidden="true">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
+                        </svg>
+                        <span class="phone-number">Hotline @(!string.IsNullOrEmpty(ViewData["Cfg_Phone"]?.ToString()) ? ViewData["Cfg_Phone"] : "1900986868")</span>
+                    </a>
+                    <ul class="login-panel gap-3">
+                        <li>
+                            @if (ViewData["UserCode"] != null)
+                            {
+                                <div class="d-flex justify-content-between align-items-center user-info">
+                                    <div class="d-flex justify-content-between align-items-center gap-2">
+                                        <span class="mr-2">Xin chào</span>
+                                        <a rel="canonical" href="/patient/thong-tin-ca-nhan">@ViewData["UserCode"]</a>
+                                    </div>
+                                    <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="signOut()" tabindex="0" type="button">
+                                        <span class="css-1sdfs1n">Thoát</span>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="logon()" tabindex="0" type="button">
+                                    <img alt="icon user" src="~/img/icon/icon_user.svg" width="20" height="20" decoding="async" loading="lazy" style="color: transparent;">
+                                    <span class="css-1sdfs1n">Đăng nhập</span>
+                                </button>
+                            }
+                        </li>
+                        <li>
+                            <div class="d-flex gap-1">
+                                <a  rel="canonical" class="p-0 change-lang" href="/#googtrans(vi)">
+                                    <img alt="flag vi" src="~/img/icon/icon_flag_vn.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
+                                </a>
+                                <a rel="canonical" class="p-0 change-lang" href="/#googtrans(en)">
+                                    <img alt="flag en" src="~/img/icon/icon_flag_en.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End Atribute Navigation -->
+            </div>
+            <div class="d-flex main-panel">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand p-0">
+                        <img alt="logo.png" src="@(!string.IsNullOrEmpty(ViewData["Cfg_LogoURL"]?.ToString()) ? ViewData["Cfg_LogoURL"] : "~/img/logo.png")" width="253" height="56" decoding="async" loading="lazy" style="color: transparent; width: auto;">
+                    </a>
+                </div>
+                <!-- End Header Navigation -->
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right nav-menu gap-4" data-in="#" data-out="#">
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                @if (item.ChildWebMenu != null && item.ChildWebMenu.Count() > 0)
+                                {
+                                    <li class="dropdown dropdown-right">
+                                        <a href="#" class="dropdown-toggle smooth-menu" data-toggle="dropdown">
+                                            <span class="content">@item.Name</span>
+                                            @if (item.ChildWebMenu != null && item.ChildWebMenu.Count() > 0)
+                                            {
+                                                <svg class="icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AddIcon">
+                                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                                                </svg>
+                                            }
+                                        </a>
+                                        @if (item.ChildWebMenu != null && item.ChildWebMenu.Count() > 0)
+                                        {
+                                            <ul class="dropdown-menu sub-menu">
+                                                @foreach (var child in item.ChildWebMenu)
+                                                {
+                                                    @if (child.ChildWebMenu != null && child.ChildWebMenu.Count() > 0)
+                                                    {
+                                                        <li class="dropdown dropdown-right">
+                                                            <a href="#" class="dropdown-toggle smooth-menu" data-toggle="dropdown"><span class="content">@child.Name</span></a>
+                                                            @if (child.ChildWebMenu != null && child.ChildWebMenu.Count() > 0)
+                                                            {
+                                                                <div class="position-fixed menu-wrapper">
+                                                                    <ul class="dropdown-menu sub-menu">
+                                                                        @foreach (var child2 in child.ChildWebMenu)
+                                                                        {
+                                                                            <li><a rel="canonical" href="@StringUtil.GenerateMenuHref(child2)">@child2.Name</a></li>
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            }
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li><a rel="canonical" href="@StringUtil.GenerateMenuHref(child)" class="smooth-menu"><span class="content">@child.Name</span></a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a rel="canonical" href="@StringUtil.GenerateMenuHref(item)" class="smooth-menu"><span class="content">@item.Name</span></a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+
+                <div class="search-box">
+                    <input placeholder="Nhập từ khóa tìm kiếm..." id="searchBox" type="text" value="">
+                    <button class="search-button" onclick="openSearchBox()">
+                        <img alt="search" src="~/img/icon/icon_search.svg" class="search-button" width="17" height="17" decoding="async" loading="lazy" style="color: transparent;">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navigation -->
+    <!-- Start mobile menu -->
+    <nav class="navbar navbar-default navbar-fixed dark no-background bootsnav p-3 on-mobile">
+        <button class="btn btn-nav" tabindex="0" type="button" onclick="openNav()">
+            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="MenuIcon">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+        </button>
+    </nav>
+    <div id="mobileMenuSidenav" class="sidenav">
+        <div class="rightSidenav">
+            <div class="close-panel">
+                <a href="#" class="closebtn" onclick="closeNav()">&times;</a>
+                @*<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>*@
+            </div>
+            <div class="mx-2">
+                <div class="d-flex align-items-end my-3 gap-3">
+                    <div class="search-input pb-2">
+                        <label>Tìm kiếm tin tức</label>
+                        <input type="text" placeholder="Nhập từ khóa tìm kiếm...." class="txt-seatch" id="sidenav-search-keyword" value="">
+                    </div>
+                    <button class="btn btn-custom btn-search mb-2" tabindex="0" type="button" onclick="search()">Tìm kiếm</button>
+                </div>
+                <div class="panel-group mobile-menu" role="tablist" aria-multiselectable="true">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model.Select((v, i) => new { index = i, value = v }))
+                        {
+                            <div class="panel panel-default border-0 m-0">
+                                <div class="panel-heading @(item.value.ChildWebMenu.Any() ? "is-submenu" : "")" role="tab" id="@("heading-" + @item.index.ToString())">
+                                    <div class="panel-title">
+                                        @if (item.value.ChildWebMenu.Any())
+                                        {
+                                            <a role="button" data-toggle="collapse" class="accordion-toggle @(item.value.ChildWebMenu.Any() ? "accordion-arrow-toggle collapsed" : "")" data-parent="" href="@("#collapse-" + @item.index.ToString())" aria-expanded="true" aria-controls="@("collapse-" + @item.index.ToString())">@item.value.Name</a>
+                                        }
+                                        else
+                                        {
+                                            <a role="button" data-parent="" href="@item.value.UrlRef">@item.value.Name</a>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div id="@("collapse-" + @item.index.ToString())" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-tin-tuc">
+                                    @if (item.value.ChildWebMenu.Any())
+                                    {
+                                        <ul>
+                                            @foreach (var child in item.value.ChildWebMenu.Select((v, i) => new { index = i, value = v }))
+                                            {
+                                                <li class="menu-item p-0">
+                                                    <div class="panel panel-default border-0 m-0">
+                                                        <div class="panel-heading @(child.value.ChildWebMenu.Any() ? "is-submenu py-1" : "")" role="tab" id="@("heading-" + @child.index.ToString() + "-" + @child.index.ToString())">
+                                                            <div class="panel-title">
+                                                                @if (child.value.ChildWebMenu.Any())
+                                                                {
+                                                                    <a rel="canonical" role="button" data-toggle="collapse" class="accordion-toggle @(child.value.ChildWebMenu.Any() ? "accordion-arrow-toggle collapsed" : "")" data-parent="" href="@("#collapse-" + @child.index.ToString() + "-" + @child.index.ToString())" aria-expanded="true" aria-controls="@("collapse-" + @child.index.ToString() + "-" + @child.index.ToString())">@child.value.Name</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a  rel="canonical" role="button" data-parent="" href="@StringUtil.GenerateMenuHref(child.value)">@child.value.Name</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div id="@("collapse-" + @child.index.ToString() + "-" + @child.index.ToString())" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-tin-tuc">
+                                                            @if (child.value.ChildWebMenu.Any())
+                                                            {
+                                                                <ul>
+                                                                    @foreach (var child2 in child.value.ChildWebMenu)
+                                                                    {
+                                                                        <li class="menu-item"><a href="@StringUtil.GenerateMenuHref(child2)">@child2.Name</a></li>
+                                                                    }
+                                                                </ul>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Ngôn ngữ:</span>
+                        <div class="d-flex gap-1">
+                            <a class="p-0 change-lang" href="/#googtrans(vi)">
+                                <img alt="flag vi" src="~/img/icon/icon_flag_vn.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
+                            </a>
+                            <a class="p-0 change-lang" href="/#googtrans(en)">
+                                <img alt="flag en" src="~/img/icon/icon_flag_en.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
+                            </a>
+                        </div>
+                    </div>
+                    @if (ViewData["UserCode"] != null)
+                    {
+                        <div class="d-flex justify-content-between align-items-center user-info">
+                            <div class="d-flex justify-content-between align-items-center gap-2">
+                                <span class="mr-2">Xin chào</span>
+                                <a href="/patient">@ViewData["UserCode"]</a>
+                            </div>
+                            <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="signOut()" tabindex="0" type="button">
+                                <span class="css-1sdfs1n">Thoát</span>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="btn btn-block btn-custom-outline" onclick="logon()" tabindex="0" type="button">
+                            Đăng nhập
+                        </button>
+                        <button class="btn btn-block btn-custom" onclick="register()" tabindex="0" type="button">
+                            Đăng ký
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End mobile menu -->
+</header>
+
+<div class="modal fade logon-modal" id="myModal" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="text-center"><img alt="logo.png" src="~/img/logo.png" width="200" height="50" decoding="async" data-nimg="1" loading="lazy" style="color: transparent;"></h3>
+            </div>
+            <div class="modal-body m-1">
+                <h2 class="logon-title text-center mb-3">Đăng nhập</h2>
+                <form role="form" class="logon-form">
+                    <div class="logon-info">
+                        <div class="form-group">
+                            <div class="d-flex align-items-center position-relative input-group-custom">
+                                <div class="input-icon-panel">
+                                    <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AccountCircleIcon">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" class="form-control" pattern="[0-9+]*" id="usrname" placeholder="Số điện thoại">
+                            </div>
+                            <div class="error-message">Số điện thoại không đúng.</div>
+                        </div>
+                        <div class="form-group password-input">
+                            <div class="d-flex align-items-center position-relative input-group-custom pwd-input">
+                                <div class="input-icon-panel">
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                         viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+                                        <path d="M6,9c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V11c0-1.1-0.9-2-2-2H6z M12,18c-1.1,0-2-0.9-2-2s0.9-2,2-2 s2,0.9,2,2S13.1,18,12,18z" />
+                                        <path d="M12,2C9.2,2,7,4.2,7,7v5h1.9V7c0-1.7,1.4-3.1,3.1-3.1s3.1,1.4,3.1,3.1v2H17V7C17,4.2,14.8,2,12,2z" />
+                                    </svg>
+                                </div>
+                                <input type="password" class="form-control" pattern="[A-Za-z0-9_@@.&amp;!#$%^*]*" id="pwd" onkeyup="validPassword(this)" placeholder="Mật khẩu">
+                            </div>
+                            <div class="error-message">Nhập mật khẩu.</div>
+                        </div>
+
+
+                        <div class="account-register-info">
+                            <div class="form-group password-input">
+                                <div class="d-flex align-items-center position-relative input-group-custom">
+                                    <div class="input-icon-panel">
+                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+                                        <path d="M6,9c-1.1,0-2,0.9-2,2v10c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V11c0-1.1-0.9-2-2-2H6z M12,18c-1.1,0-2-0.9-2-2s0.9-2,2-2 s2,0.9,2,2S13.1,18,12,18z" />
+                                        <path d="M12,2C9.2,2,7,4.2,7,7v5h1.9V7c0-1.7,1.4-3.1,3.1-3.1s3.1,1.4,3.1,3.1v2H17V7C17,4.2,14.8,2,12,2z" />
+                                    </svg>
+                                    </div>
+                                    <input type="password" class="form-control" pattern="[A-Za-z0-9_@@.&amp;!#$%^*]*" id="repwd" onkeyup="validPassword(this)" placeholder="Mật khẩu">
+                                </div>
+                                <div class="error-message">Nhập lại mật khẩu.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column gap-3 mt-5">
+                        <button type="submit" class="btn btn-custom btn-login">Đăng nhập</button>
+                        <button type="button" class="btn btn-custom btn-register">Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

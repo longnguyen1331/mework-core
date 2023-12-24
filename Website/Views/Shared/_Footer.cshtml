@@ -1,0 +1,131 @@
+﻿@{
+    string countAccess = "0";
+    if (Context.Response.Headers.ContainsKey("CountAccess"))
+        countAccess = Context.Response.Headers["CountAccess"];
+}
+
+<footer>
+    <div class="container footer-panel">
+        <div class="d-flex justify-content-between">
+            <div class="hospital-info">
+                <h3 class="title">THÔNG TIN BỆNH VIỆN</h3>
+                <ul class="d-flex flex-column gap-2">
+                    <li>
+                        <span class="content">
+                            <span class="icon-item">
+                                <img alt="icon_footer1" src="~/img/icon/icon_footer1.png" width="15" height="20" decoding="async" data-nimg="1" loading="lazy" style="color:transparent">
+                            </span>
+                            @(!string.IsNullOrEmpty(ViewData["Cfg_Address"]?.ToString()) ? ViewData["Cfg_Address"] : "216 Nguyễn Công Trứ, Quận Sơn Trà, Đà Nẵng")
+                        </span>
+                    </li>
+                    <li>
+                        <span class="content">
+                            <span class="icon-item"><img alt="icon_footer2" src="~/img/icon/icon_footer2.png" width="19" height="15" decoding="async" data-nimg="1" loading="lazy" style="color:transparent"></span>
+                            @(!string.IsNullOrEmpty(ViewData["Cfg_Email"]?.ToString()) ? ViewData["Cfg_Email"] : "cskh@benhvien199.vn")
+                        </span>
+                    </li>
+                    <li>
+                        <span class="content">
+                            <span class="icon-item">
+                                <img alt="icon_footer3" src="~/img/icon/icon_footer3.png" width="18" height="19" decoding="async" data-nimg="1" loading="lazy" style="color:transparent">
+                            </span>
+                            @Context.Request.Host
+                        </span>
+                    </li>
+                    <li>
+                        <a class="css-18wrpjs" href="tel:1900986868">
+                            <span class="content">
+                                <span class="icon-item">
+                                    <img alt="icon_footer4" src="~/img/icon/icon_footer4.png" width="15" height="16" decoding="async" data-nimg="1" loading="lazy" style="color:transparent">
+                                </span>@(!string.IsNullOrEmpty(ViewData["Cfg_Phone"]?.ToString()) ? ViewData["Cfg_Phone"] : "1900986868")
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex report">
+                    <div class="online">
+                        <p class="m-0">Trực tuyến<br> @(Website.Middleware.OnlineUsersMiddleware.GetOnlineUsersCount())</p>
+                    </div>
+                    <div class="views-total">
+                        <p class="m-0">Tổng lượt truy cập <br>@countAccess</p>
+                    </div>
+                </div>
+            </div>
+            <div class="customer-guide">
+                <div>
+                    <div class="center_fot">
+                        <h3 class="title-fot">HỖ TRỢ</h3>
+                        <div class="category">
+                            <ul>
+                                <li><a rel="canonical" href="#" name="hdkh" class="lnk-ft">Hướng dẫn khách hàng</a></li>
+                                <li>
+                                    <a rel="canonical" href="#" name="bgdv" class="lnk-ft">Bảng giá dịch vụ</a>
+                                </li>
+                                <li>
+                                    <a rel="canonical" href="#" name="qtkb" class="lnk-ft">Quy trình khám bệnh</a>
+                                </li>
+                                 <li>
+                                    <a rel="canonical" href="http://mail.benhvien199.vn" target="_blank">
+                                        Email nội bộ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a rel="canonical" href="http://qldh.benhvien199.vn" target="_blank">
+                                        Văn bản nội bộ
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="category">
+                            <a rel="canonical" href="https://tinnhiemmang.vn/danh-ba-tin-nhiem/benhvien199vn-1698822941" title="Chung nhan Tin Nhiem Mang" target="_blank"><img src="https://tinnhiemmang.vn/handle_cert?id=benhvien199.vn" width="150px" height="auto" alt="Chung nhan Tin Nhiem Mang"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-fanpage">
+                <div>
+                    <div class="right_fot">
+                        <h3 class="title-fot">FANPAGE</h3>
+                        <iframe class="fb_link" allow="encrypted-media" allowtransparency="true" frameborder="0" height="210" scrolling="no" src="https://www.facebook.com/plugins/page.php?href=https://www.facebook.com/benhvien199/&amp;tabs=timeline&amp;height=210&amp;small_header=false&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=true&amp;appId" style="border:none;overflow:hidden"></iframe>
+                        <div class="follow_us">
+                            <h5 class="title">KÊNH THÔNG TIN</h5>
+                            <div class="d-flex gap-3 pt-2">
+                                <a rel="canonical" href="https://www.facebook.com/benhvien199" target="_blank"><img src="https://benhvien199.vn/static/old/Content/Website/Assets/images/fb.svg" alt="Facebook Bệnh viện 199"></a>
+                                <a rel="canonical" href="https://www.youtube.com/channel/UC5JCFK6-iwHswDxI0p4k0yQ?view_as=subscriber" target="_blank"><img src="https://benhvien199.vn/static/old/Content/Website/Assets/images/yt.svg" alt="kênh youtube Bệnh viện 199"></a>
+                                <a rel="canonical" href="#"><img src="https://benhvien199.vn/static/old/Content/Website/Assets/images/insta.svg" alt="Instagram Bệnh viện 199"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="copy-right-panel">
+    <div class="container">
+        <p class="copy-right">Copyright © 2020 @(!string.IsNullOrEmpty(ViewData["Cfg_CompanyName"]?.ToString()) ? ViewData["Cfg_CompanyName"] : "Bệnh Viện 199 - Bộ Công An")</p>
+    </div>
+</div>
+@*
+<div id="fb-root" class=" fb_reset">
+    <div style="position: absolute; top: -10000px; width: 0px; height: 0px;">
+        <div>
+        </div>
+    </div>
+    <div class=" fb_iframe_widget fb_invisible_flow" fb-iframe-plugin-query="app_id=&amp;attribution=biz_inbox&amp;container_width=1562&amp;current_url=https%3A%2F%2Fbenhvien199.vn%2Ftin-tuc%3Fkeyword%3D&amp;is_loaded_by_facade=true&amp;local_state=%7B%22v%22%3A1%2C%22path%22%3A2%2C%22chatState%22%3A1%2C%22visibility%22%3A%22hidden%22%2C%22showUpgradePrompt%22%3A%22not_shown%22%7D&amp;locale=en_US&amp;log_id=52626c06-b4c0-4c5a-b4ae-2e7fd1477772&amp;page_id=183751401770975&amp;request_time=1694010128046&amp;sdk=joey">
+        <span style="vertical-align: bottom; width: 1000px; height: 0px;">
+            <iframe name="f390c7dce39c75c" width="1000px" height="1000px" data-testid="dialog_iframe" title="" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v15.0/plugins/customerchat.php?app_id=&amp;attribution=biz_inbox&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fx%2Fconnect%2Fxd_arbiter%2F%3Fversion%3D46%23cb%3Df220abb983a72f%26domain%3Dbenhvien199.vn%26is_canvas%3Dfalse%26origin%3Dhttps%253A%252F%252Fbenhvien199.vn%252Ff2909efbb2debe8%26relation%3Dparent.parent&amp;container_width=1562&amp;current_url=https%3A%2F%2Fbenhvien199.vn%2Ftin-tuc%3Fkeyword%3D&amp;is_loaded_by_facade=true&amp;local_state=%7B%22v%22%3A1%2C%22path%22%3A2%2C%22chatState%22%3A1%2C%22visibility%22%3A%22hidden%22%2C%22showUpgradePrompt%22%3A%22not_shown%22%7D&amp;locale=en_US&amp;log_id=52626c06-b4c0-4c5a-b4ae-2e7fd1477772&amp;page_id=183751401770975&amp;request_time=1694010128046&amp;sdk=joey" style="padding: 0px; position: fixed; z-index: 2147483646; border-radius: 16px; top: auto; background: none; width: 399px; bottom: 68px; max-height: 0px; right: 16px; visibility: visible; height: 373px;" class=""></iframe>
+        </span>
+    </div>
+    <div class="fb_dialog  fb_dialog_advanced" alignment="right" desktop_bottom_spacing="24">
+        <div class="fb_dialog_content">
+            <iframe name="blank_f390c7dce39c75c" width="60px" tabindex="-1" data-testid="bubble_iframe" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v15.0/plugins/customer_chat/bubble" style="background: none; border-radius: 60px; bottom: 24px; display: block; height: 44px; margin: 0px 12px; overflow: visible; padding: 0px; position: fixed; right: 12px; top: auto; width: 96px; z-index: 2147483644; box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px 0px;"></iframe>
+            <iframe name="availabilityStatus_f390c7dce39c75c" tabindex="-1" data-testid="availabilityStatus_iframe" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v15.0/plugins/customer_chat/bubble" style="border-radius: 50%; bottom: 21.5px; height: 15px; position: fixed; right: 24px; width: 15px; z-index: 2147483646;"></iframe>
+            <iframe name="unread_f390c7dce39c75c" tabindex="-1" data-testid="unread_iframe" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v15.0/plugins/customer_chat/bubble" style="background: none; border-radius: 4pt; bottom: 52px; height: 24px; position: fixed; right: 22px; width: 20px; z-index: 2147483645;"></iframe>
+            <iframe name="greeting_f390c7dce39c75c" tabindex="-1" data-testid="greeting_iframe" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="https://www.facebook.com/v15.0/plugins/customer_chat/bubble" style="animation: 3s ease-out 0s 1 normal none running slideInFromBottomDelay; background: none; border-radius: 16px; bottom: 80px; height: 72px; margin-right: 12px; max-height: 0px; padding: 0px; position: fixed; right: 6px; top: auto; width: 247px; z-index: 2147483646; min-height: 0px;"></iframe>
+        </div>
+    </div>
+</div>
+*@

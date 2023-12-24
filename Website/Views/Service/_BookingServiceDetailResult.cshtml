@@ -1,0 +1,64 @@
+﻿@{
+    var service = ViewData["Service"] as Contract.Services.ServiceDto;
+}
+
+<div class="modal-body register-service register-service-detail p-2 m-2 mt-3" style="display: none">
+    <div class="register-service">
+        <div class="panel panel-default">
+            <div class="panel-body d-flex p-2 pb-0">
+                <div class="register-service-thumb">
+                    <img alt="service" sizes="100vw" src="@service?.ImageUrl" decoding="async" class="imageBox" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+                </div>
+                <div class="register-service-box">
+                    <span class="register-service-title">@service?.Name</span>
+                    <p class="retail-price">
+                        Giá: <span class="price">@service?.Charges.ToString("#,##0") đ</span>
+                    </p>
+                </div>
+            </div>
+           
+        </div>
+
+        <div class="panel">
+            <div class="panel-body p-0 doctor-list"></div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body p-2 register-service-working-hour">
+                <h3 class="register-service-header-panel">
+                    <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
+                    </svg>
+                    <span> Ngày và giờ</span>
+                </h3>
+
+                <div class="register-service-date-of-week"></div>
+
+                <div class="register-service-working-time"></div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body p-2">
+                <h3 class="register-service-header-panel">
+                    <svg class="custom-svg-icon" fill="#000000" focusable="false" aria-hidden="true" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+                    <path d="M201.5,175.343H66.241l22.758-6.293c1.019-0.154,2.001-0.608,2.787-1.393l95.336-95.336  c0.938-0.938,1.464-2.209,1.464-3.535s-0.527-2.598-1.464-3.535L169.77,47.898L67.363,150.305l11.243,11.243l-18.325,5.068  l-17.152-17.152l5.068-18.325l12.096,12.096L162.699,40.828l-18.206-18.206c-1.953-1.953-5.118-1.953-7.071,0l-95.336,95.336  c-0.756,0.756-1.228,1.732-1.389,2.776l-15.102,54.609H5c-2.761,0-5,2.238-5,5s2.239,5,5,5h196.5c2.761,0,5-2.238,5-5  S204.261,175.343,201.5,175.343z"></path>
+                                </svg>
+                    <span> Ghi chú</span>
+                </h3>
+                <div class="register-service-note">
+                    <textarea id="registerServiceNote" class="textarea-custom"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer d-flex justify-content-center gap-2" style="display: none">
+    <button class="btn-custom btn-service" tabindex="0" type="button" data-serviceId="@service?.Id" data-UserId="@ViewData["UserId"]" data-serviceTitle="@service?.Name" data-amount="@(service?.Charges ?? 0)" onclick="registerServiceNow(this)">
+        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CalendarMonthIcon">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
+        </svg>
+        <span class="btn-content">Đăng ký ngay</span>
+    </button>
+</div>

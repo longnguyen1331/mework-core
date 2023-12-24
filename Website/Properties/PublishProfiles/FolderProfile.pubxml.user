@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\hungt\Desktop\WEB_199\FE</_PublishTargetUrl>
+    <History>True|2023-12-09T05:41:41.7297141Z;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="wwwroot/css/pages/post/post.css">
+      <publishTime>12/14/2023 22:28:03</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

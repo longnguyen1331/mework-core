@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServ4r", "SqlServ4r\SqlS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{17CAF9A3-22E3-498D-BF69-74FB879A46D6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.csproj", "{CF8D6FA5-A06E-458C-8AE0-4B6128B79B05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{17CAF9A3-22E3-498D-BF69-74FB879A46D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17CAF9A3-22E3-498D-BF69-74FB879A46D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17CAF9A3-22E3-498D-BF69-74FB879A46D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF8D6FA5-A06E-458C-8AE0-4B6128B79B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF8D6FA5-A06E-458C-8AE0-4B6128B79B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF8D6FA5-A06E-458C-8AE0-4B6128B79B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF8D6FA5-A06E-458C-8AE0-4B6128B79B05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

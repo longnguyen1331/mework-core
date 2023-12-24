@@ -1,0 +1,36 @@
+﻿.post-tags {
+    margin-top: 50px;
+    color: rgb(6, 188, 176);
+    font-size: 16px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+    .post-tags svg {
+        user-select: none;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        fill: currentcolor;
+        flex-shrink: 0;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        font-size: 1.5rem;
+        margin-right: 5px;
+    }
+
+.tag-content {
+    margin-left: 5px;
+    color: rgb(80, 80, 80);
+    background: rgb(238, 238, 238);
+    padding: 2px 10px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    transition: background 0.2s linear 0s;
+}
+
+    .tag-content:hover {
+        color: rgb(255, 255, 255);
+        background: rgb(6, 188, 176);
+    }

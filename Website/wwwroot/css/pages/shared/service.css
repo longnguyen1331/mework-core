@@ -1,0 +1,127 @@
+﻿
+.service-container {
+    min-height: 362px;
+}
+
+.service-box-1 {
+    width: 100%;
+    background: rgb(247, 249, 251);
+    border-radius: 8px;
+    max-width: 362px;
+    transition: all 0.2s linear 0s;
+}
+
+.layout-grid .service-box-1 {
+    max-width: inherit;
+}
+
+    .service-box-1:hover {
+        box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
+    }
+
+        .service-box-1:hover .imageBox {
+            transform: scale(1.05);
+        }
+
+.service-thumb-img {
+    position: relative;
+    padding-bottom: calc(66.2722%);
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+    .service-thumb-img img {
+        transition: all 0.3s linear 0s;
+    }
+
+.service-box-1-body {
+    padding: 20px 16px 16px;
+}
+
+    .service-box-1-body a:hover {
+        color: #67c63f;
+    }
+
+        .service-box-1-body a:hover span {
+            color: #67c63f !important;
+        }
+
+.service-box-1-content-title {
+    margin: 0px;
+    letter-spacing: 0.05em;
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(38, 47, 54);
+    line-height: 28px;
+    text-align: center;
+    height: 28px;
+}
+
+.service-box-1-content-desc {
+    margin: 13px 0px 0px;
+    letter-spacing: 0.05em;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(38, 47, 54);
+    line-height: 26px;
+    text-align: center;
+    height: 78px;
+}
+
+.retail-price {
+    line-height: 21px;
+    font-weight: 500;
+    text-align: left;
+    color: rgb(103, 198, 63);
+    margin-top: 15px;
+}
+
+.retail-price-2 {
+    color: rgb(38, 47, 54);
+    line-height: 21px;
+    font-weight: 500;
+    text-align: right;
+}
+
+    .retail-price > .price,
+    .retail-price-2 > .price {
+        color: rgb(103, 198, 63);
+        margin-left: 5px;
+    }
+
+.service-box-1-content-inline {
+    margin-top: 8px;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    color: rgb(38, 47, 54);
+    font-size: 12px;
+    margin-bottom: 0px;
+}
+
+    .service-box-1-content-inline img {
+        margin-right: 8px;
+        width: inherit !important;
+        height: inherit !important;
+    }
+
+    .service-box-1-content-inline span {
+        display: inline-flex;
+        -webkit-box-align: center;
+        align-items: center;
+    }
+
+
+@media (min-width: 960px) {
+    .retail-price {
+        display: none;
+    }
+}
+
+@media (max-width: 960px) {
+    .retail-price-2 {
+        display: none;
+    }
+}

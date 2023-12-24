@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Gói dịch vụ";
+    var highlightServices = ViewData["HightlightServices"] as List<Contract.Services.ServiceDto>;
+   
+    bool isShowSearch = ViewData["IsShowSearch"] as bool? ?? true;
+}
+
+@section Headers {
+    <link href="~/css/pages/shared/breadcrumb.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/top-banner.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/doctor.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/pagination.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/search-panel.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/service/service.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script>
+        const serviceTypeId = '@Html.Raw(ViewData["ServiceTypeId"])'
+    </script>
+    <script src="~/js/pages/service/service.js"></script>
+    <script src="~/js/pages/service/_servicePanel.js"></script>
+}
+
+<!-- Start Banner
+============================================= -->
+<section class="banner-section">
+    <div class="top-banner-carousel owl-carousel owl-theme text-center">
+        <div class="item">
+            <div class="banner-item">
+                <div class="banner-body">
+                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076441726797486.png" alt="Gói dịch vụ">
+                    <div class="banner-body-content">
+                        <div class="container banner-body-content-header">
+                            <div class="banner-title">
+                                <div class="banner-title-content">
+                                    <h2></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="breadcrumb-panel">
+        <div class="container breadcrumb-body">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">
+                        <span>
+                            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="HomeIcon">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+                            </svg>Trang chủ
+                        </span>
+                    </a>
+                </li>
+                <li><span>Gói dịch vụ</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="container my-4">
+    <div class="row col-revert">
+        <div class="col-md-4">
+            <!-- Doctor -->
+            <div class="d-flex justify-content-between align-items-center mb-3 doctor-panel-header">
+                <h3 class="section-title">Chuyên gia</h3>
+                <div class="d-flex justify-content-end">
+                    <div class="carousel-navigate">
+                        <button class="navigation custom_prevSpecialty" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
+                                <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
+                            </svg>
+                        </button>
+                        <button class="navigation custom_nextSpecialty" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
+                                <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="d-flex align-items-end my-3 mb-4">
+                        <div class="search-input pb-2">
+                            <label>Tìm kiếm dịch vụ</label>
+                            <input type="text" placeholder="Nhập từ khóa tìm kiếm...." class="txt-seatch" id="search-keyword" value="@Html.Raw(ViewData["Keyword"])">
+                        </div>
+                        <button class="btn btn-custom btn-search mb-2" tabindex="0" type="button" onclick="onSearch('@Context.Request.Path')">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+            <div id="service-panel"></div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,25 @@
+﻿@{
+    var postResult = ViewData["PostResult"] as Contract.Posts.PostSearchResultDto;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="section-title">Tin nổi bật</h3>
+</div>
+
+@if (postResult != null && postResult.Items.Any())
+{
+    foreach (var item in postResult.Items)
+    {
+        <div class="news_hot">
+            <a href="/post/@(item.Slug)_dt_@(item.Id)">
+                <img class="avatar_new imageBox" src="@item.PictureUrl">
+            </a>
+            <div class="news_hot_content">
+                <a class="news news-item-title text-ellipses text-ellipses-2-line" href="/post/@(item.Slug)_dt_@(item.Id)">@item.Title</a>
+                <div class="new_hot_time">
+                    <i class="fas fa-calendar-alt"></i> @item.PostedDate
+                </div>
+            </div>
+        </div>
+    }
+}

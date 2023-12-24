@@ -1,0 +1,95 @@
+﻿.service-section {
+    width: 100%;
+    margin: 50px auto;
+}
+
+.service-info .img-thumb-panel {
+    width: 40%;
+    margin-right: 40px;
+}
+
+.service-info .img-thumb {
+    position: relative;
+    padding-bottom: 300px;
+}
+
+    .service-info .img-thumb img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+.retail-price-panel {
+    display: flex;
+    margin-bottom: 20px;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+    .retail-price-panel .retail-price {
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0px;
+        display: block !important;
+    }
+
+.button-pannel {
+    margin-bottom: 20px;
+}
+
+.advise-panel p {
+    color: rgb(108, 108, 108);
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+    .advise-panel p span {
+        color: rgb(6, 188, 176);
+        margin-left: 10px;
+    }
+
+.advise-panel .email {
+    color: rgb(108, 108, 108);
+    margin-left: 10px;
+    font-weight: normal;
+}
+
+.service-detail-panel {
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.section-title {
+    font-size: 24px;
+    color: rgb(38, 47, 54);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-right: 40px;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+    .section-title:before {
+        content: "";
+        position: absolute;
+        left: 0px;
+        bottom: -10px;
+        width: 100%;
+        height: 3px;
+        background: rgb(6, 188, 176);
+    }
+
+.other-service-section {
+    margin-top: 50px;
+    width: 100%;
+}
+
+@media (max-width: 1000px) {
+    .service-info {
+        gap: 1rem;
+    }
+
+    .service-info .img-thumb-panel {
+        width: 100%;
+        margin-right: 0px;
+    }
+}

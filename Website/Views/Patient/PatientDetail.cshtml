@@ -1,0 +1,222 @@
+﻿@using Core.Enum;
+@{
+    var patient = ViewData["Patient"] as Contract.Identity.UserManager.UserWithNavigationPropertiesDto;
+
+    ViewData["Title"] = $"{patient?.User.FirstName} {patient?.User.LastName}";
+}
+
+@section Headers {
+    <link href="~/css/pages/shared/breadcrumb.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/top-banner.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/patients/patientdetail.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/pages/patient/patient.js"></script>
+}
+
+<!-- Start Banner
+============================================= -->
+<section class="banner-section">
+    <div class="top-banner-carousel owl-carousel owl-theme text-center">
+        <div class="item">
+            <div class="banner-item">
+                <div class="banner-body">
+                    <img src="/img/banner-chuyen-gia.png" alt="Thông tin cá nhân">
+                    <div class="banner-body-content">
+                        <div class="container banner-body-content-header">
+                            <div class="banner-title">
+                                <div class="banner-title-content">
+                                    <h2></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="breadcrumb-panel">
+        <div class="container breadcrumb-body">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/">
+                        <span>
+                            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="HomeIcon">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+                            </svg>Trang chủ
+                        </span>
+                    </a>
+                </li>
+                <li><span>Thông tin cá nhân</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="container mt-4 mb-5">
+    <div class="row d-flex flex-wrap">
+        <div class="col-sm-12 col-md-3">
+            <div class="panel panel-default h-100">
+                <div class="panel-header d-flex align-content-center justify-content-center p-4">
+                    <div class="avatar-section" onclick="onChangeAvatar(this)" data-usercode="@ViewData["UserCode"]">
+                        <div class="avatar-panel">
+                            <img id="previewAvatar" src="@(patient?.User.AvatarURL ?? "https://api-development.drcare.app/upload/images/patient-male.png")" alt="avatar" class="css-nmg4ge">
+                        </div>
+                        <button type="button" class="btn avatar-btn-icon">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CameraAltOutlinedIcon"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h4.05l1.83-2h4.24l1.83 2H20v12zM12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"></path></svg>
+                        </button>
+                    </div>
+                    <input type="file" id="patientAvatar" accept=".png,.jpg,.jpeg" class="d-none">
+                </div>
+                <div class="panel-body py-2 px-0">
+                    <ul class="patient-info">
+                        <li class="patient-action active">
+                            <a href="/patient/thong-tin-ca-nhan">
+                                <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="InfoOutlinedIcon">
+                                    <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+                                </svg>
+                                <span>Thông tin</span>
+                            </a>
+                        </li>
+                        <li class="patient-action">
+                            <a href="/patient/tra-cuu-thong-tin-kham-chua-benh">
+                                <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CalendarMonthOutlinedIcon">
+                                    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"></path>
+                                </svg>
+                                <span>Lịch sử KCB</span>
+                            </a>
+                        </li>
+                        @if (ViewData["UserCode"] != null)
+                        {
+                            <li class="patient-action">
+                                <a href="javascript:void(0)" onclick="signOut()">
+                                    <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LogoutOutlinedIcon">
+                                        <path d="m17 8-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4-4-4zM5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5V5z"></path>
+                                    </svg>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="patient-action">
+                                <a href="javascript:void(0)" onclick="logon()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 512 512" data-testid="LoginOutlinedIcon">
+                                        <path d="M222,327.8a11.34,11.34,0,0,0,16,16L318.86,263h0a11.35,11.35,0,0,0,0-16h0l-80.81-80.82a11.34,11.34,0,0,0-16,16l61.47,61.46H63.9a11.34,11.34,0,0,0,0,22.68H283.47Z" />
+                                        <path d="M372.84,59.53H184.26a45.7,45.7,0,0,0-45.64,45.65V151.3a11.34,11.34,0,0,0,22.67,0V105.18a23,23,0,0,1,23-23H372.84a23,23,0,0,1,23,23V407a23,23,0,0,1-23,23H184.26a23,23,0,0,1-23-23v-45a11.34,11.34,0,1,0-22.67,0v45a45.7,45.7,0,0,0,45.64,45.65H372.84A45.7,45.7,0,0,0,418.49,407V105.18A45.7,45.7,0,0,0,372.84,59.53Z" />
+                                    </svg>
+                                    <span>Đăng nhập</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-9">
+            <div class="panel panel-default h-100">
+                <div class="panel-header p-3 pb-4">
+                    <h1 class="panel-heading-title">Thông tin cá nhân</h1>
+                </div>
+                @if (ViewData["UserCode"] != null)
+                {
+                    <div class="panel-body py-2 px-0">
+                        <div class="d-flex flex-wrap">
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Họ và tên đệm</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="firstName" placeholder="Họ và tên đệm" value="@patient?.User.FirstName">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Tên</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="lastName" placeholder="Tên" value="@patient?.User.LastName">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Địa chỉ email</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="email" placeholder="Email" value="@patient?.User.Email">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">CMND</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="cityNo" placeholder="CMND" value="@patient?.User.CitizenIDNumber">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Ngày sinh</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="dateOfBird" placeholder="DD/MM/YYYY" value="@patient?.User.DOB.ToString("dd/MM/yyyy")">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Giới tính</p>
+                                <div class="dropdown-button custom-dropdown dropdown gioi-tinh">
+                                    <button class="dropdown-select w-100" type="button" data-toggle="dropdown" data-selected="@((int)patient?.User.Gender)" aria-haspopup="true" aria-expanded="false">
+                                        <span class="btn-content">@(patient?.User.Gender == Gender.Male ? "Nam" : (patient?.User.Gender == Gender.Female ? "Nữ" : "Chọn giới tính"))</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu w-100" aria-labelledby="dLabel">
+                                        <li data-value="">Chọn Giới tính</li>
+                                        <li data-value="@((int)Gender.Male)">Nam</li>
+                                        <li data-value="@((int)Gender.Female)">Nữ</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Tỉnh/Thành phố</p>
+                                <div class="dropdown-button custom-dropdown dropdown province">
+                                    <button class="dropdown-select w-100" type="button" data-toggle="dropdown" data-selected="@patient?.User.ProvinceId" aria-haspopup="true" aria-expanded="false">
+                                        <span class="btn-content">@(!string.IsNullOrEmpty(patient?.User.ProvinceName) ? patient?.User.ProvinceName : "Chọn Tỉnh/Thành phố")</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu w-100" aria-labelledby="dLabel"></ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Quận/Huyện</p>
+                                <div class="dropdown-button custom-dropdown dropdown district">
+                                    <button class="dropdown-select w-100" type="button" data-toggle="dropdown" data-selected="@patient?.User.DistrictId" aria-haspopup="true" aria-expanded="false">
+                                        <span class="btn-content">@(!string.IsNullOrEmpty(patient?.User.DistrictName) ? patient?.User.DistrictName : "Chọn Quận/Huyện")</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu w-100" aria-labelledby="dLabel"></ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Phường/Xã</p>
+                                <div class="dropdown-button custom-dropdown dropdown ward">
+                                    <button class="dropdown-select w-100" type="button" data-toggle="dropdown" data-selected="@patient?.User.WardId" aria-haspopup="true" aria-expanded="false">
+                                        <span class="btn-content">@(!string.IsNullOrEmpty(patient?.User.WardName) ? patient?.User.WardName : "Chọn Phường/Xã")</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu w-100" aria-labelledby="dLabel"></ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6">
+                                <p class="mb-0">Địa chỉ</p>
+                                <div class="d-flex flex-column position-relative input-group-custom">
+                                    <input type="text" class="patient-info-input" id="address" placeholder="Địa chỉ" value="@patient?.User.Address" onkeyup="validFirstName(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body d-flex justify-content-center mt-5">
+                        <button type="button" class="btn btn-custom btn-update" onclick="updatePatient()">Cập nhật thông tin</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center">
+                        <h3>Không tìm thấy thông tin!</h3>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

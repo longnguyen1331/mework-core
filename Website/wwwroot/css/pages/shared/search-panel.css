@@ -1,0 +1,35 @@
+﻿.search-input {
+    flex: 1 1 0%;
+}
+
+    .search-input label {
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .search-input .txt-seatch {
+        width: 100%;
+        padding: 14px;
+        display: block;
+        outline: none;
+        border: 1px solid #06bcb0;
+        font-size: 13px;
+        line-height: 15px;
+        min-height: inherit;
+    }
+
+.btn-search {
+    height: 47px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: 16px;
+    color: #fff;
+    background: #06bcb0 !important;
+}
+
+    .btn-search:hover {
+        background-color: rgb(103, 198, 63) !important;
+        color: #fff;
+    }

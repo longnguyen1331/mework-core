@@ -1,0 +1,258 @@
+﻿@{
+    var highlightServices = ViewData["HightlightServices"] as List<Contract.Services.ServiceDto>;
+  
+    var post = ViewData["Post"] as Contract.Posts.PostDto;
+    var postsRelated = ViewData["PostRelated"] as List<Contract.Posts.PostDto>;
+    bool isIntro = ViewData["IsIntro"] as bool? ?? false;
+
+    var title = !string.IsNullOrEmpty(post?.SeoTitle) ? post?.SeoTitle : post?.Title;
+    var desc = !string.IsNullOrEmpty(post?.SeoDescription) ? post?.SeoDescription : post?.SortDescription;
+
+    ViewData["Title"] = post?.Title;
+
+    if (!string.IsNullOrEmpty(title))
+        ViewData["SEOTitle"] = title;
+
+    if (!string.IsNullOrEmpty(desc))
+        ViewData["SEODescription"] = desc;
+
+    if (!string.IsNullOrEmpty(post?.SeoKeyword))
+        ViewData["SEOKeyword"] = post?.SeoKeyword;
+}
+
+@section Headers {
+    <link href="~/css/pages/shared/breadcrumb.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/top-banner.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/news-block.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/doctor.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/shared/tags.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/pages/post/post.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/pages/post/post.js"></script>
+}
+
+<!-- Start Banner
+============================================= -->
+<section class="banner-section">
+    <div class="top-banner-carousel owl-carousel owl-theme text-center">
+        <div class="item">
+            <div class="banner-item">
+                <div class="banner-body">
+                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076441726797486.png" alt="Tin tức">
+                    <div class="banner-body-content">
+                        <div class="container banner-body-content-header">
+                            <div class="banner-title">
+                                <div class="banner-title-content">
+                                    <h2>Tin tức</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="banner-item">
+                <div class="banner-body">
+                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076437169774717.png" alt="Tin tức Bệnh viện 199">
+                    <div class="banner-body-content">
+                        <div class="container banner-body-content-header">
+                            <div class="banner-title">
+                                <div class="banner-title-content">
+                                    <h2>Tin tức Bệnh viện 199</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="breadcrumb-panel">
+        <div class="container breadcrumb-body">
+            <ul class="breadcrumb">
+                <li>
+                    <a rel="canonical" href="/">
+                        <span>
+                            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="HomeIcon">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+                            </svg>Trang chủ
+                        </span>
+                    </a>
+                </li>
+                <li><span>Tin Tức</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="container my-4">
+    <div class="row col-revert">
+        <div class="col-md-4">
+            <!-- News Hot -->
+            <div id="hot-news"></div>
+
+            <!-- Doctor -->
+            <div class="d-flex justify-content-between align-items-center mb-3 doctor-panel-header">
+                <h3 class="section-title">Chuyên gia</h3>
+                <div class="d-flex justify-content-end">
+                    <div class="carousel-navigate">
+                        <button class="navigation custom_prevSpecialty" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
+                                <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
+                            </svg>
+                        </button>
+                        <button class="navigation custom_nextSpecialty" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
+                                <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+           
+
+            <!-- Highlight Service -->
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                <h3 class="section-title">Dịch vụ nổi bật</h3>
+                <div class="d-flex justify-content-end">
+                    <div class="carousel-navigate">
+                        <button class="navigation custom_prevService" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
+                                <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
+                            </svg>
+                        </button>
+                        <button class="navigation custom_nextService" tabindex="0" type="button">
+                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
+                                <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-services-items-carousel owl-carousel owl-theme hide-dot-in-desktop text-center mb-5">
+                @if (highlightServices != null)
+                {
+                    foreach (var item in highlightServices)
+                    {
+                        <div class="item">
+                            <div class="service-container">
+                                <div class="service-box-1">
+                                    <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                        <div class="service-thumb-img">
+                                            <img alt="service" sizes="100vw" src="@item.ImageUrl" decoding="async" data-nimg="fill" class="imageBox" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+                                        </div>
+                                    </a>
+                                    <div class="service-box-1-body">
+                                        <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                            <span class="service-box-1-content-title text-ellipses">@item.Name</span>
+                                        </a>
+                                        <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
+                                            <span class="service-box-1-content-desc text-ellipses text-ellipses-3-line">@item.Description</span>
+                                        </a>
+                                        <p class="retail-price">
+                                            Giá: <span class="price">@item.Charges.ToString("#,##0") đ</span>
+                                        </p>
+                                       
+                                        <p class="retail-price-2 mt-3">
+                                            Giá: <span class="price"> @item.Charges.ToString("#,##0") đ</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <!-- EndHighlight Service -->
+            <!-- Tags nổi bật -->
+            <div id="tag-panel"></div>
+        </div>
+        <div class="col-md-8">
+            @if (post != null)
+            {
+                <article class="post-body">
+                    <h1 class="post-title">@Html.Raw(post.Title)</h1>
+                    <div class="post-content">@Html.Raw(post.Description)</div>
+
+                    @if (!isIntro)
+                    {
+                        <div class="post-tags">
+                            <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SellIcon">
+                                <path d="m21.41 11.41-8.83-8.83c-.37-.37-.88-.58-1.41-.58H4c-1.1 0-2 .9-2 2v7.17c0 .53.21 1.04.59 1.41l8.83 8.83c.78.78 2.05.78 2.83 0l7.17-7.17c.78-.78.78-2.04-.01-2.83zM6.5 8C5.67 8 5 7.33 5 6.5S5.67 5 6.5 5 8 5.67 8 6.5 7.33 8 6.5 8z"></path>
+                            </svg>
+                            <span class="tag-title">Tags</span>
+                            @if (!string.IsNullOrEmpty(post.Tags))
+                            {
+                                foreach (var item in post.Tags.Split(','))
+                                {
+                                    <a rel="canonical" class="tag-content" href="/postCategory/tags?tag=@System.Web.HttpUtility.UrlEncode(item)">@item</a>
+                                }
+                            }
+                        </div>
+                        <div class="post-related related">
+                            <h2 class="section-title">Các tin tức khác</h2>
+                            <div class="post-related-items-carousel owl-carousel owl-theme hide-dot-in-desktop text-center mt-4">
+                                @if (postsRelated != null)
+                                {
+                                    foreach (var item in postsRelated)
+                                    {
+                                        <div class="news-card-full-item">
+                                            <div class="text-justify">
+                                                <div class="news-card-full-thumbnail">
+                                                    <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                                        <img class="imageBox" src="@item.PictureUrl" alt="news">
+                                                        <div class="news-category-box">
+                                                            <span class="news-category-content">@item.PostCategoryName</span>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="news news-item-box">
+                                                    <div class="d-flex flex-column gap-3">
+                                                        <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                                            <span class="news news-item-title text-ellipses text-ellipses-2-line">@item.Title</span>
+                                                        </a>
+                                                        <div>
+                                                            <span class="news news-item-content text-ellipses text-ellipses-3-line">@item.SortDescription</span>
+                                                        </div>
+                                                        <p class="d-flex gap-5 news-item-author">
+                                                            <span class="d-flex justify-content-center align-items-center">
+                                                                <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="Person2OutlinedIcon">
+                                                                    <path d="M18.39 14.56C16.71 13.7 14.53 13 12 13s-4.71.7-6.39 1.56C4.61 15.07 4 16.1 4 17.22V20h16v-2.78c0-1.12-.61-2.15-1.61-2.66zM18 18H6v-.78c0-.38.2-.72.52-.88C7.71 15.73 9.63 15 12 15c2.37 0 4.29.73 5.48 1.34.32.16.52.5.52.88V18zm-8.22-6h4.44c1.21 0 2.14-1.06 1.98-2.26l-.32-2.45C15.57 5.39 13.92 4 12 4S8.43 5.39 8.12 7.29L7.8 9.74c-.16 1.2.77 2.26 1.98 2.26zm.32-4.41C10.26 6.67 11.06 6 12 6s1.74.67 1.9 1.59l.32 2.41H9.78l.32-2.41z"></path>
+                                                                </svg>@item.PosterFullName
+                                                            </span>
+                                                            <span class="d-flex justify-content-center align-items-center">
+                                                                <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="WatchLaterOutlinedIcon">
+                                                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"></path>
+                                                                </svg>@item.PostedDate
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a rel="canonical" href="/post/@(item.Slug)_dt_@(item.Id)">
+                                                            <div class="news btn-custom-outline news-btn-detail">
+                                                                <p class="d-fex gap-3 news-btn-detail-content">
+                                                                    Chi tiết
+                                                                    <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AddIcon">
+                                                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                                                                    </svg>
+                                                                </p>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</section>
