@@ -33,7 +33,7 @@ namespace Website.Services.Menus
             var client = _httpClientFactory.CreateClient("Website");
             var response = await client.GetStringAsync(_remoteOptions.GetWebsiteMenu);
 
-            var menus = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<WebMenuDto>>(response) : null;
+           var menus = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<WebMenuDto>>(response) : null;
             List<WebMenuDto> webMenus = new List<WebMenuDto>();
             if (menus != null && menus.Any())
             {
