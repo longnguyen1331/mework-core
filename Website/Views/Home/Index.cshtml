@@ -78,7 +78,7 @@
 <!-- End Banner -->
 
 <!-- News -->
-<div class="news-section">
+@* <div class="news-section">
     <section class="news-section-container">
         <div class="news-background-top"></div>
         <div class="news-background-bottom"></div>
@@ -99,93 +99,13 @@
             </div>
         </div>
     </section>
-</div>
+</div> *@
 <!-- End News -->
-<!-- Highlight Service -->
-<section class="highlight-service-section">
-    <div class="highlight-service-container container">
-        <div class="d-flex justify-content-between align-items-center news mb-5">
-            <h3 class="section-title">Dịch vụ nổi bật</h3>
-            <div class="d-flex justify-content-end">
-                <div class="carousel-navigate">
-                    <button class="navigation custom_prevService" tabindex="0" type="button">
-                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
-                            <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
-                        </svg>
-                    </button>
-                    <button class="navigation custom_nextService" tabindex="0" type="button">
-                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
-                            <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="highlight-services-items-carousel owl-carousel owl-theme hide-dot-in-desktop text-center" id="highlightservicesPanel"></div>
-    </div>
-</section>
-<!-- EndHighlight Service -->
-<!-- Search -->
-<section class="search-section">
-    <div class="container search-container">
-        <div class="search-body">
-            <div class="search-message">
-                <p class="message-title">Tìm Bác sĩ theo chuyên khoa tại Bệnh viện 199</p>
-                <p class="message-content">DỄ DÀNG - TIỆN LỢI - NHANH CHÓNG!</p>
-            </div>
-            <div class="search-section-box">
-                <input type="text" placeholder="Nhập từ khóa tìm kiếm" class="search-input" id="searchInput">
-                <div class="search-divice">
-                    <div class="search-by-type">
-                        <select class="search-type" id="searchTypeVallue">
-                            <option selected value="1" data-params="fullName">Bác sĩ</option>
-                            <option value="2" data-params="departmentName">Chuyên khoa</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-custom" style="margin: 0px 0px 0px 20px;" tabindex="0" type="button" onclick="onSearch()">
-                    <div class="d-flex justify-content-center align-items-center gap-2">
-                        <span>Tìm kiếm</span>
-                        <img alt="search" src="/img/icon/icon_search.svg" width="18" height="18" decoding="async" data-nimg="1" loading="lazy" style="">
-                    </div>
-                </button>
-            </div>
-            <p class="search-specialty-tags">
-                <span class="specialty-title">Chuyên khoa:</span>
-                <span class="specialty-tags" id="specialtiesPanel"></span>
-            </p>
-        </div>
-    </div>
-</section>
-<!-- End Search -->
-<!-- Doctor -->
-<section class="doctor-section">
-    <div class="container doctor-panel">
-        <div class="d-flex justify-content-between align-items-center mb-5 news doctor-panel-header">
-            <h3 class="section-title">Chuyên gia</h3>
-            <div class="d-flex justify-content-end">
-                <div class="carousel-navigate">
-                    <button class="navigation custom_prevSpecialty" tabindex="0" type="button">
-                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
-                            <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
-                        </svg>
-                    </button>
-                    <button class="navigation custom_nextSpecialty" tabindex="0" type="button">
-                        <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
-                            <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="doctor-items-carousel owl-carousel owl-theme hide-dot-in-desktop text-center" id="topDoctorsPanel"></div>
-    </div>
-</section>
-<!-- EndHighlight Service -->
-<!-- Health News -->
+
+<!-- News -->
 <section class="headlth-news-section">
     <div class="headlth-news-container container">
-        <h3 class="section-title text-center">BẢN TIN SỨC KHỎE</h3>
+        <h3 class="section-title text-center">BẢN TIN</h3>
 
         <div class="row justify-content-between news-content">
             <div class="col-md-12">
@@ -197,15 +117,5 @@
         </div>
     </div>
 </section>
-<!-- End Health News -->
-<!-- Experience -->
-<section class="experience-section">
-    <div class="container experience-panel">
-        @* <img src="~/uploads/experience-now.png" style="height: auto;width: auto" />*@
-        <div class="col-md-12 pr-0 mobile-text">
-            <img src="~/img/mobile-text.png" alt="Ứng dụng di động Bệnh viện 199"/>
-        </div>
-     
-    </div>
-</section>
-<!-- End Experience -->
+<!-- End News -->
+

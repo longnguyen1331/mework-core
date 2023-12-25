@@ -18,9 +18,9 @@
         loadPostCategories();
         loadServices();
         loadServiceTypes();
-        loadSpecialties();
-        loadTopDoctors();
-        loadHealthNews();
+        //loadSpecialties();
+        //loadTopDoctors();
+        //loadHealthNews();
     });
 })(jQuery); // End jQuery
 

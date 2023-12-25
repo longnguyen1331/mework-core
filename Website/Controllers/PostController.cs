@@ -33,10 +33,10 @@ namespace Website.Controllers
 
             var client = _httpClientFactory.CreateClient("Website");
 
-            #region Get top 10 doctor
-            var response = await client.GetStringAsync(_remoteOptions.GetTopRateDoctor);
-            ViewData["TopDoctor"] = "" ;
-            #endregion
+            //#region Get top 10 doctor
+            //var response = await client.GetStringAsync(_remoteOptions.GetTopRateDoctor);
+            //ViewData["TopDoctor"] = "" ;
+            //#endregion
             #region Get highlight service
             var request = new HttpRequestMessage(HttpMethod.Post, _remoteOptions.GetServiceAdvanceFilter);
             ServiceFilterPagingDto filter = new ServiceFilterPagingDto()
@@ -48,7 +48,7 @@ namespace Website.Controllers
             request.Content = new StringContent(JsonConvert.SerializeObject(filter), Encoding.UTF8, "application/json");
 
             var result = await client.SendAsync(request);
-            response = await result.Content.ReadAsStringAsync();
+           var   response = await result.Content.ReadAsStringAsync();
 
             var highlightServices = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ApiResponseBase<ServiceSearchResultDto>>(response) : null;
 
@@ -75,7 +75,7 @@ namespace Website.Controllers
             var client = _httpClientFactory.CreateClient("Website");
 
             #region Get top 10 doctor
-            var response = await client.GetStringAsync(_remoteOptions.GetTopRateDoctor);
+           // var response = await client.GetStringAsync(_remoteOptions.GetTopRateDoctor);
             //ViewData["TopDoctor"] = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<DoctorInfoWithNavigationDto>>(response) : null;
             #endregion
 
@@ -90,7 +90,7 @@ namespace Website.Controllers
             request.Content = new StringContent(JsonConvert.SerializeObject(serviceFilter), Encoding.UTF8, "application/json");
 
             var result = await client.SendAsync(request);
-            response = await result.Content.ReadAsStringAsync();
+            var response = await result.Content.ReadAsStringAsync();
 
             var highlightServices = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ApiResponseBase<ServiceSearchResultDto>>(response) : null;
 

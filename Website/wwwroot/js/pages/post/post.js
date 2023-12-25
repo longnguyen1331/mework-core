@@ -15,40 +15,8 @@
             animateOut: 'fadeOut'
         });
 
-        $('.doctor-items-carousel').owlCarousel({
-            loop: true,
-            nav: false,
-            dots: true,
-            autoplay: true,
-            margin: 20,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                425: {
-                    items: 3
-                },
-                960: {
-                    items: 1
-                }
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ],
-        });
-
-        $('.custom_prevSpecialty').on('click', function (e) {
-            e.preventDefault();
-
-            $('.doctor-items-carousel').trigger('prev.owl.carousel');
-        });
-
-        $('.custom_nextSpecialty').on('click', function (e) {
-            e.preventDefault();
-
-            $('.doctor-items-carousel').trigger('next.owl.carousel');
-        });
+ 
+    
 
         $('.highlight-services-items-carousel').owlCarousel({
             loop: true,
