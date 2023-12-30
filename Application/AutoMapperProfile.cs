@@ -1,6 +1,7 @@
 using AutoMapper;
 using Contract.AppConfigs;
 using Contract.AppHistories;
+using Contract.Backups;
 using Contract.Departments;
 using Contract.Files;
 using Contract.Identity.RoleManager;
@@ -16,6 +17,7 @@ using Core.Extension;
 using Core.Helper;
 using Domain.AppConfigs;
 using Domain.AppHistories;
+using Domain.Backups;
 using Domain.Departments;
 using Domain.Identity.Roles;
 using Domain.Identity.Users;
@@ -39,6 +41,12 @@ namespace Application
                 .ForMember(dest => dest.FullName,
                     opt => opt.MapFrom(src => (src.User.FirstName + " " + src.User.LastName).Trim()));
             CreateMap<CreateUpdateAppHistoryDto, AppHistory>().ReverseMap();
+
+            CreateMap<BackupDto, Backup>();
+            CreateMap<Backup, BackupDto>()
+                .ForMember(dest => dest.UserFullName,
+                    opt => opt.MapFrom(src => src.User != null ? (src.User.FirstName + " " + src.User.LastName).Trim() : string.Empty));
+            CreateMap<CreateUpdateBackupDto, Backup>().ReverseMap();
 
 
             CreateMap<UserWithNavigationProperties, UserWithNavigationPropertiesDto>().ReverseMap();

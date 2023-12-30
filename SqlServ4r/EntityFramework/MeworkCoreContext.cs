@@ -1,5 +1,7 @@
 ﻿using Domain.AppConfigs;
 using Domain.AppHistories;
+using Domain.BackupDetails;
+using Domain.Backups;
 using Domain.Departments;
 using Domain.Identity.RoleClaims;
 using Domain.Identity.Roles;
@@ -25,7 +27,9 @@ namespace SqlServ4r.EntityFramework
     public class MeworkCoreContext  : IdentityDbContext<User,Role,Guid,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
     {
         public DbSet<AppHistory> AppHistories { get; set;}
-        public DbSet<Position> Positions { get; set;}
+        public DbSet<Backup> Backups { get; set;}
+        public DbSet<BackupDetail> BackupDetails { get; set; }
+        public DbSet<Position> Positions { get; set; }
         public DbSet<Department> Departments { get; set;}
         public DbSet<UserDepartment> UserDepartments { get; set;}
         public DbSet<AppConfig> AppConfigs { get; set; }
@@ -55,6 +59,15 @@ namespace SqlServ4r.EntityFramework
 
             builder.Entity<AppHistory>().HasOne<User>(x => x.User)
                 .WithMany(x => x.AppHistoryUsers)
+                .HasForeignKey(x => x.UserId);
+
+
+            builder.Entity<BackupDetail>().HasOne<User>(x => x.User)
+                .WithMany(x => x.BackupDetailUsers)
+                .HasForeignKey(x => x.UserId); 
+
+            builder.Entity<Backup>().HasOne<User>(x => x.User)
+                .WithMany(x => x.BackupUsers)
                 .HasForeignKey(x => x.UserId);
 
 

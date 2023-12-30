@@ -1,0 +1,125 @@
+﻿@page "/backups"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject BackupService _backupService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.Backups
+@using Contract.Backups;
+@using Variant = Radzen.Variant
+
+<h3>Backup</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+    <div>
+        <RadzenButton Text="@L["Create"]" Click="@ShowNewModal" Icon="post_add" Style="margin-bottom: 20px;"/>
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true"
+                    AllowColumnResize="true"
+                    AllowAlternatingRows="false"
+                    AllowSorting="true"
+                    PageSize="@DefaultPageSize"
+                    AllowPaging="true"
+                    PagerHorizontalAlign="HorizontalAlign.Left"
+                    ShowPagingSummary="true"
+                    Count="@TotalItem"
+                    Data="@Backups"
+                    LoadData="@GetBackups"
+                    TItem="BackupDto"
+                    ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Simple"
+                    PageSizeOptions="PageSizeOptions"
+                    IsLoading="IsLoading"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="BackupDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px"/>
+            <RadzenDataGridColumn TItem="BackupDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Server" TextAlign="TextAlign.Center" Title="@L["Server"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="DbName" TextAlign="TextAlign.Center" Title="@L["DbName"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="UserName" TextAlign="TextAlign.Center" Title="@L["UserName"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Password" TextAlign="TextAlign.Center" Title="@L["Password"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="CreatedDate" TextAlign="TextAlign.Center" Title="@L["CreatedDate"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
+                    <RadzenButton Click="async () => { await ShowConfirmMessage(data.Id); }" ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" Class="my-1 ms-1">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+
+
+<Modal @ref="CreateUpdateModal">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["Backup"]</ModalTitle>
+        </ModalHeader>
+        <EditForm Model="NewBackup" OnValidSubmit="async () => { await CreateOrUpdateBackup(); }">
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <Blazorise.Row>
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Code"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewBackup.Code" />
+                            <ValidationMessage For="@(() => NewBackup.Code)" />
+                    </Blazorise.Column>
+
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Name"]</RadzenText>
+                            <RadzenTextBox Class="w-100" @bind-Value="NewBackup.Name" />
+                            <ValidationMessage For="@(() => NewBackup.Name)" />
+                    </Blazorise.Column>
+
+
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Server"]</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewBackup.Server" />
+                        <ValidationMessage For="@(() => NewBackup.Server)" />
+                    </Blazorise.Column>
+
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["DbName"]</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewBackup.DbName" />
+                        <ValidationMessage For="@(() => NewBackup.DbName)" />
+                    </Blazorise.Column>
+
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["UserName"]</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewBackup.UserName" />
+                        <ValidationMessage For="@(() => NewBackup.UserName)" />
+                    </Blazorise.Column>
+
+                    <Blazorise.Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">@L["Password"]</RadzenText>
+                        <RadzenTextBox Class="w-100" @bind-Value="NewBackup.Password" />
+                        <ValidationMessage For="@(() => NewBackup.Password)" />
+                    </Blazorise.Column>
+                </Blazorise.Row>
+            </ModalBody>
+            <ModalFooter>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Click="@HideModal" Text="@L["Cancel"]" Disabled="IsDisable"/>
+                <RadzenButton Text="@L["SaveChanges"]" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+</Modal>
+

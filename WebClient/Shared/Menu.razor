@@ -14,7 +14,13 @@
                 <RadzenPanelMenuItem Text="@L["Post"]" Path="posts" Icon="arrow_right"></RadzenPanelMenuItem>
             </RadzenPanelMenuItem>
         }
-    
+        @if (context.User.IsInRole("ADMIN"))
+        {
+            <RadzenPanelMenuItem Text="@L["Menu:Backup"]" Icon="admin_panel_settings">
+                <RadzenPanelMenuItem Text="@L["BackupConfig"]" Path="backups" Icon="arrow_right"></RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Text="@L["BackupDetail"]" Path="backup-details" Icon="arrow_right"></RadzenPanelMenuItem>
+            </RadzenPanelMenuItem>
+        }
         @if (context.User.IsInRole("ADMIN"))
         {
             <RadzenPanelMenuItem Text="@L["Menu:Administrator"]" Icon="admin_panel_settings">

@@ -1,5 +1,7 @@
 ﻿using Core.Enum;
 using Domain.AppHistories;
+using Domain.BackupDetails;
+using Domain.Backups;
 using Domain.Positions;
 using Domain.PostCategories;
 using Domain.Posts;
@@ -60,7 +62,9 @@ namespace Domain.Identity.Users
         public List<WebMenu> ModifiedUserWebMenus { get; set; }
 
         public List<AppHistory> AppHistoryUsers { get; set; }
-
+        public List<Backup>? BackupUsers { get; set; }
+        public List<BackupDetail>? BackupDetailUsers { get; set; }
+        
         public List<Post> CreatedUserPosts { get; set; }
         public List<Post> ModifiedUserPosts { get; set; }
 

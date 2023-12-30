@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contract;
 using Contract.AppConfigs;
+using Contract.Backups;
 using Contract.Departments;
 using Contract.Identity.RoleManager;
 using Contract.Identity.UserManager;
@@ -27,9 +28,9 @@ namespace WebClient
             CreateMap<UserWithNavigationPropertiesDto, CreateUserDto>().ReverseMap();
 
 
-           
-            CreateMap<UserDto, CreateUserDto>().ReverseMap();
+            CreateMap<CreateUpdateBackupDto, BackupDto>().ReverseMap();
 
+            CreateMap<UserDto, CreateUserDto>().ReverseMap();
             CreateMap<CreateUpdatePositionDto, PositionDto>().ReverseMap();
 
             CreateMap<DepartmentDto, CreateUpdateDepartmentDto>().ReverseMap();
