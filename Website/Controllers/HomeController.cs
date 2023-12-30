@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using Website.Models;
+using Website.Models.ResponseModels;
 using Website.Utils;
 
 namespace Website.Controllers
@@ -54,6 +55,7 @@ namespace Website.Controllers
             ViewData["Banners"] = bannerCacheData;
             #endregion
 
+
             ViewData["HealthInfomationIds"] = _newsInHomepageConfigOptions.HealthInformation;
             ViewData["NewsCategoryIds"] = _newsInHomepageConfigOptions.NewsCategory;
 
@@ -64,6 +66,24 @@ namespace Website.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, StatusCode = HttpContext.Response.StatusCode.ToString() });
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> GetTongDanGiaSuc()
+        {
+            var client = _httpClientFactory.CreateClient("Statics");
+            var response = await client.GetStringAsync(_remoteOptions.TongDanGiaSuc);
+            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
+            return Json(dataTongDan);
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetTongDanGiaCam()
+        {
+            var client = _httpClientFactory.CreateClient("Statics");
+            var response = await client.GetStringAsync(_remoteOptions.TongDanGiaCam);
+            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
+            return Json(dataTongDan);
         }
 
         [HttpPost]

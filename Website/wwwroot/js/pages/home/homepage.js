@@ -18,6 +18,8 @@
         loadPostCategories();
         loadServices();
         loadServiceTypes();
+        loadTongDanGiaSucs();
+        loadTongDanGiaCams();
         //loadSpecialties();
         //loadTopDoctors();
         //loadHealthNews();
@@ -287,6 +289,81 @@ function loadPostCategories() {
         }
     });
 }
+
+function loadTongDanGiaCams() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetTongDanGiaCam",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("tongDanGiaCamChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart tổng đàn gia cầm"
+                    }
+                }
+            });
+        }
+    });
+}
+
+function loadTongDanGiaSucs() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetTongDanGiaSuc",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+            
+            new Chart("tongDanGiaSucChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart tổng đàn gia súc"
+                    }
+                }
+            });
+        }
+    });
+}
+
 
 function loadPosts(id) {
     $('#newsHighlight').empty();

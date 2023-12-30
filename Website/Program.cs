@@ -41,8 +41,15 @@ builder.Services
     {
         c.BaseAddress = new Uri(builder.Configuration.GetSection("RemoteServices").GetValue<string>("BaseUrl"));
         c.DefaultRequestHeaders.Add("Accept", "application/json");
-    })
-    .ConfigurePrimaryHttpMessageHandler(handler => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip });
+    }).ConfigurePrimaryHttpMessageHandler(handler => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip });
+
+builder.Services
+    .AddHttpClient("Statics", c =>
+    {
+        c.BaseAddress = new Uri(builder.Configuration.GetSection("RemoteServices").GetValue<string>("StaticsApiUrl"));
+        c.DefaultRequestHeaders.Add("Accept", "application/json");
+    }).ConfigurePrimaryHttpMessageHandler(handler => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip });
+
 
 builder.Services.AddMemoryCache();
 

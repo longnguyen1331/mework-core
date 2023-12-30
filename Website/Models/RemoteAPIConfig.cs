@@ -3,6 +3,10 @@
     public class RemoteAPIConfig
     {
         public string BaseUrl { get; set; } = string.Empty;
+        public string StaticsApiUrl { get; set; } = string.Empty;
+        public string TongDanGiaSuc { get; set; } = string.Empty;
+        public string TongDanGiaCam { get; set; } = string.Empty;
+
         public string GetAppConfig { get; set; } = string.Empty;
         public string GetWebBanner { get; set; } = string.Empty;
         public string GetWebsiteMenu { get; set; } = string.Empty;

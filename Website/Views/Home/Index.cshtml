@@ -108,13 +108,43 @@
         <h3 class="section-title text-center">BẢN TIN</h3>
 
         <div class="row justify-content-between news-content">
-            <div class="col-md-12">
-                <div class="d-flex justify-content-between news-card-full-item" id="healthNewsHighlightPanel"></div>
+            <div class="col-md-6">
+                <canvas id="tongDanGiaSucChart"></canvas>
             </div>
+             <div class="col-md-6">
+                <canvas id="tongDanGiaCamChart"></canvas>
+            </div>
+
             <div class="col-md-12 mt-5">
                 <div class="health-news-items-carousel owl-carousel owl-theme" id="healthNewsPanel"></div>
             </div>
         </div>
+        <div class="col-xs-12 text-center">
+            <canvas id="myPieChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+        <script>
+            const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+            const yValues = [55, 49, 44, 24, 15];
+            const barColors = ["red", "green", "blue", "orange", "brown"];
+
+
+            new Chart("myPieChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "World Wide Wine Production"
+                    }
+                }
+            });
+        </script>
     </div>
 </section>
 <!-- End News -->
