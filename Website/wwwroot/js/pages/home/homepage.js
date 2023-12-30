@@ -18,13 +18,405 @@
         loadPostCategories();
         loadServices();
         loadServiceTypes();
-        loadTongDanGiaSucs();
-        loadTongDanGiaCams();
-        //loadSpecialties();
-        //loadTopDoctors();
-        //loadHealthNews();
+        loadTongDanGiaSuc();
+        loadTongDanGiaCam();
+        loadSanLuongThitGiaSuc();
+        loadSanLuongThitGiaCam();
+
+
+        loadSanLuongTrung();
+        loadSanLuongSua();
+        loadSanLuongSanXuatThucAn();
+        loadSanLuongTieuThuThucAn();
+        loadDichBenh();
+        loadTiemPhong();
     });
 })(jQuery); // End jQuery
+
+
+function loadDichBenh() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetDichBenh",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+            const coloR = [];
+            for (var i in xValues) {
+                coloR.push(dynamicColors());
+            }
+
+            new Chart("dichBenhChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: coloR,
+                        data: yValues
+                    }]
+                },
+                options: {
+
+                    title: {
+                        display: true,
+                        text: "Chart dịch bệnh"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadTiemPhong() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetTiemPhong",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+            const coloR = [];
+            for (var i in xValues) {
+                coloR.push(dynamicColors());
+            }
+
+            new Chart("tiemPhongChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: coloR,
+                        data: yValues
+                    }]
+                },
+                options: {
+
+                    title: {
+                        display: true,
+                        text: "Chart tiêm phòng"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongSanXuatThucAn() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongSanXuatThucAn",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("sanLuongSanXuatThucAnChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        yAxes: [{ ticks: { min: 0, max: Math.max(...yValues) } }],
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongTieuThuThucAn() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongTieuThuThucAn",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            console.log(jqXHR.responseText);
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("sanLuongTieuThuThucAnChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        yAxes: [{ ticks: { min: 0, max: Math.max(...yValues) } }],
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongTrung() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongTrung",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("sanLuongTrungChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart sản lượng trứng"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongSua() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongSua",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("sanLuongSuaChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart sản lượng sữa"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongThitGiaSuc() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongThitGiaSuc",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+            const coloR = [];
+            for (var i in xValues) {
+                coloR.push(dynamicColors());
+            }
+
+            new Chart("sanLuongThitGiaSucChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: coloR,
+                        data: yValues
+                    }]
+                },
+                options: {
+                  
+                    title: {
+                        display: true,
+                        text: "Chart sản lượng thịt gia súc"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadSanLuongThitGiaCam() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetSanLuongThitGiaCam",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+            const coloR = [];
+            for (var i in xValues) {
+                coloR.push(dynamicColors());
+            }
+
+            new Chart("sanLuongThitGiaCamChart", {
+                type: "pie",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: coloR,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Chart sản lượng thịt gia cầm"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadTongDanGiaCam() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetTongDanGiaCam",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("tongDanGiaCamChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart tổng đàn gia cầm"
+                    }
+                }
+            });
+        }
+    });
+}
+function loadTongDanGiaSuc() {
+    $.ajax({
+        type: "GET",
+        url: "Home/GetTongDanGiaSuc",
+        dataType: 'json',
+        contentType: 'application/json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+        },
+        complete: function (jqXHR, status) {
+            let arrays = JSON.parse(jqXHR.responseText);
+
+            const xValues = arrays.labels;
+            const yValues = arrays.data;
+
+
+            new Chart("tongDanGiaSucChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "blue",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Chart tổng đàn gia súc"
+                    }
+                }
+            });
+        }
+    });
+}
+
+function dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+};
 
 function loadServices() {
     let data = {
@@ -290,79 +682,6 @@ function loadPostCategories() {
     });
 }
 
-function loadTongDanGiaCams() {
-    $.ajax({
-        type: "GET",
-        url: "Home/GetTongDanGiaCam",
-        dataType: 'json',
-        contentType: 'application/json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-        },
-        complete: function (jqXHR, status) {
-            let arrays = JSON.parse(jqXHR.responseText);
-
-            const xValues = arrays.labels;
-            const yValues = arrays.data;
-
-
-            new Chart("tongDanGiaCamChart", {
-                type: "bar",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: "blue",
-                        data: yValues
-                    }]
-                },
-                options: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: "Chart tổng đàn gia cầm"
-                    }
-                }
-            });
-        }
-    });
-}
-
-function loadTongDanGiaSucs() {
-    $.ajax({
-        type: "GET",
-        url: "Home/GetTongDanGiaSuc",
-        dataType: 'json',
-        contentType: 'application/json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-        },
-        complete: function (jqXHR, status) {
-            let arrays = JSON.parse(jqXHR.responseText);
-
-            const xValues = arrays.labels;
-            const yValues = arrays.data;
-
-            
-            new Chart("tongDanGiaSucChart", {
-                type: "bar",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: "blue",
-                        data: yValues
-                    }]
-                },
-                options: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: "Chart tổng đàn gia súc"
-                    }
-                }
-            });
-        }
-    });
-}
 
 
 function loadPosts(id) {

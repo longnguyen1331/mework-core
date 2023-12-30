@@ -7,6 +7,23 @@
         public string TongDanGiaSuc { get; set; } = string.Empty;
         public string TongDanGiaCam { get; set; } = string.Empty;
 
+
+        public string SanLuongThitGiaSuc {set;get;} = string.Empty;
+        public string SanLuongThitGiaCam {set;get;} = string.Empty;
+        public string SanLuongTrung {set;get;} = string.Empty;
+        public string SanLuongSua {set;get;} = string.Empty;
+        public string SanLuongSanXuatThucAn {set;get;} = string.Empty;
+        public string SanLuongTieuThuThucAn {set;get;} = string.Empty;
+        public string DichBenh {set;get;} = string.Empty;
+        public string TiemPhong {set;get;} = string.Empty;
+        public string ThongKe {set;get;} = string.Empty;
+        public string ThongKeChanNuoi {set;get;} = string.Empty;
+        public string Tinh {set;get;} = string.Empty;
+        public string Huyen {set;get;} = string.Empty;
+        public string Xa { set; get; } = string.Empty;
+
+
+
         public string GetAppConfig { get; set; } = string.Empty;
         public string GetWebBanner { get; set; } = string.Empty;
         public string GetWebsiteMenu { get; set; } = string.Empty;

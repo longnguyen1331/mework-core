@@ -115,36 +115,46 @@
                 <canvas id="tongDanGiaCamChart"></canvas>
             </div>
 
-            <div class="col-md-12 mt-5">
-                <div class="health-news-items-carousel owl-carousel owl-theme" id="healthNewsPanel"></div>
+
+            <div class="col-md-6">
+                <canvas id="sanLuongThitGiaSucChart"></canvas>
+            </div>
+
+            <div class="col-md-6">
+                <canvas id="sanLuongThitGiaCamChart"></canvas>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <canvas id="sanLuongTrungChart"></canvas>
+            </div>
+
+            <div class="col-md-6">
+                <canvas id="sanLuongSuaChart"></canvas>
+            </div>
+
+
+
+
+            <div class="col-md-6">
+                <canvas id="sanLuongSanXuatThucAnChart"></canvas>
+            </div>
+
+            <div class="col-md-6">
+                <canvas id="sanLuongTieuThuThucAnChart"></canvas>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <canvas id="dichBenhChart"></canvas>
+            </div>
+
+            <div class="col-md-6">
+                <canvas id="tiemPhongChart"></canvas>
             </div>
         </div>
-        <div class="col-xs-12 text-center">
-            <canvas id="myPieChart" style="width:100%;max-width:600px"></canvas>
-        </div>
-        <script>
-            const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-            const yValues = [55, 49, 44, 24, 15];
-            const barColors = ["red", "green", "blue", "orange", "brown"];
-
-
-            new Chart("myPieChart", {
-                type: "pie",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                        backgroundColor: barColors,
-                        data: yValues
-                    }]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: "World Wide Wine Production"
-                    }
-                }
-            });
-        </script>
     </div>
 </section>
 <!-- End News -->
