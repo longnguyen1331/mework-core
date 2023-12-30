@@ -2,6 +2,7 @@ using Domain.Identity.Roles;
 using Domain.Identity.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -139,7 +140,25 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseCors("ApiCorsPolicy");
 
+var provider = new FileExtensionContentTypeProvider();
+// Add new MIME type mappings
+provider.Mappings[".res"] = "application/octet-stream";
+provider.Mappings[".pexe"] = "application/x-pnacl";
+provider.Mappings[".nmf"] = "application/octet-stream";
+provider.Mappings[".mem"] = "application/octet-stream";
+provider.Mappings[".wasm"] = "application/wasm";
+provider.Mappings[".bak"] = "application/octet-stream";
+
 app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
+    RequestPath = "/StaticFiles",
+       ContentTypeProvider = provider
+
+});
+
+app.UseDirectoryBrowser(new DirectoryBrowserOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),

@@ -1,0 +1,60 @@
+﻿@page "/backup-details"
+@attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
+@using ButtonType = Radzen.ButtonType
+@inject BackupDetailService _backupDetailService;
+@inherits BaseBlazorPage
+@using Core.Const
+@using WebClient.Service.BackupDetails
+@using Contract.BackupDetails;
+@using Variant = Radzen.Variant
+@inject IJSRuntime JS
+@inject IConfiguration Configuration
+
+<h3>Backup</h3>
+
+
+<div style="display: flex;justify-content: space-between;align-items: center">
+    <div>
+        <RadzenBreadCrumb >
+            <RadzenBreadCrumbItem Path="/" Icon="home" Style="font-size: 20px"/>
+            <RadzenBreadCrumbItem Text="@HeaderTitle" Style="font-weight: 300"/>
+        </RadzenBreadCrumb>
+    </div>
+</div>
+
+
+<RadzenCard>
+    <RadzenDataGrid AllowFiltering="true"
+                    AllowColumnResize="true"
+                    AllowAlternatingRows="false"
+                    AllowSorting="true"
+                    PageSize="@DefaultPageSize"
+                    AllowPaging="true"
+                    PagerHorizontalAlign="HorizontalAlign.Left"
+                    ShowPagingSummary="true"
+                    Count="@TotalItem"
+                    Data="@BackupDetails"
+                    LoadData="@GetBackupDetails"
+                    TItem="BackupDetailDto"
+                    ColumnWidth="300px"
+                    AllowColumnPicking="true"
+                    FilterMode="FilterMode.Simple"
+                    PageSizeOptions="PageSizeOptions"
+                    IsLoading="IsLoading"
+                    Style="width: 100%">
+        <Columns>
+
+            <RadzenDataGridColumn TItem="BackupDetailDto" Property="Server" TextAlign="TextAlign.Center" Title="@L["Server"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDetailDto" Property="DbName" TextAlign="TextAlign.Center" Title="@L["DbName"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDetailDto" Property="FullFilePath" TextAlign="TextAlign.Left" Title="@L["FullFilePath"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDetailDto" Property="CreatedDate" TextAlign="TextAlign.Center" Title="@L["CreatedDate"]" Frozen="true" Width="100" />
+            <RadzenDataGridColumn TItem="BackupDetailDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
+                <Template Context="data">
+                    <RadzenButton Click="async () => { await Download(data); }" Icon="download" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+

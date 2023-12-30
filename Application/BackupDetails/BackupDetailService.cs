@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using Org.BouncyCastle.Crypto.Generators;
 using SqlServ4r.Repository.BackupDetails;
 using SqlServ4r.Repository.Backups;
 using Volo.Abp.DependencyInjection;
@@ -36,7 +37,8 @@ namespace Application.BackupDetails
             {
                 var backup = await _backupRepository.FirstOrDefaultAsync(x => x.Id == input.BackupId);
                 string folderPath = Path.Combine(_environment.WebRootPath, _configuration["Media:BACKUP_FOLDER"]);
-                string destinationPath  = Path.Combine(folderPath, $"{DateTime.Now.ToFileTimeUtc}.bak");
+                string fileName = $"backup_{DateTime.Now.Ticks}.bak";
+                string destinationPath  = Path.Combine(folderPath, fileName);
 
                 if (!File.Exists(folderPath))
                 {
@@ -49,20 +51,10 @@ namespace Application.BackupDetails
                 }
                 else
                 {
-                    //SqlConnection objconnection = new SqlConnection(backup.ConnectionString);
-                    //ServerConnection con = new ServerConnection(objconnection.DataSource.ToString());
-                    //Server server = new Server(con);
-                    //Backup source = new Backup();
-                    //source.Action = BackupActionType.Database;
-                    //source.Database = backup.DbName;    
-                    //BackupDeviceItem destination = new BackupDeviceItem($"backup_{DateTime.Now.ToFileTimeUtc}", DeviceType.File);
-                    //source.Devices.Add(destination);
-                    //source.SqlBackup(server);
-
                     Backup sqlBackup = new Backup();
                     //Specify the type of backup, the description, the name, and the database to be backed up.
                     sqlBackup.Action = BackupActionType.Database;
-                    sqlBackup.BackupSetDescription = "BackUp of:" + backup.DbName + "on" + DateTime.Now.ToShortDateString();
+                    sqlBackup.BackupSetDescription = $"BackUp of Server: {backup.Server} - DBName: {backup.DbName} on {DateTime.Now.ToShortDateString()}" ;
                     sqlBackup.BackupSetName = "FullBackUp";
                     sqlBackup.Database = backup.DbName;
 
@@ -94,8 +86,12 @@ namespace Application.BackupDetails
                     //Remove the backup device from the Backup object.
                     sqlBackup.Devices.Remove(deviceItem);
 
+                    sqlServer.ConnectionContext.Disconnect();
+
                     // thực hiện backup 
-                    input.FullFilePath = destinationPath;
+                    input.Server = backup.Server;
+                    input.DbName = backup.DbName;
+                    input.FullFilePath = Path.Combine(_configuration["Media:BACKUP_FOLDER"], fileName) ;
                     var backupDetai = ObjectMapper.Map<CreateUpdateBackupDetailDto, BackupDetail>(input);
                     await _backupDetailRepository.AddAsync(backupDetai);
                     result.Data = true;

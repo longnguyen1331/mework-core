@@ -1,6 +1,7 @@
 using AutoMapper;
 using Contract.AppConfigs;
 using Contract.AppHistories;
+using Contract.BackupDetails;
 using Contract.Backups;
 using Contract.Departments;
 using Contract.Files;
@@ -17,6 +18,7 @@ using Core.Extension;
 using Core.Helper;
 using Domain.AppConfigs;
 using Domain.AppHistories;
+using Domain.BackupDetails;
 using Domain.Backups;
 using Domain.Departments;
 using Domain.Identity.Roles;
@@ -29,6 +31,7 @@ using Domain.ServiceTypes;
 using Domain.StaticFiles;
 using Domain.WebBanners;
 using Domain.WebMenus;
+using System.Collections.Generic;
 
 namespace Application
 {
@@ -47,8 +50,8 @@ namespace Application
                 .ForMember(dest => dest.UserFullName,
                     opt => opt.MapFrom(src => src.User != null ? (src.User.FirstName + " " + src.User.LastName).Trim() : string.Empty));
             CreateMap<CreateUpdateBackupDto, Backup>().ReverseMap();
-
-
+            CreateMap<CreateUpdateBackupDetailDto, BackupDetail>().ReverseMap();
+            CreateMap<BackupDetail, BackupDetailDto>().ReverseMap();
             CreateMap<UserWithNavigationProperties, UserWithNavigationPropertiesDto>().ReverseMap();
             CreateMap<CreateUserDto, User>().ReverseMap();
             CreateMap<UpdateUserDto, User>().ReverseMap();

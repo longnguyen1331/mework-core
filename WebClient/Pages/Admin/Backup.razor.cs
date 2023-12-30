@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blazorise;
+using Contract.BackupDetails;
 using Contract.Backups;
 using Core.Enum;
 using Microsoft.AspNetCore.Components;
@@ -117,6 +118,25 @@ namespace WebClient.Pages.Admin
             NewBackup = new CreateUpdateBackupDto();
             CreateUpdateModal.Show();
         }
+        public async Task BackUpDatabase(BackupDto data)
+        {
+            IsLoading = true;
+            var res  = await _backupDetailService.CreateAsync(new CreateUpdateBackupDetailDto
+            {
+                BackupId = data.Id,
+                UserId = data.UserId,
+            });
+
+            if(res.IsSuccess) {
+            
+                NotifyMessage(NotificationSeverity.Success, "Sao lưu dữ liệu thành công", 2000);
+            }
+            else
+                NotifyMessage(NotificationSeverity.Error, res.Message, 2000);
+
+            IsLoading = false;
+        }
+
         public async Task ShowEditingModal(BackupDto data)
         {
             NewBackup = new CreateUpdateBackupDto

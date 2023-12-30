@@ -2,9 +2,11 @@
 @attribute [Authorize(Roles = "ADMIN,MANAGECATEGORIES")]
 @using ButtonType = Radzen.ButtonType
 @inject BackupService _backupService;
+@inject BackupDetailService _backupDetailService;
 @inherits BaseBlazorPage
 @using Core.Const
 @using WebClient.Service.Backups
+@using WebClient.Service.BackupDetails
 @using Contract.Backups;
 @using Variant = Radzen.Variant
 
@@ -45,15 +47,18 @@
                     Style="width: 100%">
         <Columns>
 
-            <RadzenDataGridColumn TItem="BackupDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="160px"/>
-            <RadzenDataGridColumn TItem="BackupDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn TItem="BackupDto" Property="Server" TextAlign="TextAlign.Center" Title="@L["Server"]" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn TItem="BackupDto" Property="DbName" TextAlign="TextAlign.Center" Title="@L["DbName"]" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn TItem="BackupDto" Property="UserName" TextAlign="TextAlign.Center" Title="@L["UserName"]" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn TItem="BackupDto" Property="Password" TextAlign="TextAlign.Center" Title="@L["Password"]" Frozen="true" Width="160px" />
-            <RadzenDataGridColumn TItem="BackupDto" Property="CreatedDate" TextAlign="TextAlign.Center" Title="@L["CreatedDate"]" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Name" TextAlign="TextAlign.Center" Title="@L["Name"]" Frozen="true" Width="80px"/>
+            <RadzenDataGridColumn TItem="BackupDto" Property="Code" TextAlign="TextAlign.Center" Title="@L["Code"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Server" TextAlign="TextAlign.Center" Title="@L["Server"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="DbName" TextAlign="TextAlign.Center" Title="@L["DbName"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="UserName" TextAlign="TextAlign.Center" Title="@L["UserName"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="Password" TextAlign="TextAlign.Center" Title="@L["Password"]" Frozen="true" Width="80px" />
+            <RadzenDataGridColumn TItem="BackupDto" Property="CreatedDate" TextAlign="TextAlign.Center" Title="@L["CreatedDate"]" Frozen="true" Width="80px" />
             <RadzenDataGridColumn TItem="BackupDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
+                    <RadzenButton Click="async () => { await BackUpDatabase(data); }" Icon="storage" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
                     <RadzenButton Click="async () => { await ShowEditingModal(data); }" Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
 

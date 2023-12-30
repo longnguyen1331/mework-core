@@ -12,6 +12,8 @@ namespace Domain.BackupDetails
         public Guid? UserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? FullFilePath { get; set; }
+        public string? Server { get; set; }
+        public string? DbName { get; set; }
         public User? User { get; set; }
     }
 }

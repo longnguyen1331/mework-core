@@ -105,10 +105,10 @@ namespace WebApi.Controllers
         {
             return await _uploadService.UploadDocumentFile(file);
         }
-        
-        
-      
-        
-        
+
+
+
+
+  
     }
 }

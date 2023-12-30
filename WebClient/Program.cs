@@ -14,6 +14,7 @@ using WebClient.LanguageResources;
 using WebClient.RequestHttp;
 using WebClient.Service.AppConfigs;
 using WebClient.Service.AppHistories;
+using WebClient.Service.BackupDetails;
 using WebClient.Service.Backups;
 using WebClient.Service.Departments;
 using WebClient.Service.JS;
@@ -60,7 +61,7 @@ builder.Services.AddTransient<WebBannerService>();
 builder.Services.AddTransient<WebMenuService>();
 builder.Services.AddTransient<JsService>();
 builder.Services.AddTransient<BackupService>();
-//builder.Services.AddTransient<BackupDetailService>();
+builder.Services.AddTransient<BackupDetailService>();
 builder.Services.AddTransient<PostService>();
 builder.Services.AddTransient<AppHistoryService>();
 builder.Services.AddTransient<UserCompanyService>();
@@ -88,6 +89,7 @@ builder.Services
     .AddBootstrapProviders()
     .AddFontAwesomeIcons();
 
+builder.Services.AddDirectoryBrowser();
 
 builder.Services.AddCors();
 
@@ -120,6 +122,7 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
     ContentTypeProvider = provider
 });
+
 
 app.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
 
