@@ -1350,6 +1350,12 @@ a, blockquote, button, span {
     width: 25%;
     padding: 15px;
 }
+.khung_dv_img {
+    text-align: center;
+    float: left;
+    width: 20%;
+    padding: 15px;
+}
 
 .box_sl_dv {
     padding: 20px 20px 30px;

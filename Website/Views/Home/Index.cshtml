@@ -107,6 +107,85 @@
     <div class="headlth-news-container container">
         <h3 class="section-title text-center">BẢN TIN</h3>
 
+
+
+        <div class="row">
+            <label for="date" class="col-md-2 col-form-label">Tỉnh</label>
+            <div class="col-md-2">
+                <select class="form-control" id="province" name="state">
+                </select>
+            </div>
+
+            <label for="date" class="col-md-2 col-form-label">Huyện</label>
+            <div class="col-md-2">
+                <select class="form-control" id="district" name="state">
+                </select>
+            </div>
+
+            <label for="date" class="col-md-2 col-form-label">Xã</label>
+            <div class="col-md-2">
+                <select class="form-control" id="ward" name="state">
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row mt-2">
+            <label for="date" class="col-md-2 col-form-label">Ngày thống kê</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control datepicker" id="date" />
+            </div>
+
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-6 col-sm-2 khung_dv_img">
+                    <a href="#">
+                        <div class="box_sl_dv">
+                            <img src="/img/duck.png">
+                            <p>VỊT: 01</p>
+                        </div>
+                    </a>
+                </div>
+            <div class="col-xs-6 col-sm-2 khung_dv_img">
+                    <a href="#">
+                        <div class="box_sl_dv">
+                            <img src="/img/chicken.png">
+                            <p>GÀ: 04</p>
+                        </div>
+                    </a>
+                </div>
+
+            <div class="col-xs-6 col-sm-2 khung_dv_img">
+                    <a href="#">
+                        <div class="box_sl_dv">
+                            <img src="/img/buffalo.png">
+                            <p>TRÂU: 02</p>
+                        </div>
+                    </a>
+                </div>
+            <div class="col-xs-6 col-sm-2 khung_dv_img">
+                    <a href="#">
+                        <div class="box_sl_dv">
+                            <img src="/img/cow.png">
+                            <p>BÒ: 05</p>
+                        </div>
+                    </a>
+                </div>
+            <div class="col-xs-6 col-sm-2 khung_dv_img">
+                    <a href="#">
+                        <div class="box_sl_dv">
+                            <img src="/img/pig.png">
+                            <p>LỢN: 03</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
         <div class="row justify-content-between news-content">
             <div class="col-md-6">
                 <canvas id="tongDanGiaSucChart"></canvas>
@@ -114,7 +193,6 @@
              <div class="col-md-6">
                 <canvas id="tongDanGiaCamChart"></canvas>
             </div>
-
 
             <div class="col-md-6">
                 <canvas id="sanLuongThitGiaSucChart"></canvas>
@@ -124,8 +202,6 @@
                 <canvas id="sanLuongThitGiaCamChart"></canvas>
             </div>
 
-
-
             <div class="col-md-6">
                 <canvas id="sanLuongTrungChart"></canvas>
             </div>
@@ -133,9 +209,6 @@
             <div class="col-md-6">
                 <canvas id="sanLuongSuaChart"></canvas>
             </div>
-
-
-
 
             <div class="col-md-6">
                 <canvas id="sanLuongSanXuatThucAnChart"></canvas>
@@ -145,14 +218,17 @@
                 <canvas id="sanLuongTieuThuThucAnChart"></canvas>
             </div>
 
-
-
             <div class="col-md-6">
                 <canvas id="dichBenhChart"></canvas>
             </div>
 
             <div class="col-md-6">
                 <canvas id="tiemPhongChart"></canvas>
+            </div>
+
+
+            <div class="col-md-6">
+                <canvas id="thongKeChart"></canvas>
             </div>
         </div>
     </div>

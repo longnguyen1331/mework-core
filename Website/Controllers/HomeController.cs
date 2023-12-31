@@ -7,10 +7,16 @@ using Contract.ServiceTypes;
 
 using Contract.WebBanners;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json.Nodes;
+using System.Xml.Linq;
 using Website.Models;
 using Website.Models.ResponseModels;
 using Website.Utils;
@@ -70,6 +76,118 @@ namespace Website.Controllers
 
 
         [HttpGet]
+        public async Task<JsonResult> GetStatics()
+        {
+            try
+            {
+
+                var client = _httpClientFactory.CreateClient("Statics");
+
+                var resApiTongDanGiaSuc = client.GetStringAsync(_remoteOptions.TongDanGiaSuc);
+                var resApiTongDanGiaCam = client.GetStringAsync(_remoteOptions.TongDanGiaCam);
+                var resApiSanLuongThitGiaSuc = client.GetStringAsync(_remoteOptions.SanLuongThitGiaSuc);
+                var resApiSanLuongThitGiaCam = client.GetStringAsync(_remoteOptions.SanLuongThitGiaCam);
+                var resApiSanLuongTrung = client.GetStringAsync(_remoteOptions.SanLuongTrung);
+                var resApiSanLuongSua = client.GetStringAsync(_remoteOptions.SanLuongSua);
+                var resApiSanLuongSanXuatThucAn = client.GetStringAsync(_remoteOptions.SanLuongSanXuatThucAn);
+                var resApiSanLuongTieuThuThucAn = client.GetStringAsync(_remoteOptions.SanLuongTieuThuThucAn);
+                var resApiDichBenh = client.GetStringAsync(_remoteOptions.DichBenh);
+                var resApiTiemPhong = client.GetStringAsync(_remoteOptions.TiemPhong);
+                var resApiThongKe = client.GetStringAsync(_remoteOptions.ThongKe);
+                var resApiThongKeChanNuoi = client.GetStringAsync(_remoteOptions.ThongKeChanNuoi);
+
+                // Wait for both tasks to complete.
+                await Task.WhenAll(
+                    resApiTongDanGiaSuc,
+                    resApiTongDanGiaCam,
+                    resApiSanLuongThitGiaSuc,
+                    resApiSanLuongThitGiaCam,
+                    resApiSanLuongTrung,
+                    resApiSanLuongSua,
+                    resApiSanLuongSanXuatThucAn,
+                    resApiSanLuongTieuThuThucAn,
+                    resApiDichBenh,
+                    resApiTiemPhong,
+                    resApiThongKe,
+                    resApiThongKeChanNuoi
+                );
+
+                var resApiThongKeResult = !string.IsNullOrEmpty(resApiThongKe.Result) ? JsonConvert.DeserializeObject<ThongKeResponseModel>(resApiThongKe.Result) : null;
+                ChartResponseModel dataThongKe  = new ChartResponseModel();
+                PropertyInfo[] properties = typeof(ThongKeResponseModel).GetProperties();
+                foreach (PropertyInfo property in properties)
+                {
+                    dataThongKe.Labels.Add(property.Name);
+                    dataThongKe.Data.Add((int)property.GetValue(resApiThongKeResult));
+                }
+
+                var data = new
+                {
+                    dataTongDanGiaSuc = !string.IsNullOrEmpty(resApiTongDanGiaSuc.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiTongDanGiaSuc.Result) : null,
+                    dataTongDanGiaCam = !string.IsNullOrEmpty(resApiTongDanGiaCam.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiTongDanGiaCam.Result) : null,
+                    dataSanLuongThitGiaSuc = !string.IsNullOrEmpty(resApiSanLuongThitGiaSuc.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongThitGiaSuc.Result) : null,
+                    dataSanLuongThitGiaCam = !string.IsNullOrEmpty(resApiSanLuongThitGiaCam.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongThitGiaCam.Result) : null,
+                    dataSanLuongTrung = !string.IsNullOrEmpty(resApiSanLuongTrung.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongTrung.Result) : null,
+                    dataSanLuongSua = !string.IsNullOrEmpty(resApiSanLuongSua.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongSua.Result) : null,
+                    dataSanLuongSanXuatThucAn = !string.IsNullOrEmpty(resApiSanLuongSanXuatThucAn.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongSanXuatThucAn.Result) : null,
+                    dataSanLuongTieuThuThucAn = !string.IsNullOrEmpty(resApiSanLuongTieuThuThucAn.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiSanLuongTieuThuThucAn.Result) : null,
+                    dataDichBenh = !string.IsNullOrEmpty(resApiDichBenh.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiDichBenh.Result) : null,
+                    dataTiemPhong = !string.IsNullOrEmpty(resApiTiemPhong.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiTiemPhong.Result) : null,
+                    dataThongKe = dataThongKe,
+                    dataThongKeChanNuoi = !string.IsNullOrEmpty(resApiThongKeChanNuoi.Result) ? JsonConvert.DeserializeObject<List<ThongKeChanNuoiChiTietResponseModel>>(resApiThongKeChanNuoi.Result) : null,
+                };
+                return Json(data);
+            }
+            catch (Exception ex) {
+
+                return Json(null);
+
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetProvinces()
+        {
+            var client = _httpClientFactory.CreateClient("Statics");
+            var response = await client.GetStringAsync(_remoteOptions.Tinh);
+            var data = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<BaseModel>>(response) : null;
+            data.FirstOrDefault(x => x.Id == 36).Selected = true;
+            return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDistricts([FromQuery]int? provinceId)
+        {
+            List<BaseModel> result = new List<BaseModel>();
+            if(provinceId != null && provinceId.Value > 0)
+            {
+                var client = _httpClientFactory.CreateClient("Statics");
+                var response = await client.GetStringAsync($"{_remoteOptions.Huyen}/{provinceId.Value}");
+                result = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<BaseModel>>(response) : null;
+
+                result.Insert(0, new BaseModel { Id = 0, Ten = "Tất cả", Selected = true });
+            }
+            
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetWards([FromQuery] int? districtId)
+        {
+            List<BaseModel> result = new List<BaseModel>();
+            if (districtId != null && districtId.Value > 0)
+            {
+                var client = _httpClientFactory.CreateClient("Statics");
+                var response = await client.GetStringAsync($"{_remoteOptions.Xa}/{districtId.Value}");
+                result = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<BaseModel>>(response) : null;
+                result.Insert(0, new BaseModel { Id = 0, Ten = "Tất cả", Selected = true });
+            }
+
+            return Json(result);
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetTongDanGiaSuc()
         {
             var client = _httpClientFactory.CreateClient("Statics");
@@ -77,87 +195,7 @@ namespace Website.Controllers
             var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
             return Json(dataTongDan);
         }
-        [HttpGet]
-        public async Task<JsonResult> GetTongDanGiaCam()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.TongDanGiaCam);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongThitGiaSuc()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongThitGiaSuc);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongThitGiaCam()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongThitGiaCam);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-
-
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongTrung()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongTrung);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongSua()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongSua);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongSanXuatThucAn()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongSanXuatThucAn);
-
-            response = response.Replace("\t\r\n", "");
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> GetSanLuongTieuThuThucAn()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.SanLuongTieuThuThucAn);
-            response = response.Replace("\t\r\n", "");
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> GetDichBenh()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.DichBenh);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> GetTiemPhong()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.TiemPhong);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
-
+        
         [HttpPost]
         public async Task<JsonResult> GetPosts([FromBody] PostFitlerPagingDto filter)
         {
@@ -260,5 +298,6 @@ namespace Website.Controllers
 
             return Json(postCategories);
         }
+
     }
 }
