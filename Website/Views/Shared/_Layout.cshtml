@@ -94,7 +94,8 @@
     <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
     <link href="~/css/animate.css" rel="stylesheet" />
     <link href="~/css/bootsnav.css" rel="stylesheet" />
-
+    <link href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .primary {
             color: @ViewData["PrimaryColor"];
@@ -111,6 +112,9 @@
     <link href="~/css/responsive.css" rel="stylesheet" />
     <link href="~/css/pages/shared/service.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/pages/shared/registerServices.css" rel="stylesheet" asp-append-version="true" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
     @await RenderSectionAsync("Headers", required: false)
     <!-- ========== End Stylesheet ========== -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -148,23 +152,7 @@
         chatbox.setAttribute("attribution", "biz_inbox");
     </script>
 
-    <!-- Your SDK code -->
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                xfbml: true,
-                version: 'v18.0'
-            });
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
+   
     <!-- Preloader Start -->
     <div class="se-pre-con"></div>
     <!-- Preloader Ends -->
@@ -210,6 +198,12 @@
             <script src="~/js/pages/shared/header.js"></script>
             <script src="~/js/pages/shared/bookingServiceResult.js"></script>
             <script src="~/js/pages/shared/registerService.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+            <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             @await RenderSectionAsync("Scripts", required: false)
 
 </body>

@@ -56,12 +56,12 @@
         <div class="item">
             <div class="banner-item">
                 <div class="banner-body">
-                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076437169774717.png" alt="Tin tức Bệnh viện 199">
+                    <img src="https://api-danang.drcare.app/uploads/images/mWUmcYsk/638076437169774717.png" alt="Tin tức">
                     <div class="banner-body-content">
                         <div class="container banner-body-content-header">
                             <div class="banner-title">
                                 <div class="banner-title-content">
-                                    <h2>Tin tức Bệnh viện 199</h2>
+                                    <h2>Tin tức</h2>
                                 </div>
                             </div>
                         </div>
@@ -95,79 +95,7 @@
             <!-- News Hot -->
             <div id="hot-news"></div>
 
-            <!-- Doctor -->
-            <div class="d-flex justify-content-between align-items-center mb-3 doctor-panel-header">
-                <h3 class="section-title">Chuyên gia</h3>
-                <div class="d-flex justify-content-end">
-                    <div class="carousel-navigate">
-                        <button class="navigation custom_prevSpecialty" tabindex="0" type="button">
-                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
-                                <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
-                            </svg>
-                        </button>
-                        <button class="navigation custom_nextSpecialty" tabindex="0" type="button">
-                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
-                                <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-           
-
-            <!-- Highlight Service -->
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
-                <h3 class="section-title">Dịch vụ nổi bật</h3>
-                <div class="d-flex justify-content-end">
-                    <div class="carousel-navigate">
-                        <button class="navigation custom_prevService" tabindex="0" type="button">
-                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowBackIosNewIcon">
-                                <path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
-                            </svg>
-                        </button>
-                        <button class="navigation custom_nextService" tabindex="0" type="button">
-                            <svg class="custom-svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ArrowForwardIosIcon">
-                                <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="highlight-services-items-carousel owl-carousel owl-theme hide-dot-in-desktop text-center mb-5">
-                @if (highlightServices != null)
-                {
-                    foreach (var item in highlightServices)
-                    {
-                        <div class="item">
-                            <div class="service-container">
-                                <div class="service-box-1">
-                                    <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
-                                        <div class="service-thumb-img">
-                                            <img alt="service" sizes="100vw" src="@item.ImageUrl" decoding="async" data-nimg="fill" class="imageBox" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
-                                        </div>
-                                    </a>
-                                    <div class="service-box-1-body">
-                                        <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
-                                            <span class="service-box-1-content-title text-ellipses">@item.Name</span>
-                                        </a>
-                                        <a rel="canonical" href="/servicedetail/@(!string.IsNullOrEmpty(item.Slug) ? item.Slug : item.Code)_pdt_@(item.Id)">
-                                            <span class="service-box-1-content-desc text-ellipses text-ellipses-3-line">@item.Description</span>
-                                        </a>
-                                        <p class="retail-price">
-                                            Giá: <span class="price">@item.Charges.ToString("#,##0") đ</span>
-                                        </p>
-                                       
-                                        <p class="retail-price-2 mt-3">
-                                            Giá: <span class="price"> @item.Charges.ToString("#,##0") đ</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-            <!-- EndHighlight Service -->
+            
             <!-- Tags nổi bật -->
             <div id="tag-panel"></div>
         </div>
