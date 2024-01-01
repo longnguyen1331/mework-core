@@ -118,6 +118,22 @@ namespace WebClient.Pages.Admin
             NewBackup = new CreateUpdateBackupDto();
             CreateUpdateModal.Show();
         }
+
+        public async Task TestConnection(BackupDto data)
+        {
+            IsLoading = true;
+            var res = await _backupService.TestConnectionAsync(data.Id);
+
+            if (res.IsSuccess)
+            {
+
+                NotifyMessage(NotificationSeverity.Success, "Test kết nối dữ liệu thành công", 2000);
+            }
+            else
+                NotifyMessage(NotificationSeverity.Error, res.Message, 2000);
+
+            IsLoading = false;
+        }
         public async Task BackUpDatabase(BackupDto data)
         {
             IsLoading = true;

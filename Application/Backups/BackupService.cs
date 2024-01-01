@@ -1,12 +1,17 @@
 ﻿using Contract;
+using Contract.BackupDetails;
 using Contract.Backups;
 using Core.Const;
 using Core.Exceptions;
 using Domain.Backups;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
+using SqlServ4r.Repository.BackupDetails;
 using SqlServ4r.Repository.Backups;
 using System.Net;
 using Volo.Abp.DependencyInjection;
+using Backup = Domain.Backups.Backup;
 
 namespace Application.Backups
 {
@@ -19,8 +24,48 @@ namespace Application.Backups
         {
             _backupRepository = backupRepository;
         }
+        public async Task<ApiResponseBase<bool>> TestConnectionAsync(Guid id)
+        {
+            ApiResponseBase<bool> result = new ApiResponseBase<bool>() { Data = false };
+            try
+            {
+                var backup = await _backupRepository.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (backup == null || string.IsNullOrEmpty(backup.DbName) || string.IsNullOrEmpty(backup.Server) || string.IsNullOrEmpty(backup.UserName) || string.IsNullOrEmpty(backup.Password)) //check if a database name has been entered
+                {
+                    result.Message = "Cấu hình thông tin kết nối dữ liệu sai hoặc thiếu thông tin";
+                    result.Data = false;
+                }
+                else
+                {
+                    //Define Server connection
+                    ServerConnection connection = new ServerConnection(backup.Server, backup.UserName, backup.Password);
+                    //To Avoid TimeOut Exception
+                    Server sqlServer = new Server(connection);
+                    sqlServer.ConnectionContext.Disconnect();
+                    sqlServer.ConnectionContext.Connect();
+                    if (sqlServer.ConnectionContext.IsOpen)
+                    {
+                        result.Data = true;
+                    }
+                    else
+                    {
+                        result.Message = "Không thể kết nối CSDL";
+                        result.Data = false;
+                    }
+
+                    sqlServer.ConnectionContext.Disconnect();
 
 
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Data = false;
+                result.Message = ex.Message;
+            }
+            return result;
+        }
         public async Task<ApiResponseBase<bool>> CreateAsync(CreateUpdateBackupDto input)
         {
             ApiResponseBase<bool> result = new ApiResponseBase<bool>() { Data = true };

@@ -23,6 +23,14 @@ namespace WebApi.Controllers
             return await _backupService.CreateAsync(input); 
         }
 
+        [HttpGet]
+        [Route("TestConnection/{id}")]
+        public async Task<ApiResponseBase<bool>> TestConnectionAsync(Guid id)
+        {
+            return await _backupService.TestConnectionAsync(id);
+        }
+
+
         [HttpDelete]
         public async Task<ApiResponseBase<bool>> DeleteAsync(Guid id)
         {

@@ -10,6 +10,10 @@ namespace WebClient.Service.Backups
         {
             return await RequestClient.PostAPIAsync<ApiResponseBase<BackupSearchResponseDto>>("backups/search", filter);
         }
+        public async Task<ApiResponseBase<bool>> TestConnectionAsync(Guid id)
+        {
+            return await RequestClient.GetAPIAsync<ApiResponseBase<bool>>($"backups/testConnection/{id}");
+        }
         public async Task<ApiResponseBase<bool>> CreateAsync(CreateUpdateBackupDto input)
         {
             return await RequestClient.PostAPIAsync<ApiResponseBase<bool>>("backups", input);

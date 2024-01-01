@@ -56,6 +56,10 @@
             <RadzenDataGridColumn TItem="BackupDto" Property="CreatedDate" TextAlign="TextAlign.Center" Title="@L["CreatedDate"]" Frozen="true" Width="80px" />
             <RadzenDataGridColumn TItem="BackupDto" Property="Name" Title="@L["Action"]" TextAlign="TextAlign.Center" Frozen="true" Width="160px" Filterable="false">
                 <Template Context="data">
+
+                    <RadzenButton Click="async () => { await TestConnection(data); }" Icon="settings_input_composite" ButtonStyle="ButtonStyle.Warning" Variant="Variant.Flat" Size="ButtonSize.Medium">
+                    </RadzenButton>
+
                     <RadzenButton Click="async () => { await BackUpDatabase(data); }" Icon="storage" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium">
                     </RadzenButton>
 

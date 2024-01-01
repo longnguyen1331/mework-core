@@ -21,7 +21,6 @@
         loadPostCategories();
         loadServices();
         loadServiceTypes();
-
         loadStatis();
 
         $('.datepicker').datepicker({
