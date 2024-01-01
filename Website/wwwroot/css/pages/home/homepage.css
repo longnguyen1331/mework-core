@@ -487,14 +487,14 @@
 /* End Experience */
 @media (min-width: 600px) {
     .banner-section img {
-        max-height: 550px;
+        max-height: 350px;
         object-fit: cover;
     }
 }
 
 @media (min-width: 960px) {
     .banner-section {
-        min-height: 800px;
+        max-height: 650px;
         overflow: hidden;
     }
 

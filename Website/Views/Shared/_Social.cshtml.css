@@ -22,7 +22,7 @@
         }
 
         .social-panel .social-item a {
-            color: #06bcb0;
+            color: #1c59e3;
         }
 
         .social-panel .social-item .social-content {
@@ -51,11 +51,10 @@
             -webkit-box-pack: start;
             -webkit-box-align: center;
             box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
-            background: rgb(6, 188, 176) !important;
+            background: #1c59e3 !important;
         }
 
-            .social-panel .social-item .social-content:hover
-            {
+            .social-panel .social-item .social-content:hover {
                 background-color: rgb(103, 198, 63) !important;
             }
 
@@ -70,7 +69,7 @@
                 -webkit-box-pack: center;
                 justify-content: center;
                 background: rgb(255, 255, 255);
-                color: rgb(6, 188, 176);
+                color: #1c59e3;
             }
 
             .social-panel .social-item .social-content:hover .icon {

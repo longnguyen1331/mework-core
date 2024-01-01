@@ -26,15 +26,15 @@ nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle:after {
     content: "";
 }
 
-    nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle .icon {
-        fill: currentColor;
-        -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        font-size: 1.5rem;
-        width: 20px;
-        height: 20px;
-        color: #06bcb0;
-    }
+nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle .icon {
+    fill: currentColor;
+    -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    font-size: 1.5rem;
+    width: 20px;
+    height: 20px;
+    color: #1c59e3;
+}
 
 ul.nav-menu {
     display: -webkit-box;
@@ -63,7 +63,7 @@ ul.nav-menu {
     }
 
         ul.nav-menu > li > a:hover {
-            color: rgb(6, 188, 176) !important;
+            color: #1c59e3 !important;
         }
 
 nav.navbar.bootsnav li.dropdown ul.dropdown-menu {
@@ -80,19 +80,19 @@ ul.dropdown-menu.sub-menu {
     min-width: 250px;
 }
 
-ul.dropdown-menu.sub-menu > li > a > span {
-    padding-right: 0.5rem;
-    white-space: nowrap
-}
+    ul.dropdown-menu.sub-menu > li > a > span {
+        padding-right: 0.5rem;
+        white-space: nowrap
+    }
 
     ul.dropdown-menu.sub-menu > li:hover {
         text-decoration: none;
         background-color: rgba(0, 0, 0, 0.04);
     }
 
-ul.dropdown-menu.sub-menu > li a:hover {
-    color: rgb(6, 188, 176) !important;
-}
+    ul.dropdown-menu.sub-menu > li a:hover {
+        color: #1c59e3 !important;
+    }
 
 .dropdown-right .position-fixed ul.dropdown-menu.sub-menu {
     right: 100% !important;
@@ -154,7 +154,7 @@ nav .dropdown .menu-wrapper {
         -webkit-justify-content: center;
         justify-content: center;
         color: #fff;
-        background: #06bcb0;
+        background: #1c59e3;
         border: none;
         cursor: pointer;
     }
@@ -184,7 +184,7 @@ nav.bootsnav:not(.no-background) .main-panel {
     left: 304px;
     width: 100vw;
     height: 40px;
-    background: #06bcb0;
+    background: #1c59e3;
     border-radius: 0px 0px 0px 10px;
     padding-left: 19px;
     padding-top: 3px;
@@ -285,7 +285,7 @@ header .login-panel {
         border-radius: 4px;
         -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
         transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        color: #06bcb0;
+        color: #1c59e3;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -383,7 +383,7 @@ header .login-panel {
         padding: 14px;
         display: block;
         outline: none;
-        border: 1px solid rgb(6, 188, 176);
+        border: 1px solid #1c59e3;
     }
 
 .rightSidenav .btn-search:hover {
@@ -400,7 +400,7 @@ header .login-panel {
     text-align: left;
     padding: 8px 16px;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: rgb(6, 188, 176);
+    color: #1c59e3;
     font-size: 1rem;
 }
 
@@ -471,7 +471,7 @@ header .login-panel {
 }
 
 .on-mobile {
-    display: none !important; 
+    display: none !important;
 }
 
     .on-mobile.no-background {
@@ -526,12 +526,12 @@ header .login-panel {
 
 .logon-modal .modal-header {
     border-bottom: none;
-    padding-bottom:0px;
+    padding-bottom: 0px;
 }
 
-.logon-modal .modal-header h3 {
-    margin:0px;
-}
+    .logon-modal .modal-header h3 {
+        margin: 0px;
+    }
 
 .logon-title {
     font-size: 25px;
@@ -572,8 +572,8 @@ header .login-panel {
 }
 
 .btn-register:hover {
-    background: rgb(6, 188, 176) !important;
-    border: 1px solid rgb(6, 188, 176);
+    background: #1c59e3 !important;
+    border: 1px solid #1c59e3;
     color: #fff;
 }
 
@@ -584,7 +584,7 @@ header .login-panel {
         /*position: fixed;
         background: rgb(255, 255, 255);
         box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;*/
-}
+    }
 
     .on-desktop {
         display: none !important;
