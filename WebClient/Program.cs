@@ -6,7 +6,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
-using MudBlazor.Services;
 using Radzen;
 using System.Reflection;
 using WebClient.Identity;
@@ -36,7 +35,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
 
 RequestClient.Initialize(builder.Configuration);
 

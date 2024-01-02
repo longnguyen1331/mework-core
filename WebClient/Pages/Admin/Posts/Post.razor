@@ -8,7 +8,6 @@
 @using WebClient.Service.PostCategories;
 @using WebClient.Service.Posts;
 @using Contract.Posts;
-@using Color = MudBlazor.Color
 @using Variant = Radzen.Variant
 @using WebClient.Service.Upload
 @inject NavigationManager _navigationManager;
@@ -24,10 +23,11 @@
     }
 </style>
 
-@if (IsLoading)
+ @if (IsLoading)
 {
-    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+  <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
 }
+ 
 
 <h3>@L["Web.Post"]</h3>
 

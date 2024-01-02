@@ -61,6 +61,5 @@ namespace WebClient.Service.Upload
         {
             return  await RequestClient.PostAPIWithFileAsync<UploadFileURLDto>("upload/save-user-avatar", file);
         }
-
     }
 }

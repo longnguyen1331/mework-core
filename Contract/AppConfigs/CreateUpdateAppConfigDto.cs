@@ -1,13 +1,11 @@
 ﻿using Core.Const;
-using System;
 using System.ComponentModel.DataAnnotations;
-
 namespace Contract.AppConfigs
 {
     public class CreateUpdateAppConfigDto
     {
-        public string CompanyName { get; set; }
-        public string Code { get; set; }
+        public string? CompanyName { get; set; }
+        public string? Code { get; set; }
         public string? MailHost { get; set; }
         public int MailPort { get; set; }
         public string? SendingEmailContent { get; set; }

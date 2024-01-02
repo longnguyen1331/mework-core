@@ -1,10 +1,8 @@
 ﻿@page "/my-profile"
 @attribute [Authorize]
-@using Color = MudBlazor.Color
 @using WebClient.Service.Users
 @using ButtonType = Radzen.ButtonType
 @using WebClient.Service.Upload
-@using Size = MudBlazor.Size
 @inherits BaseBlazorPage
 @inject UserManagerService _userDtoManagerService;
 @inject UploadService _uploadService;
@@ -12,10 +10,11 @@
 
 
 
-<MudTabs Outlined="true" Position="@Position" Rounded="true" Border="true"
-         ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
-    <MudTabPanel Text="My Profile" Icon="@Icons.Material.Filled.Person" Style="min-width: 0">
-        <RadzenRow Gap="20px" Style="width: 100%">
+
+<RadzenTabs TabPosition="@tabPosition" RenderMode="TabRenderMode.Client" >
+    <Tabs>
+        <RadzenTabsItem Text="My profile">
+          <RadzenRow Gap="20px" Style="width: 100%">
 
             <RadzenColumn Size="8">
                 <EditForm Model="NewProfile" OnValidSubmit="async () => { await UpdateProfile(); }">
@@ -63,15 +62,18 @@
 
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Upload Avatar</RadzenText>
                             <div  style="display: flex;align-items: center;gap: 5px">
-                                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-                                    <ButtonTemplate Context="data">
-                                        <MudIconButton HtmlTag="label"
-                                                       Color="Color.Info"
-                                                       Icon="@Icons.Material.Filled.PhotoCamera"
-                                                       for="@data">
-                                        </MudIconButton>
-                                    </ButtonTemplate>
-                                </MudFileUpload>
+                        
+
+                                 @*    <RadzenUpload Icon="upload" ChooseText="" @ref="upload"
+                                                  Change=@(args => OnChange(args, "Manual Upload"))
+                                                  Accept="image/*"
+                                    InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})">
+                                    </RadzenUpload>
+                                    <RadzenButton Text="Upload" Click=@(args => upload.Upload()) class="d-block mt-4" /> *@
+
+                      
+                                    <RadzenUpload Accept="image/*" Url=@($"https://localhost:7093/api/save-image-a") Progress="@((args) => OnProgress(args, "Uploading file..."))" />
+
                                 <div>@AvatarFile?.Name</div>
                             </div>
 
@@ -84,31 +86,37 @@
 
 
             <RadzenColumn Size="4">
-                <MudBadge  Overlap="true" Bordered="true" >
-                    <MudAvatar Image="@UserDto.User.AvatarURL" Size="Size.Large" Style="width: 300px;height: 300px"/>
-                </MudBadge>
-            </RadzenColumn>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Info" Shade="Shade.Dark">
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal"
+                        AlignItems="AlignItems.Center" Gap="0.25rem" Style="width: 300px;height: 300px; padding: 0 0.25rem 0 0; text-transform: none;">
+                            <RadzenImage Path="@UserDto.User.AvatarURL" AlternateText="binary image" />
+                        </RadzenStack>
+                    </RadzenBadge>
+
+                </RadzenColumn>
         </RadzenRow>
+            
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Reset Password">
+
+            <EditForm Model="NewPassword" OnValidSubmit="async () => { await ResetPassword(); }" style="width: 50%">
+
+                <DataAnnotationsValidator />
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password</RadzenText>
+                <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPassword" />
+                <ValidationMessage For="@(() => NewPassword.NewPassword)" />
+
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password Confirm</RadzenText>
+                <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPasswordConfirm" />
+                <ValidationMessage For="@(() => NewPassword.NewPasswordConfirm)" />
+
+                <RZBR></RZBR>
+                <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable" />
+
+            </EditForm>
+
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 
-    </MudTabPanel>
-    <MudTabPanel Text="Reset Password" Icon="@Icons.Material.Filled.Key">
-
-        <EditForm Model="NewPassword" OnValidSubmit="async () => { await ResetPassword(); }" style="width: 50%">
-
-            <DataAnnotationsValidator/>
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password</RadzenText>
-            <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPassword"/>
-            <ValidationMessage For="@(() => NewPassword.NewPassword)"/>
-
-            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">New Password Confirm</RadzenText>
-            <RadzenPassword Class="w-100" @bind-Value="NewPassword.NewPasswordConfirm"/>
-            <ValidationMessage For="@(() => NewPassword.NewPasswordConfirm)"/>
-
-            <RZBR></RZBR>
-            <RadzenButton Text="Save Changes" Icon="save" ButtonType="ButtonType.Submit" Disabled="IsDisable"/>
-
-        </EditForm>
-
-    </MudTabPanel>
-</MudTabs>

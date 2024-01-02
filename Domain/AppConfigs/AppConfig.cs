@@ -7,8 +7,8 @@ namespace Domain.AppConfigs
     public class AppConfig
     {
         public Guid Id { get; set; }
-        public string CompanyName { get; set; }
-        public string Code { get; set; }
+        public string CompanyName { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
         
         public bool EnableNotificationByEmail { get; set; }
         public string? MailHost { get; set; }

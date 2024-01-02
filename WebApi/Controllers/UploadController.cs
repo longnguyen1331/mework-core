@@ -10,13 +10,14 @@ using Core.Helper;
 using Domain.StaticFiles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/upload/")]
-    public class UploadController 
+    public class UploadController  : Controller
     {
         private UploadService _uploadService;
 
@@ -31,6 +32,17 @@ namespace WebApi.Controllers
         {
             return await _uploadService.CreateStaticFile(input);
         }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("save-image-a")]
+        public async Task<IActionResult> Single(IFormFile file)
+        {
+             await _uploadService.UploadImage(file);
+            return StatusCode(200);
+        }
+
 
         [HttpPost]
         [Route("save-image")]

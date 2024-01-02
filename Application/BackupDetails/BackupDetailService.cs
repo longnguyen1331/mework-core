@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
-using Org.BouncyCastle.Crypto.Generators;
 using SqlServ4r.Repository.BackupDetails;
 using SqlServ4r.Repository.Backups;
 using Volo.Abp.DependencyInjection;
@@ -20,15 +19,17 @@ namespace Application.BackupDetails
         private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
 
-
-        public BackupDetailService(IConfiguration configuration, BackupDetailRepository backupDetailRepository, BackupRepository backupRepository, IWebHostEnvironment environment)
+        public BackupDetailService(
+            IConfiguration configuration, 
+            BackupDetailRepository backupDetailRepository, 
+            BackupRepository backupRepository, 
+            IWebHostEnvironment environment)
         {
             _backupDetailRepository = backupDetailRepository;
             _configuration = configuration;
             _backupRepository = backupRepository;
             _environment = environment;
         }
-
 
         public async Task<ApiResponseBase<bool>> CreateAsync(CreateUpdateBackupDetailDto input)
         {

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Contract.Identity.UserManager;
+﻿using Contract.Identity.UserManager;
 using Core.Enum;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
+using System;
 using WebClient.Exceptions;
 using WebClient.Setting;
 
@@ -10,13 +10,14 @@ namespace WebClient.Pages.Admin
 {
     public partial class MyProfile
     {
-        
-        public MudBlazor.Position Position { get; set; } = MudBlazor.Position.Left;
+
+        public TabPosition tabPosition = TabPosition.Left;
         public UserWithNavigationPropertiesDto UserDto { get; set; } = new UserWithNavigationPropertiesDto();
         private UpdateUserProfileRequestDto NewProfile = new UpdateUserProfileRequestDto();
         public NewUserPasswordDto NewPassword { get; set; } = new NewUserPasswordDto();
-        private IBrowserFile AvatarFile { get; set; }
-
+        private Radzen.FileInfo AvatarFile { get; set; }
+        public string fileName, fileBase64;
+        public long? fileSize;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -54,17 +55,29 @@ namespace WebClient.Pages.Admin
             {
                 if (AvatarFile != null)
                 {
-                  var uploadedFile = await _uploadService.UploadUserAvatar(AvatarFile);
-                  NewProfile.AvatarURL = uploadedFile.URL;
+                    //var uploadedFile = await _uploadService.UploadUserAvatar(AvatarFile);
+                    //NewProfile.AvatarURL = uploadedFile.URL;
                 }
-                
+
                 await _userDtoManagerService.UpdateProfile(NewProfile);
                 _navigationManager.NavigateTo(_navigationManager.Uri,true);
                 
             },ActionType.Update,true);
         }
-        
-        
+
+        void OnProgress(UploadProgressArgs args, string name)
+        {
+
+            if (args.Progress == 100)
+            {
+                foreach (var file in args.Files)
+                {
+                    // Upload local file
+                    fileName = file.Name;
+                    AvatarFile =file;
+                }
+            }
+        }
         private async void UploadFiles(IBrowserFile file)
         {
             await InvokeAsync(async () =>
@@ -75,12 +88,10 @@ namespace WebClient.Pages.Admin
                     throw new FailedOperation(@L["FileSoBig"]);
                 }
 
-                AvatarFile = file;
+                //AvatarFile = file;
             }, ActionType.UploadFile);
 
-
-
         }
-     
+
     }
 }

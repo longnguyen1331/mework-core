@@ -15,8 +15,8 @@ namespace WebClient.Pages.Admin
         public Dictionary<string, DateRange> DateRanges { get; set; } = new Dictionary<string, DateRange>();
         public (DateTimeOffset? StartDay, DateTimeOffset? EndDay) Timeline = (null, null);
         
-        public RZModel ScheduleFileView { get; set;}
-        public RZModel ContentFileView { get; set;}
+        public RZModel? ScheduleFileView { get; set;}
+        public RZModel? ContentFileView { get; set;}
         
         public List<DepartmentDto> SelectionHierarchicalDepartments { get; set; } = new List<DepartmentDto>();
         public List<DepartmentDto> Departments { get; set; } = new List<DepartmentDto>();

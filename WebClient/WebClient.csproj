@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -35,29 +35,28 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="12.0.0" />
-      <PackageReference Include="BlazorDateRangePicker" Version="4.3.0" />
-      <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
-      <PackageReference Include="Blazorise.Bootstrap" Version="1.1.4.1" />
-      <PackageReference Include="Blazorise.Components" Version="1.1.5" />
-      <PackageReference Include="Blazorise.Generator.Features" Version="1.2.4" />
-      <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.1.4.1" />
-      <PackageReference Include="CorePush" Version="3.1.1" />
-      <PackageReference Include="EPPlus" Version="6.1.2" />
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="BlazorDateRangePicker" Version="4.5.0" />
+      <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+      <PackageReference Include="Blazorise.Bootstrap" Version="1.4.0" />
+      <PackageReference Include="Blazorise.Components" Version="1.4.0" />
+      <PackageReference Include="Blazorise.Generator.Features" Version="1.4.0" />
+      <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.4.0" />
+      <PackageReference Include="CorePush" Version="4.1.0" />
+      <PackageReference Include="EPPlus" Version="7.0.5" />
       <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
-      <PackageReference Include="FluentValidation" Version="11.5.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.10.0" />
-      <PackageReference Include="MudBlazor" Version="6.1.9" />
-      <PackageReference Include="Radzen.Blazor" Version="4.15.4" />
-      <PackageReference Include="Refit" Version="6.3.2" />
-      <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
-      <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
-      <PackageReference Include="System.Text.Json" Version="6.0.0" />
-      <PackageReference Include="Volo.Abp.Autofac" Version="6.0.0" />
-      <PackageReference Include="Volo.Abp.Core" Version="6.0.0" />
-      <PackageReference Include="Volo.Abp.Http.Client" Version="6.0.0" />
+      <PackageReference Include="FluentValidation" Version="11.9.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
+      <PackageReference Include="Radzen.Blazor" Version="4.23.4" />
+      <PackageReference Include="Refit" Version="7.0.0" />
+      <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
+      <PackageReference Include="Refit.Newtonsoft.Json" Version="7.0.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+      <PackageReference Include="System.Text.Json" Version="8.0.0" />
+      <PackageReference Include="Volo.Abp.Autofac" Version="8.0.0" />
+      <PackageReference Include="Volo.Abp.Core" Version="8.0.0" />
+      <PackageReference Include="Volo.Abp.Http.Client" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

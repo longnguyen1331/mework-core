@@ -1,5 +1,5 @@
 ﻿using Contract.Files;
-
+#nullable disable
 namespace Contract.Services
 {
     public class ServiceDto

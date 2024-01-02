@@ -110,7 +110,6 @@ namespace WebClient.RequestHttp
                 return await ReturnApiResponse<T>(httpResponseMessage);
             }
         }
-
         public static async Task<T> PostAPIWithMultipleFileAsync<T>([Required] string URL, List<IBrowserFile> files)
         {
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage();

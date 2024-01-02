@@ -14,6 +14,7 @@ using Domain.StaticFiles;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using SqlServ4r.Repository.Files;
 using Volo.Abp.DependencyInjection;
 
@@ -102,7 +103,8 @@ namespace Application.Uploads
                 URL = fileModel.Url
             };
         }
-        
+
+
         public async Task<UploadFileURLDto> UploadUserReviewImg(IFormFile file)
         {
             string pathBase = Path.Combine(_environment.WebRootPath,_configuration["Media:BASE_IMAGE_PATH"]);

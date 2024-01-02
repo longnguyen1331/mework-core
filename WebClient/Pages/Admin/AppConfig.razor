@@ -8,7 +8,6 @@
 @using WebClient.Service.JS
 @using WebClient.Service.Upload
 @using Variant = Radzen.Variant
-@using Color = MudBlazor.Color
 @inject NavigationManager _navigationManager;
 @inject UploadService _uploadService;
 <h3>@L["AppConfig"]</h3>
@@ -25,9 +24,7 @@
     </div>
 </div>
 
-<MudOverlay Visible="IsVisible" DarkBackground="true" Absolute="true">
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-</MudOverlay>
+
 <RadzenCard>
     <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" AllowSorting="true" PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                     Data="@AppConfigs" TItem="AppConfigDto" ColumnWidth="300px"
