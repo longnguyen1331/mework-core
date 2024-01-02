@@ -10,15 +10,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/posts/")]
     [Authorize]
-    public class PostController : IPostService
+    public class PostController(PostService _postService)
     {
-        private readonly PostService _postService;
-
-        public PostController(PostService postService)
-        {
-            _postService = postService;
-        }
-
         [HttpPost]
         public async Task<ApiResponseBase<PostDto>> CreateAsync(CreateUpdatePostDto input)
         {

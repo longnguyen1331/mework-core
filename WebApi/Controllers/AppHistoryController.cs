@@ -9,14 +9,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/appHistories/")]
     [Authorize]
-    public class AppHistoryController : IAppHistoryService
+    public class AppHistoryController(AppHistoryService _appHistoryService)
     {
-        private AppHistoryService _appHistoryService;
-        public AppHistoryController(AppHistoryService appHistoryService)
-        {
-            _appHistoryService = appHistoryService;
-        }
-        
         [HttpPost]
         public async Task CreateAsync(CreateUpdateAppHistoryDto input)
         {

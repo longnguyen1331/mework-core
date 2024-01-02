@@ -10,15 +10,8 @@ namespace WebApi.Controllers
 	[ApiController]
 	[Route("api/postCategories/")]
 	[Authorize]
-	public class PostCategoryController : IPostCategoryService
-	{
-		private readonly PostCategoryService _postCategory;
-
-		public PostCategoryController(PostCategoryService postCategory)
-		{
-			_postCategory = postCategory;
-		}
-
+	public class PostCategoryController(PostCategoryService _postCategory)
+    {
         [HttpPost]
 		public async Task<PostCategoryDto> CreateAsync(CreateUpdatePostCategoryDto input)
 		{

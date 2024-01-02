@@ -13,13 +13,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/app-config/")]
     [Authorize]
-    public class AppConfigController : IAppConfigService
+    public class AppConfigController(IAppConfigService _appConfigService)
     {
-        private readonly AppConfigService _appConfigService;
-        public AppConfigController(AppConfigService appConfigService)
-        {
-            _appConfigService = appConfigService;
-        }
         [HttpGet]
         public async Task<ApiResponseBase<List<AppConfigDto>>> GetListAsync()
         {

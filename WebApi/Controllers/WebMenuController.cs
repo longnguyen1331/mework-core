@@ -10,14 +10,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/webMenus/")]
     [Authorize]
-    public class WebMenuController : IWebMenuService
+    public class WebMenuController(WebMenuService _webMenuService)
     {
-        private WebMenuService _webMenuService;
-        public WebMenuController(WebMenuService positionService)
-        {
-            _webMenuService = positionService;
-        }
-        
         [HttpPost]
         public async Task<WebMenuDto> CreateAsync(CreateUpdateWebMenuDto input)
         {
