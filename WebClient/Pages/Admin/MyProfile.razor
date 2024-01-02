@@ -71,9 +71,11 @@
                                     </RadzenUpload>
                                     <RadzenButton Text="Upload" Click=@(args => upload.Upload()) class="d-block mt-4" /> *@
 
-                      
-                                    <RadzenUpload Accept="image/*" Url=@($"https://localhost:7093/api/save-image-a") Progress="@((args) => OnProgress(args, "Uploading file..."))" />
-
+                                    <RZInputFile Icon="upload"
+                                                 Accept="image/png, image/jpeg, image/gif" Text="@L["UploadImage"]"
+                                                 Style="display: flex;align-items: center; width:100%;max-width:350px;margin-top: 0;cursor: pointer;background-color: var(--rz-on-info-lighter)"
+                                                 Event="async (e) => { await OnChangeImageFile(e); }">
+                                    </RZInputFile>
                                 <div>@AvatarFile?.Name</div>
                             </div>
 

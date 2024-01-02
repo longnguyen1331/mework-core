@@ -15,7 +15,7 @@ namespace WebClient.Pages.Admin
         public UserWithNavigationPropertiesDto UserDto { get; set; } = new UserWithNavigationPropertiesDto();
         private UpdateUserProfileRequestDto NewProfile = new UpdateUserProfileRequestDto();
         public NewUserPasswordDto NewPassword { get; set; } = new NewUserPasswordDto();
-        private Radzen.FileInfo AvatarFile { get; set; }
+        private IBrowserFile AvatarFile { get; set; }
         public string fileName, fileBase64;
         public long? fileSize;
 
@@ -55,8 +55,8 @@ namespace WebClient.Pages.Admin
             {
                 if (AvatarFile != null)
                 {
-                    //var uploadedFile = await _uploadService.UploadUserAvatar(AvatarFile);
-                    //NewProfile.AvatarURL = uploadedFile.URL;
+                    var uploadedFile = await _uploadService.UploadUserAvatar(AvatarFile);
+                    NewProfile.AvatarURL = uploadedFile.URL;
                 }
 
                 await _userDtoManagerService.UpdateProfile(NewProfile);
@@ -65,32 +65,16 @@ namespace WebClient.Pages.Admin
             },ActionType.Update,true);
         }
 
-        void OnProgress(UploadProgressArgs args, string name)
-        {
-
-            if (args.Progress == 100)
-            {
-                foreach (var file in args.Files)
-                {
-                    // Upload local file
-                    fileName = file.Name;
-                    AvatarFile =file;
-                }
-            }
-        }
-        private async void UploadFiles(IBrowserFile file)
+      
+        async Task OnChangeImageFile(InputFileChangeEventArgs e)
         {
             await InvokeAsync(async () =>
             {
                 AvatarFile = null;
-                if (file.Size > BlazorSetting.Avatar_LENGTH_LIMIT)
-                {
+                AvatarFile = e.File;
+                if (e.File.Size > BlazorSetting.Document_FILE_LENGTH_LIMIT)
                     throw new FailedOperation(@L["FileSoBig"]);
-                }
-
-                //AvatarFile = file;
-            }, ActionType.UploadFile);
-
+            }, ActionType.UploadFile, false);
         }
 
     }
