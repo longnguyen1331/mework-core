@@ -18,6 +18,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Xml.Linq;
 using Website.Models;
+using Website.Models.RequestModels;
 using Website.Models.ResponseModels;
 using Website.Utils;
 
@@ -76,25 +77,36 @@ namespace Website.Controllers
 
 
         [HttpGet]
-        public async Task<JsonResult> GetStatics()
+        public async Task<JsonResult> GetStatics([FromQuery] 
+            int? idTinhThanh, int? idQuanHuyen, int? idXaPhuong,
+            string? fromDate, string? toDate
+            )
         {
+            string paramsGetQuery = string.Empty;
             try
             {
+                if (idTinhThanh.HasValue) paramsGetQuery += $"idTinhThanh={idTinhThanh}";
+                if (idQuanHuyen.HasValue) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"idQuanHuyen={idQuanHuyen}";
+                if (idQuanHuyen.HasValue) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"idXaPhuong={idXaPhuong}";
+                if (fromDate != null && !string.IsNullOrEmpty(fromDate)) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"fromDate={fromDate}";
+                if (toDate != null && !string.IsNullOrEmpty(toDate)) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" +  $"toDate={toDate}";
+
+
 
                 var client = _httpClientFactory.CreateClient("Statics");
 
-                var resApiTongDanGiaSuc = client.GetStringAsync(_remoteOptions.TongDanGiaSuc);
-                var resApiTongDanGiaCam = client.GetStringAsync(_remoteOptions.TongDanGiaCam);
-                var resApiSanLuongThitGiaSuc = client.GetStringAsync(_remoteOptions.SanLuongThitGiaSuc);
-                var resApiSanLuongThitGiaCam = client.GetStringAsync(_remoteOptions.SanLuongThitGiaCam);
-                var resApiSanLuongTrung = client.GetStringAsync(_remoteOptions.SanLuongTrung);
-                var resApiSanLuongSua = client.GetStringAsync(_remoteOptions.SanLuongSua);
-                var resApiSanLuongSanXuatThucAn = client.GetStringAsync(_remoteOptions.SanLuongSanXuatThucAn);
-                var resApiSanLuongTieuThuThucAn = client.GetStringAsync(_remoteOptions.SanLuongTieuThuThucAn);
-                var resApiDichBenh = client.GetStringAsync(_remoteOptions.DichBenh);
-                var resApiTiemPhong = client.GetStringAsync(_remoteOptions.TiemPhong);
-                var resApiThongKe = client.GetStringAsync(_remoteOptions.ThongKe);
-                var resApiThongKeChanNuoi = client.GetStringAsync(_remoteOptions.ThongKeChanNuoi);
+                var resApiTongDanGiaSuc = client.GetStringAsync(_remoteOptions.TongDanGiaSuc + paramsGetQuery);
+                var resApiTongDanGiaCam = client.GetStringAsync(_remoteOptions.TongDanGiaCam + paramsGetQuery);
+                var resApiSanLuongThitGiaSuc = client.GetStringAsync(_remoteOptions.SanLuongThitGiaSuc + paramsGetQuery);
+                var resApiSanLuongThitGiaCam = client.GetStringAsync(_remoteOptions.SanLuongThitGiaCam + paramsGetQuery);
+                var resApiSanLuongTrung = client.GetStringAsync(_remoteOptions.SanLuongTrung + paramsGetQuery);
+                var resApiSanLuongSua = client.GetStringAsync(_remoteOptions.SanLuongSua + paramsGetQuery);
+                var resApiSanLuongSanXuatThucAn = client.GetStringAsync(_remoteOptions.SanLuongSanXuatThucAn + paramsGetQuery);
+                var resApiSanLuongTieuThuThucAn = client.GetStringAsync(_remoteOptions.SanLuongTieuThuThucAn + paramsGetQuery);
+                var resApiDichBenh = client.GetStringAsync(_remoteOptions.DichBenh + paramsGetQuery);
+                var resApiTiemPhong = client.GetStringAsync(_remoteOptions.TiemPhong + paramsGetQuery);
+                var resApiThongKe = client.GetStringAsync(_remoteOptions.ThongKe + paramsGetQuery);
+                var resApiThongKeChanNuoi = client.GetStringAsync(_remoteOptions.ThongKeChanNuoi + paramsGetQuery);
 
                 // Wait for both tasks to complete.
                 await Task.WhenAll(
