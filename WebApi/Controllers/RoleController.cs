@@ -14,46 +14,39 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/role/")]
     [Authorize]
-    public class RoleController : IRoleManagerService
+    public class RoleController(RoleManagerService _roleManagerService)
     {
-        public RoleManagerService RoleManagerService;
-
-        public RoleController(RoleManagerService roleManagerService)
-        {
-            RoleManagerService = roleManagerService;
-        }
-
         [HttpGet]
         public async Task<List<RoleDto>> GetListAsync()
         {
-            return await RoleManagerService.GetListAsync();
+            return await _roleManagerService.GetListAsync();
         }
 
         [HttpPost]
         public async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
         {
-            return await RoleManagerService.CreateAsync(input);
+            return await _roleManagerService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<RoleDto> UpdateAsync(CreateUpdateRoleDto input, Guid id)
         {
-            return await RoleManagerService.UpdateAsync(input, id);
+            return await _roleManagerService.UpdateAsync(input, id);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task DeleteAsync(Guid id)
         {
-             await RoleManagerService.DeleteAsync(id);
+             await _roleManagerService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("get-claims/{roleId}")]
         public async Task<List<RoleClaimDto>> GetClaimListAsync(Guid roleId)
         {
-            return await RoleManagerService.GetClaimListAsync(roleId);
+            return await _roleManagerService.GetClaimListAsync(roleId);
         }
 
         [HttpPost]
@@ -61,7 +54,7 @@ namespace WebApi.Controllers
         [Authorize("EmployeeOnly")]
         public async Task<CreateUpdateClaimRole> CreateClaimAsync(CreateUpdateClaimRole input)
         {
-            return await RoleManagerService.CreateClaimAsync(input);
+            return await _roleManagerService.CreateClaimAsync(input);
         }
 
  
@@ -70,7 +63,7 @@ namespace WebApi.Controllers
         [Route("delete-claim")]
         public async Task DeleteClaimAsync(RoleClaimModel input)
         {
-             await RoleManagerService.DeleteClaimAsync(input);
+             await _roleManagerService.DeleteClaimAsync(input);
         }
     }
 }

@@ -9,21 +9,13 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/backupDetails/")]
     [Authorize]
-    public class BackupDetailController 
+    public class BackupDetailController (BackupDetailService _backupDetailService)
     {
-        private BackupDetailService _backupDetailService;
-        public BackupDetailController(BackupDetailService backupDetailService)
-        {
-            _backupDetailService = backupDetailService;
-        }
-        
         [HttpPost]
         public async Task<ApiResponseBase<bool>> CreateAsync(CreateUpdateBackupDetailDto input)
         {
             return await _backupDetailService.CreateAsync(input); 
         }
-
-       
 
         [HttpPost]
         [Route("{search}")]

@@ -10,15 +10,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/user/")]
     [Authorize]
-    public class UserController : IUserManagerService
+    public class UserController(UserManagerService _userManagerService) : IUserManagerService
     {
-        private UserManagerService _userManagerService;
-
-        public UserController(UserManagerService userManagerService)
-        {
-            _userManagerService = userManagerService;
-        }
-
         [HttpPost]
         [Route("create-firebase-token")]
         [AllowAnonymous]

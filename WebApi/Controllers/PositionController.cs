@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Positions;
+﻿using Application.Positions;
 using Contract.Positions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +8,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/position/")]
     [Authorize]
-    public class PositionController : IPositionService
+    public class PositionController(PositionService _positionService)
     {
-        private PositionService _positionService;
-        public PositionController(PositionService positionService)
-        {
-            _positionService = positionService;
-        }
-        
         [HttpPost]
         public async Task<PositionDto> CreateAsync(CreateUpdatePositionDto input)
         {

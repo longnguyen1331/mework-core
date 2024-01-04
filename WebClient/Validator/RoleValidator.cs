@@ -1,5 +1,4 @@
 ﻿using Contract.Identity.RoleManager;
-using Domain.Identity.Roles;
 using FluentValidation;
 using WebClient.LanguageResources;
 
@@ -13,6 +12,5 @@ namespace WebClient.Validator
             RuleFor(x => x.Code).NotEmpty().WithMessage(localizer["Hello"]);
             RuleFor(x => x.Name).NotEmpty().WithMessage(localizer["Hello"]);
         }
-
     }
 }

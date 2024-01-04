@@ -9,14 +9,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/services/")]
     [Authorize]
-    public class ServiceController  : IServiceService
+    public class ServiceController(ServiceService _serviceService)
     {
-        private ServiceService _serviceService;
-        public ServiceController(ServiceService serviceService)
-        {
-            _serviceService = serviceService;
-        }
-        
         [HttpPost]
         public async Task<ApiResponseBase<ServiceDto>> CreateAsync(CreateUpdateServiceDto input)
         {

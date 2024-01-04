@@ -1,32 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using BlazorDateRangePicker;
-using Blazorise;
-using Contract;
 using Core.Enum;
 using Core.Extension;
 using FluentDateTimeOffset;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Radzen;
-using Radzen.Blazor;
+using System.Security.Claims;
 using WebClient.Exceptions;
-using WebClient.Identity;
 using WebClient.LanguageResources;
 using WebClient.RequestHttp;
 using WebClient.Setting;
@@ -52,7 +34,6 @@ namespace WebClient.Shared
 
         public BaseBlazorPage()
         {
-            
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutoMapperProfile());
@@ -358,8 +339,6 @@ namespace WebClient.Shared
                       End = now.Add(new TimeSpan(23,59,59))
                   }
               }
-              
-          
           };
 
           
@@ -386,8 +365,6 @@ namespace WebClient.Shared
             return (fromDateOffset.Value.DateTime, toDateTimeOffset.Value.DateTime);
         }
         
-        
-
         public async Task<string> GetUserNameAsync()
         {
             var authState = await AuthState;
@@ -411,14 +388,11 @@ namespace WebClient.Shared
                 .Where(x => x.Type == ClaimTypes.Role);
             return roleClaims.Select(x => x.Value).ToList();
         }
-
-
-
         public async Task<bool> IsAuthenticatedAsync()
         {
             var authState = await AuthState;
             var user = authState.User;
-            if (user.Identity.IsAuthenticated)
+            if (user.Identity != null && user.Identity.IsAuthenticated)
             {
                 return true;
             }

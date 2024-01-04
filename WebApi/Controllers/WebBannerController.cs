@@ -9,14 +9,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/webBanners/")]
     [Authorize]
-    public class WebBannerController : IWebBannerService
+    public class WebBannerController(WebBannerService _webBannerService)
     {
-        private WebBannerService _webBannerService;
-        public WebBannerController(WebBannerService webBannerService)
-        {
-            _webBannerService = webBannerService;
-        }
-        
         [HttpPost]
         public async Task<WebBannerDto> CreateAsync(CreateUpdateWebBannerDto input)
         {

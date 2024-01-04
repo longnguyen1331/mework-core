@@ -17,15 +17,8 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/upload/")]
-    public class UploadController  : Controller
+    public class UploadController(UploadService _uploadService)  : Controller
     {
-        private UploadService _uploadService;
-
-        public UploadController(UploadService uploadService)
-        {
-            _uploadService = uploadService;
-        }
-
         [HttpPost]
         [Route("create-static-file")]
         public async Task<Guid> CreateStaticFile(CreateUpdateStaticFileDto input)

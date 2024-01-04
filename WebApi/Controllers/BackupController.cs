@@ -9,14 +9,8 @@ namespace WebApi.Controllers
     [ApiController]
     [Route("api/backups/")]
     [Authorize]
-    public class BackupController 
+    public class BackupController(BackupService _backupService)
     {
-        private BackupService _backupService;
-        public BackupController(BackupService backupService)
-        {
-            _backupService = backupService;
-        }
-        
         [HttpPost]
         public async Task<ApiResponseBase<bool>> CreateAsync(CreateUpdateBackupDto input)
         {
