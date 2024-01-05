@@ -18,40 +18,9 @@
  
     
 
-        $('.highlight-services-items-carousel').owlCarousel({
-            loop: true,
-            nav: false,
-            dots: true,
-            autoplay: true,
-            margin: 20,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                425: {
-                    items: 3
-                },
-                960: {
-                    items: 1
-                }
-            },
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ],
-        });
+        
 
-        $('.custom_prevService').on('click', function (e) {
-            e.preventDefault();
-
-            $('.highlight-services-items-carousel').trigger('prev.owl.carousel');
-        });
-
-        $('.custom_nextService').on('click', function (e) {
-            e.preventDefault();
-
-            $('.highlight-services-items-carousel').trigger('next.owl.carousel');
-        });
+       
 
         $('.post-related-items-carousel').owlCarousel({
             loop: false,

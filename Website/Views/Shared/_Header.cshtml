@@ -168,40 +168,7 @@
                         }
                     }
                 </div>
-                <div class="d-flex flex-column gap-3">
-                    <div class="d-flex justify-content-between">
-                        <span>Ngôn ngữ:</span>
-                        <div class="d-flex gap-1">
-                            <a class="p-0 change-lang" href="/#googtrans(vi)">
-                                <img alt="flag vi" src="~/img/icon/icon_flag_vn.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
-                            </a>
-                            <a class="p-0 change-lang" href="/#googtrans(en)">
-                                <img alt="flag en" src="~/img/icon/icon_flag_en.png" width="30" height="30" decoding="async" loading="lazy" style="color: transparent;" />
-                            </a>
-                        </div>
-                    </div>
-                    @if (ViewData["UserCode"] != null)
-                    {
-                        <div class="d-flex justify-content-between align-items-center user-info">
-                            <div class="d-flex justify-content-between align-items-center gap-2">
-                                <span class="mr-2">Xin chào</span>
-                                <a href="/patient">@ViewData["UserCode"]</a>
-                            </div>
-                            <button class="btn btn-toolbar no-focus gap-1 login-button" onclick="signOut()" tabindex="0" type="button">
-                                <span class="css-1sdfs1n">Thoát</span>
-                            </button>
-                        </div>
-                    }
-                    else
-                    {
-                        <button class="btn btn-block btn-custom-outline" onclick="logon()" tabindex="0" type="button">
-                            Đăng nhập
-                        </button>
-                        <button class="btn btn-block btn-custom" onclick="register()" tabindex="0" type="button">
-                            Đăng ký
-                        </button>
-                    }
-                </div>
+               
             </div>
         </div>
     </div>
