@@ -13,5 +13,7 @@ namespace Website.Models.ResponseModels
 
         [JsonPropertyName("selected")]
         public bool Selected { get; set; } =false;
+        [JsonPropertyName("disabled")]
+        public bool Disabled { get; set; } = false;
     }
 }

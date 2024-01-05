@@ -3,6 +3,7 @@
     $(document).on('ready', function () {
         var provinceId = 36;
         var districtId = 0;
+        var wardId = 0;
 
         $('.banner-items-carousel').owlCarousel({
             loop: true,
@@ -21,7 +22,6 @@
         loadPostCategories();
         loadServices();
         loadServiceTypes();
-        loadStatis();
 
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
@@ -36,14 +36,21 @@
             LoadDistricts(provinceId);
             LoadWards(districtId);
         });
-
-
         $('#district').select2().on('change', function (e) {
             districtId = $('#district').val();
             LoadWards(districtId);
         });
-       
-        $('#ward').select2();
+        $('#ward').select2().on('change', function (e) {
+            wardId = $('#ward').val();
+        });
+
+        $('#btnLoc').on('click', function (e) {
+            loadStatis(provinceId, districtId, wardId, $('#from-date').val(), $('#to-date').val());
+
+        });
+
+        loadStatis(provinceId, districtId, wardId, $('#from-date').val(), $('#to-date').val());
+
     });
 
 })(jQuery); // End jQuery
@@ -68,15 +75,13 @@ function LoadProvinces() {
                     );
                 } else {
                     $('#province').append(
-                        '<option value="' + data[index].id + '" >' + data[index].ten + '</option>'
+                        '<option value="' + data[index].id + '"  disabled="' + data[index].disabled +'" >' + data[index].ten + '</option>'
                     );
                 }
             });
         }
     });
 }
-
-
 function LoadDistricts(provinceId) {
     $('#district').empty();
     $('#ward').empty();
@@ -134,10 +139,37 @@ function LoadWards(districtId) {
         }
     });
 }
-function loadStatis(){
+function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
+
+    var paramsGetQuery = "";
+    var fromDateValue ='';
+    var toDateValue = '';
+    if (fromDate != null && fromDate != '') {
+        var listValue = fromDate.split('/');
+        fromDateValue = listValue[2] + '-' + listValue[1] + '-' + listValue[0];
+    }
+
+    if (toDate != null && toDate != '') {
+        var listValue = toDate.split('/');
+        toDateValue = listValue[2] + '-' + listValue[1] + '-' + listValue[0];
+    }
+
+    if (provinceId != null && provinceId > 0)
+    {
+        paramsGetQuery += "idTinhThanh=" + provinceId;
+    }
+    if (districtId != null && districtId > 0) paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "idQuanHuyen=" + districtId;
+    if (wardId != null && wardId > 0) paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "idXaPhuong=" + wardId;
+    if (fromDateValue != null && fromDateValue != '')
+        paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "fromDate=" + fromDateValue;
+    if (toDateValue != null && toDateValue != '')
+        paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "toDate=" + toDateValue;
+
+
+    console.log(paramsGetQuery);
     $.ajax({
         type: "GET",
-        url: "Home/GetStatics",
+        url: "Home/GetStatics?" + paramsGetQuery,
         dataType: 'json',
         contentType: 'application/json',
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -146,6 +178,11 @@ function loadStatis(){
         complete: function (jqXHR, status) {
             let objectData = JSON.parse(jqXHR.responseText);
             console.log(objectData);
+            $('#coSoChanNuoiTrau').text("TRÂU: " + objectData.objectThongKe.coSoChanNuoiTrau);
+            $('#coSoChanNuoiVit').text("VỊT: " + objectData.objectThongKe.coSoChanNuoiVit);
+            $('#coSoChanNuoiLon').text("LỢN: " + objectData.objectThongKe.coSoChanNuoiLon);
+            $('#coSoChanNuoiGa').text("GÀ: " + objectData.objectThongKe.coSoChanNuoiGa);
+            $('#coSoChanNuoiBo').text("BÒ: " + objectData.objectThongKe.coSoChanNuoiBo);
 
             loadTongDanGiaSuc(objectData.dataTongDanGiaSuc);
             loadTongDanGiaCam(objectData.dataTongDanGiaCam);
@@ -421,7 +458,6 @@ function loadThongKe(arrays) {
 
     const xValues = arrays.labels;
     const yValues = arrays.data;
-
 
     new Chart("thongKeChart", {
         type: "bar",

@@ -82,13 +82,18 @@
 
 
         <div class="row mt-2">
-            <label for="date" class="col-md-2 col-form-label">Ngày thống kê</label>
+            <label for="date" class="col-md-2 col-form-label">Từ ngày thống kê</label>
             <div class="col-md-2">
-                <input type="text" class="form-control datepicker" id="date" />
+                <input type="text" class="form-control datepicker" id="from-date" />
+            </div>
+
+            <label for="date" class="col-md-2 col-form-label">Đến ngày thống kê</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control datepicker" id="to-date" />
             </div>
 
             <div class="col-md-4">
-                <button type="button" class="btn btn-primary">Lọc</button>
+                <button type="button" id="btnLoc" class="btn btn-primary">Lọc</button>
             </div>
         </div>
 
@@ -97,16 +102,16 @@
             <div class="col-xs-6 col-sm-2 khung_dv_img">
                     <a href="#">
                         <div class="box_sl_dv">
-                            <img src="/img/duck.png">
-                            <p>VỊT: 01</p>
+                        <img src="/img/duck.png" />
+                        <p id="coSoChanNuoiVit"></p>
                         </div>
                     </a>
                 </div>
             <div class="col-xs-6 col-sm-2 khung_dv_img">
                     <a href="#">
                         <div class="box_sl_dv">
-                            <img src="/img/chicken.png">
-                            <p>GÀ: 04</p>
+                        <img src="/img/chicken.png" />
+                       <p id="coSoChanNuoiGa"></p>
                         </div>
                     </a>
                 </div>
@@ -114,24 +119,24 @@
             <div class="col-xs-6 col-sm-2 khung_dv_img">
                     <a href="#">
                         <div class="box_sl_dv">
-                            <img src="/img/buffalo.png">
-                            <p>TRÂU: 02</p>
+                        <img src="/img/buffalo.png" />
+                         <p id="coSoChanNuoiTrau"></p>
                         </div>
                     </a>
                 </div>
             <div class="col-xs-6 col-sm-2 khung_dv_img">
                     <a href="#">
                         <div class="box_sl_dv">
-                            <img src="/img/cow.png">
-                            <p>BÒ: 05</p>
-                        </div>
+                            <img src="/img/cow.png" />
+                         <p id="coSoChanNuoiBo"></p>
+                    </div>
                     </a>
                 </div>
             <div class="col-xs-6 col-sm-2 khung_dv_img">
                     <a href="#">
                         <div class="box_sl_dv">
-                            <img src="/img/pig.png">
-                            <p>LỢN: 03</p>
+                        <img src="/img/pig.png" />
+                         <p id="coSoChanNuoiLon"></p>
                         </div>
                     </a>
                 </div>

@@ -86,10 +86,10 @@ namespace Website.Controllers
             try
             {
                 if (idTinhThanh.HasValue) paramsGetQuery += $"idTinhThanh={idTinhThanh}";
-                if (idQuanHuyen.HasValue) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"idQuanHuyen={idQuanHuyen}";
-                if (idQuanHuyen.HasValue) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"idXaPhuong={idXaPhuong}";
-                if (fromDate != null && !string.IsNullOrEmpty(fromDate)) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" + $"fromDate={fromDate}";
-                if (toDate != null && !string.IsNullOrEmpty(toDate)) paramsGetQuery += !string.IsNullOrEmpty(paramsGetQuery) ? "&" : "" +  $"toDate={toDate}";
+                if (idQuanHuyen.HasValue) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"idQuanHuyen={idQuanHuyen}";
+                if (idQuanHuyen.HasValue) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"idXaPhuong={idXaPhuong}";
+                if (fromDate != null && !string.IsNullOrEmpty(fromDate)) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"fromDate={fromDate}";
+                if (toDate != null && !string.IsNullOrEmpty(toDate)) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") +  $"toDate={toDate}";
 
 
 
@@ -146,6 +146,7 @@ namespace Website.Controllers
                     dataDichBenh = !string.IsNullOrEmpty(resApiDichBenh.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiDichBenh.Result) : null,
                     dataTiemPhong = !string.IsNullOrEmpty(resApiTiemPhong.Result) ? JsonConvert.DeserializeObject<ChartResponseModel>(resApiTiemPhong.Result) : null,
                     dataThongKe = dataThongKe,
+                    objectThongKe = resApiThongKeResult,
                     dataThongKeChanNuoi = !string.IsNullOrEmpty(resApiThongKeChanNuoi.Result) ? JsonConvert.DeserializeObject<List<ThongKeChanNuoiChiTietResponseModel>>(resApiThongKeChanNuoi.Result) : null,
                 };
                 return Json(data);
@@ -165,6 +166,7 @@ namespace Website.Controllers
             var response = await client.GetStringAsync(_remoteOptions.Tinh);
             var data = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<BaseModel>>(response) : null;
             data.FirstOrDefault(x => x.Id == 36).Selected = true;
+            data.FirstOrDefault(x => x.Id == 36).Disabled = false;
             return Json(data);
         }
 
@@ -199,14 +201,6 @@ namespace Website.Controllers
             return Json(result);
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetTongDanGiaSuc()
-        {
-            var client = _httpClientFactory.CreateClient("Statics");
-            var response = await client.GetStringAsync(_remoteOptions.TongDanGiaSuc);
-            var dataTongDan = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<ChartResponseModel>(response) : null;
-            return Json(dataTongDan);
-        }
         
         [HttpPost]
         public async Task<JsonResult> GetPosts([FromBody] PostFitlerPagingDto filter)
