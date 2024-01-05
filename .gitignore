@@ -25,3 +25,11 @@
 /WebClient/bin/Debug/net6.0
 /Website/bin
 /Website/obj
+/Contract/bin/Release/net8.0
+/Domain/bin/Release/net8.0
+/Core/bin/Release/net8.0
+/Website/Properties/PublishProfiles
+/Website/Views/Shared/_Header.cshtml
+/Website/Website.csproj.user
+/.gitignore
+/WebClient/bin/Release/net8.0
