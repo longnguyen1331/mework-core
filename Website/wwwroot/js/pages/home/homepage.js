@@ -140,7 +140,8 @@ function LoadWards(districtId) {
     });
 }
 function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
-
+    $('.bieuDo').hide();
+    $('.spinner-border').show();
     var paramsGetQuery = "";
     var fromDateValue ='';
     var toDateValue = '';
@@ -164,9 +165,7 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
         paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "fromDate=" + fromDateValue;
     if (toDateValue != null && toDateValue != '')
         paramsGetQuery += (paramsGetQuery != '' ? "&" : "") + "toDate=" + toDateValue;
-
-
-    console.log(paramsGetQuery);
+        
     $.ajax({
         type: "GET",
         url: "Home/GetStatics?" + paramsGetQuery,
@@ -197,6 +196,9 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
             loadThongKe(objectData.dataThongKe);
             //loadThongKeChanNuoi(objectData.dataThongKeChanNuoi);
 
+
+            $('.bieuDo').show();
+            $('.spinner-border').hide();
         }
     });
 }

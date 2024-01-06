@@ -1648,9 +1648,11 @@ a, blockquote, button, span {
 }
 
 .spinner-border {
+    left: 50%;
+    position: absolute;
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 5rem;
+    height: 5rem;
     vertical-align: -0.125em;
     border: 0.25em solid currentColor;
     border-left-color: transparent;
@@ -1689,8 +1691,8 @@ a, blockquote, button, span {
 
 .spinner-grow {
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 5rem;
+    height: 5rem;
     vertical-align: -0.125em;
     background-color: currentColor;
     border-radius: 50%;
