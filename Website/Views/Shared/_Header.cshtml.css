@@ -160,7 +160,7 @@ nav .dropdown .menu-wrapper {
     }
 
 .main-panel {
-    margin-top: 2.75rem;
+    margin-top: 1.0rem;
     align-items: flex-end;
     flex-wrap: nowrap;
     transition: margin-top .3s cubic-bezier(0.17, 0.04, 0.03, 0.94);

@@ -811,16 +811,17 @@ nav.navbar.bootsnav.navbar-fixed.nav-box {
   width: 100%;
 }
 
-nav.navbar.bootsnav.navbar-fixed.no-background {
-  display: block;
-  position: absolute;
-  width: 100%;
-  z-index: 100;
-  box-shadow: 0 0 0;
-  -moz-box-shadow: 0 0 0;
-  -webkit-box-shadow: 0 0 0;
-  -o-box-shadow: 0 0 0;
-}
+    nav.navbar.bootsnav.navbar-fixed.no-background {
+        display: block;
+        position: absolute;
+        width: 100%;
+        z-index: 100;
+        box-shadow: 0 0 0;
+        -moz-box-shadow: 0 0 0;
+        -webkit-box-shadow: 0 0 0;
+        -o-box-shadow: 0 0 0;
+        background: rgb(255, 255, 255, 0.20);
+    }
 
 nav.navbar.bootsnav {
   z-index: 100;

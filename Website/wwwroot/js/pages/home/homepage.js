@@ -628,97 +628,7 @@ function loadServiceTypes() {
     });
 }
 
-function loadSpecialties() {
-    $('#specialtiesPanel').empty()
 
-    $.ajax({
-        type: "POST",
-        url: "Home/GetSpecialties",
-        dataType: 'json',
-        contentType: 'application/json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-        },
-        complete: function (jqXHR, status) {
-            let arrays = JSON.parse(jqXHR.responseText);
-            $.map(arrays, (v, i) => {
-                $('#specialtiesPanel').append('<a title="' + v.name + '"' + 'href="/doctor?departmentName=' + v.name + '">' + v.name + (i != (arrays.length - 1) ? '<span class="css-ron3ui"> | </span>' : '') + '</a>');
-            });
-        }
-    });
-}
-
-function loadTopDoctors() {
-    $('#topDoctorsPanel').empty()
-
-    $.ajax({
-        type: "POST",
-        url: "Home/GetDoctors",
-        dataType: 'json',
-        contentType: 'application/json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
-        },
-        complete: function (jqXHR, status) {
-            let arrays = JSON.parse(jqXHR.responseText);
-            $.map(arrays, (v, i) => {
-                console.log(v);
-                $('#topDoctorsPanel').append(`
-                    <div class="item">
-                        <div class="doctor-item">
-                            <a href="/doctor/` + v.doctorInfo.slug + `_sf_` + v.user.id + `">
-                                <div class="doctor-item-thumb-img">
-                                    <img class="imageBox" src="` + v.doctorInfo.imageUrl + `" alt="doctor">
-                                </div>
-                                <div class="doctor-item-body">
-                                    <span>` + v.user.fullName + `</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                `);
-            });
-
-            $('.doctor-items-carousel').owlCarousel({
-                loop: true,
-                nav: false,
-                dots: true,
-                autoplay: true,
-                margin: 20,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    500: {
-                        items: 2
-                    },
-                    768: {
-                        items: 3
-                    },
-                    900: {
-                        items: 4
-                    }
-                },
-                navText: [
-                    "<i class='fa fa-angle-left'></i>",
-                    "<i class='fa fa-angle-right'></i>"
-                ],
-            });
-
-            $('.custom_prevSpecialty').on('click', function (e) {
-                e.preventDefault();
-
-                $('.doctor-items-carousel').trigger('prev.owl.carousel');
-            });
-
-            $('.custom_nextSpecialty').on('click', function (e) {
-                e.preventDefault();
-
-                $('.doctor-items-carousel').trigger('next.owl.carousel');
-            });
-        }
-    });
-}
 
 function loadPostCategories() {
     let data = {
@@ -973,8 +883,4 @@ function loadHealthNews() {
     });
 }
 
-function onSearch() {
-    let params = $('#searchTypeVallue').find(":selected").data('params');
 
-    window.location.href = '/doctor?' + params + '=' + $('#searchInput').val();
-}
