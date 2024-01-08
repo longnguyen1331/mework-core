@@ -223,7 +223,7 @@ function loadDichBenh(arrays) {
 
             title: {
                 display: true,
-                text: "Chart dịch bệnh"
+                text: "Biểu đồ dịch bệnh"
             }
         }
     });
@@ -250,7 +250,7 @@ function loadTiemPhong(arrays) {
 
             title: {
                 display: true,
-                text: "Chart tiêm phòng"
+                text: "Biểu đồ tiêm phòng"
             }
         }
     });
@@ -326,7 +326,7 @@ function loadSanLuongTrung(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Chart sản lượng trứng"
+                text: "Biểu đồ sản lượng trứng"
             }
         }
     });
@@ -350,7 +350,7 @@ function loadSanLuongSua(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Chart sản lượng sữa"
+                text: "Biểu đồ sản lượng sữa"
             }
         }
     });
@@ -377,7 +377,7 @@ function loadSanLuongThitGiaSuc(arrays) {
 
             title: {
                 display: true,
-                text: "Chart sản lượng thịt gia súc"
+                text: "Biểu đồ sản lượng thịt gia súc"
             }
         }
     });
@@ -403,7 +403,7 @@ function loadSanLuongThitGiaCam(arrays) {
         options: {
             title: {
                 display: true,
-                text: "Chart sản lượng thịt gia cầm"
+                text: "Biểu đồ sản lượng thịt gia cầm"
             }
         }
     });
@@ -426,7 +426,7 @@ function loadTongDanGiaCam(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Chart tổng đàn gia cầm"
+                text: "Biểu đồ tổng đàn gia cầm"
             }
         }
     });
@@ -450,7 +450,7 @@ function loadTongDanGiaSuc(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Chart tổng đàn gia súc"
+                text: "Biểu đồ tổng đàn gia súc"
             }
         }
     });
@@ -474,7 +474,7 @@ function loadThongKe(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Chart thống kê"
+                text: "Biểu đồ thống kê"
             }
         }
     });

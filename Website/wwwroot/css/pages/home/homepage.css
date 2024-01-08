@@ -18,7 +18,17 @@
     object-fit: cover;
     transition: all 0.3s linear 0s;
 }
-
+.section-title
+{
+    margin-bottom:30px;
+}
+#tongDanGiaSucChart, #tongDanGiaCamChart, #sanLuongThitGiaSucChart, #sanLuongThitGiaCamChart, #sanLuongTrungChart,
+#sanLuongSuaChart, #sanLuongSanXuatThucAnChart, #sanLuongTieuThuThucAnChart, #dichBenhChart, #tiemPhongChart, #thongKeChart {
+    margin: 10px;
+    border: 1px solid #E2E2E2;
+    border-radius: 5px;
+    padding:20px;
+}
 .item-content {
     position: absolute;
     left: 0;
