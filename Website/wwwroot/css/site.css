@@ -988,7 +988,7 @@ a, blockquote, button, span {
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     height: 47px;
     color: rgb(255, 255, 255);
-    background: rgb(6, 188, 176) !important;
+    background: rgb(38, 152, 241) !important;
 }
 
 .btn-custom-outline {
@@ -1016,8 +1016,8 @@ a, blockquote, button, span {
     border-radius: 4px;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     width: 100%;
-    border: 1px solid rgb(6, 188, 176);
-    color: rgb(6, 188, 176);
+    border: 1px solid rgb(38, 152, 241);
+    color: rgb(38, 152, 241);
     padding: 10px;
 }
 
@@ -1081,7 +1081,7 @@ a, blockquote, button, span {
     border-radius: 4px;
     -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: #06bcb0;
+    color: #2698F1;
     position: absolute;
     right: 0;
     bottom: 5px;
@@ -1103,7 +1103,7 @@ a, blockquote, button, span {
     fill: currentcolor;
     flex-shrink: 0;
     transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: rgb(6, 188, 176);
+    color: rgb(38, 152, 241);
     margin-right: 5px;
     font-size: 16px;
 }
@@ -1194,8 +1194,8 @@ a, blockquote, button, span {
     border-radius: 4px;
     -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: #06bcb0;
-    background-color: #06bcb0;
+    color: #2698F1;
+    background-color: #2698F1;
     color: white;
     width: 26px;
     height: 35px;
@@ -1227,10 +1227,16 @@ a, blockquote, button, span {
 }
 
 @media (max-width: 680px) {
+    .headlth-news-container .col-md-2
+    {
+        padding-bottom:5px;
+    }
     .khung_dv {
         width: 49% !important;
     }
-
+    .khung_dv_img {
+        width: 49% !important;
+    }
     .descript_title {
         padding: 0px;
         padding-bottom: 20px;
@@ -1456,7 +1462,7 @@ a, blockquote, button, span {
     bottom: -10px;
     width: 100%;
     height: 3px;
-    background: rgb(6, 188, 176);
+    background: rgb(38, 152, 241);
 }
 
 .user-info, .user-info a {
@@ -1491,7 +1497,7 @@ a, blockquote, button, span {
         min-width: 150px;
         font-size: 14px;
         border-radius: 4px;
-        border: 1px solid #06bcb0;
+        border: 1px solid #2698F1;
         cursor: pointer;
         font: inherit;
         letter-spacing: inherit;

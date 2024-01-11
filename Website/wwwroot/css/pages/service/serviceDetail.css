@@ -43,7 +43,7 @@
 }
 
     .advise-panel p span {
-        color: rgb(6, 188, 176);
+        color: rgb(38, 152, 241);
         margin-left: 10px;
     }
 
@@ -75,7 +75,7 @@
         bottom: -10px;
         width: 100%;
         height: 3px;
-        background: rgb(6, 188, 176);
+        background: rgb(38, 152, 241);
     }
 
 .other-service-section {

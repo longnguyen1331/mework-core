@@ -14,7 +14,7 @@
         padding: 14px;
         display: block;
         outline: none;
-        border: 1px solid #06bcb0;
+        border: 1px solid #2698F1;
         font-size: 13px;
         line-height: 15px;
         min-height: inherit;
@@ -26,7 +26,7 @@
     padding-right: 16px;
     margin-left: 16px;
     color: #fff;
-    background: #06bcb0 !important;
+    background: #2698F1 !important;
 }
 
     .btn-search:hover {

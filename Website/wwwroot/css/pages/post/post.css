@@ -17,7 +17,7 @@
         left: 0;
         bottom: -5px;
         min-width: 100px;
-        background: #06bcb0;
+        background: #2698F1;
         height: 3px;
     }
 
@@ -37,7 +37,7 @@
         padding: 14px;
         display: block;
         outline: none;
-        border: 1px solid #06bcb0;
+        border: 1px solid #2698F1;
         font-size: 13px;
         line-height: 15px;
         min-height: inherit;
@@ -49,7 +49,7 @@
     padding-right: 16px;
     margin-left: 16px;
     color: #fff;
-    background: #06bcb0 !important;
+    background: #2698F1 !important;
 }
 
 .btn-search:hover {
@@ -78,7 +78,7 @@
     font-size: 14px;
     line-height: 19px;
     padding: 10px 0;
-    color: #06bcb0;
+    color: #2698F1;
     margin-top: 0px;
 }
 .avatar_new {

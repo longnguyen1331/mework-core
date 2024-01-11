@@ -33,7 +33,7 @@ nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle .icon {
     font-size: 1.5rem;
     width: 20px;
     height: 20px;
-    color: #1c59e3;
+    color: #2698F1;
 }
 
 ul.nav-menu {
@@ -63,7 +63,7 @@ ul.nav-menu {
     }
 
         ul.nav-menu > li > a:hover {
-            color: #1c59e3 !important;
+            color: #2698F1 !important;
         }
 
 nav.navbar.bootsnav li.dropdown ul.dropdown-menu {
@@ -91,7 +91,7 @@ ul.dropdown-menu.sub-menu {
     }
 
     ul.dropdown-menu.sub-menu > li a:hover {
-        color: #1c59e3 !important;
+        color: #2698F1 !important;
     }
 
 .dropdown-right .position-fixed ul.dropdown-menu.sub-menu {
@@ -154,7 +154,7 @@ nav .dropdown .menu-wrapper {
         -webkit-justify-content: center;
         justify-content: center;
         color: #fff;
-        background: #1c59e3;
+        background: #2698F1;
         border: none;
         cursor: pointer;
     }
@@ -184,7 +184,7 @@ nav.bootsnav:not(.no-background) .main-panel {
     left: 304px;
     width: 100vw;
     height: 40px;
-    background: #1c59e3;
+    background: #2698F1;
     border-radius: 0px 0px 0px 10px;
     padding-left: 19px;
     padding-top: 3px;
@@ -285,7 +285,7 @@ header .login-panel {
         border-radius: 4px;
         -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
         transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        color: #1c59e3;
+        color: #2698F1;
         display: -webkit-box;
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -383,7 +383,7 @@ header .login-panel {
         padding: 14px;
         display: block;
         outline: none;
-        border: 1px solid #1c59e3;
+        border: 1px solid #2698F1;
     }
 
 .rightSidenav .btn-search:hover {
@@ -400,7 +400,7 @@ header .login-panel {
     text-align: left;
     padding: 8px 16px;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: #1c59e3;
+    color: #2698F1;
     font-size: 1rem;
 }
 
@@ -410,7 +410,7 @@ header .login-panel {
     }
 
     .rightSidenav .mobile-menu .panel-heading:has(div.collapse.in) {
-        background: rgba(6, 188, 176, 0.8) !important;
+        background: rgb(38, 152, 241, 0.8) !important;
     }
 
     .rightSidenav .mobile-menu .panel-heading .panel-title a {
@@ -572,8 +572,8 @@ header .login-panel {
 }
 
 .btn-register:hover {
-    background: #1c59e3 !important;
-    border: 1px solid #1c59e3;
+    background: #2698F1 !important;
+    border: 1px solid #2698F1;
     color: #fff;
 }
 

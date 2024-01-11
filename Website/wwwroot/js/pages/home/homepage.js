@@ -177,11 +177,11 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
         complete: function (jqXHR, status) {
             let objectData = JSON.parse(jqXHR.responseText);
             console.log(objectData);
-            $('#coSoChanNuoiTrau').text("TRÂU: " + objectData.objectThongKe.coSoChanNuoiTrau);
-            $('#coSoChanNuoiVit').text("VỊT: " + objectData.objectThongKe.coSoChanNuoiVit);
-            $('#coSoChanNuoiLon').text("LỢN: " + objectData.objectThongKe.coSoChanNuoiLon);
-            $('#coSoChanNuoiGa').text("GÀ: " + objectData.objectThongKe.coSoChanNuoiGa);
-            $('#coSoChanNuoiBo').text("BÒ: " + objectData.objectThongKe.coSoChanNuoiBo);
+            $('#coSoChanNuoiTrau').text("Cơ sở nuôi Trâu: " + objectData.objectThongKe.coSoChanNuoiTrau);
+            $('#coSoChanNuoiVit').text("Cơ sở nuôi Vịt: " + objectData.objectThongKe.coSoChanNuoiVit);
+            $('#coSoChanNuoiLon').text("Cơ sở nuôi Lợn: " + objectData.objectThongKe.coSoChanNuoiLon);
+            $('#coSoChanNuoiGa').text("Cơ sở nuôi Gà: " + objectData.objectThongKe.coSoChanNuoiGa);
+            $('#coSoChanNuoiBo').text("Cơ sở nuôi Bò: " + objectData.objectThongKe.coSoChanNuoiBo);
 
             loadTongDanGiaSuc(objectData.dataTongDanGiaSuc);
             loadTongDanGiaCam(objectData.dataTongDanGiaCam);

@@ -85,7 +85,7 @@
                 bottom: -10px;
                 width: 0px;
                 height: 3px;
-                background: rgb(6, 188, 176);
+                background: rgb(38, 152, 241);
                 transition: all 0.2s linear 0s;
             }
 
@@ -149,7 +149,7 @@
 
 .news-category-content {
     padding: 8px 14px;
-    background: rgb(6, 188, 176);
+    background: rgb(38, 152, 241);
     border-radius: 2px;
     color: rgb(255, 255, 255);
     font-size: 12px;
@@ -218,7 +218,7 @@
     color: rgb(229, 236, 250);
     background: white;
     padding: 12px 23px;
-    border: 1px solid rgb(6, 188, 176);
+    border: 1px solid rgb(38, 152, 241);
     border-radius: 41px;
 }
 
@@ -295,7 +295,7 @@
 
 .news-item-category {
     padding: 0px 10px;
-    background: rgb(6, 188, 176);
+    background: rgb(38, 152, 241);
     border-radius: 2px;
     color: rgb(255, 255, 255);
     font-size: 12px;

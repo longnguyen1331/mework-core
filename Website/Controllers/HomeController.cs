@@ -165,8 +165,8 @@ namespace Website.Controllers
             var client = _httpClientFactory.CreateClient("Statics");
             var response = await client.GetStringAsync(_remoteOptions.Tinh);
             var data = !string.IsNullOrEmpty(response) ? JsonConvert.DeserializeObject<List<BaseModel>>(response) : null;
-            data.FirstOrDefault(x => x.Id == 36).Selected = true;
-            data.FirstOrDefault(x => x.Id == 36).Disabled = false;
+            data.FirstOrDefault(x => x.Id == 51).Selected = true;
+            data.FirstOrDefault(x => x.Id == 51).Disabled = false;
             return Json(data);
         }
 

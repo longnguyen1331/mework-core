@@ -17,7 +17,7 @@
         left: 0;
         bottom: -5px;
         min-width: 100px;
-        background: #06bcb0;
+        background: #2698F1;
         height: 3px;
     }
 
@@ -48,7 +48,7 @@
     }
 
         .btn-service.btn-advise:hover {
-            background: rgb(6, 188, 176) !important;
+            background: rgb(38, 152, 241) !important;
         }
 
 @media (max-width: 680px) {

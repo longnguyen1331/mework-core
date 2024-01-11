@@ -60,7 +60,7 @@
 }
 
     .item-inline-content a {
-        color: #06bcb0;
+        color: #2698F1;
     }
 
 .item-header-title {
@@ -135,7 +135,7 @@
     bottom: 0;
     width: 100%;
     z-index: 11;
-    background-color: rgba(6, 188, 176, 0.8);
+    background-color: rgb(38, 152, 241, 0.8);
 }
 
 .contact-panel-container {
@@ -158,7 +158,7 @@
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
-    background-color: rgba(6, 188, 176, 0.8);
+    background-color: rgb(38, 152, 241, 0.8);
     border-right: 1px solid white;
     display: -webkit-box;
     display: -webkit-flex;
@@ -228,13 +228,13 @@
 
 .khung_dv {
     text-align: center;
-    /*float: left;*/
-    /*width: 25%;*/
+    float: left;
+    width: 20%;
     padding: 15px;
 }
 
     .khung_dv a {
-        color: #06bcb0;
+        color: #2698F1;
     }
 
         .khung_dv a:hover {
@@ -246,7 +246,7 @@
             }
 
 .box_sl_dv {
-    padding: 20px 20px 30px;
+    padding: 10px 10px 10px;
     border: 1px solid #E2E2E2;
     border-radius: 5px;
 }
@@ -320,7 +320,7 @@
 .search-message {
     position: relative;
     padding: 20px 40px;
-    background: rgb(6, 188, 176);
+    background: rgb(38, 152, 241);
     border-radius: 80px;
     text-align: center;
     width: auto;
@@ -335,7 +335,7 @@
         bottom: 8px;
         width: 66px;
         height: 30px;
-        background: rgb(6, 188, 176);
+        background: rgb(38, 152, 241);
         clip-path: polygon(71.4% 25.3%, 75.6% 47.3%, 79.6% 65.8%, 86.3% 80.8%, 97.1% 96%, 33.8% 98.3%, 0% 100%, 28% 74.8%, 48.7% 52.5%);
     }
 
@@ -359,7 +359,7 @@
     -webkit-box-align: center;
     align-items: center;
     padding: 10px;
-    border: 1px solid rgb(6, 188, 176);
+    border: 1px solid rgb(38, 152, 241);
     border-radius: 10px;
 }
 
@@ -443,7 +443,7 @@
     }
 
         .search-specialty-tags .specialty-tags a {
-            color: rgb(6, 188, 176);
+            color: rgb(38, 152, 241);
         }
 
             .search-specialty-tags .specialty-tags a:hover {
@@ -500,6 +500,9 @@
         max-height: 350px;
         object-fit: cover;
     }
+    .khung_dv_img {
+        width: 49% !important;
+    }
 }
 
 @media (min-width: 960px) {
@@ -519,6 +522,9 @@
 
     .retail-price {
         display: none;
+    }
+    .khung_dv_img {
+        width: 20% !important;
     }
 }
 

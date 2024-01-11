@@ -3,7 +3,7 @@
     margin-top: 30px;
     margin-bottom: 0px;
     padding: 15px 25px;
-    border: 1px solid rgb(6, 188, 176);
+    border: 1px solid rgb(38, 152, 241);
     width: 100%;
     max-width: 80%;
     margin-left: auto;
@@ -28,7 +28,7 @@
         fill: currentcolor;
         flex-shrink: 0;
         font-size: 1.5rem;
-        color: rgb(6, 188, 176);
+        color: rgb(38, 152, 241);
         transition: all 0.2s linear 0s;
         transform: rotate(90deg);
     }

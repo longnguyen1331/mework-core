@@ -22,7 +22,7 @@
         }
 
         .social-panel .social-item a {
-            color: #1c59e3;
+            color: #2698F1;
         }
 
         .social-panel .social-item .social-content {
@@ -51,7 +51,7 @@
             -webkit-box-pack: start;
             -webkit-box-align: center;
             box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
-            background: #1c59e3 !important;
+            background: #2698F1 !important;
         }
 
             .social-panel .social-item .social-content:hover {
@@ -69,7 +69,7 @@
                 -webkit-box-pack: center;
                 justify-content: center;
                 background: rgb(255, 255, 255);
-                color: #1c59e3;
+                color: #2698F1;
             }
 
             .social-panel .social-item .social-content:hover .icon {

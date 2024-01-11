@@ -1,6 +1,6 @@
 ﻿.post-tags {
     margin-top: 50px;
-    color: rgb(6, 188, 176);
+    color: rgb(38, 152, 241);
     font-size: 16px;
     display: flex;
     -webkit-box-align: center;
@@ -32,5 +32,5 @@
 
     .tag-content:hover {
         color: rgb(255, 255, 255);
-        background: rgb(6, 188, 176);
+        background: rgb(38, 152, 241);
     }
