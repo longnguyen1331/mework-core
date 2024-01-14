@@ -240,6 +240,9 @@ function loadDichBenh(arrays) {
                         min: 0
                     }
                 }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             title: {
                 display: true,
@@ -289,6 +292,9 @@ function loadTiemPhong(arrays) {
                         min: 0
                     }
                 }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             title: {
                 display: true,
@@ -336,7 +342,16 @@ function loadSanLuongSanXuatThucAn(arrays) {
                                 return value;
                             }
                         },
-                        min: 0, max: Math.max(...yValues) } }],
+                        min: 0, max: Math.max(...yValues)
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
+            },
+            title: {
+                display: true,
+                text: "Biểu đồ sản lượng sản xuất thức ăn"
             },
             tooltips: {
                 callbacks: {
@@ -383,6 +398,13 @@ function loadSanLuongTieuThuThucAn(arrays) {
                         min: 0, max: Math.max(...yValues)
                     }
                 }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
+            },
+            title: {
+                display: true,
+                text: "Biểu đồ sản lượng tiêu thụ thức ăn"
             },
             tooltips: {
                 callbacks: {
@@ -422,7 +444,12 @@ function loadSanLuongTrung(arrays) {
                                 return value;
                             }
                         },
-                        min: 0 } }],
+                        min: 0
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             legend: { display: false },
             title: {
@@ -467,7 +494,12 @@ function loadSanLuongSua(arrays) {
                                 return value;
                             }
                         },
-                        min: 0 } }],
+                        min: 0
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             legend: { display: false },
             title: {
@@ -581,7 +613,12 @@ function loadTongDanGiaCam(arrays) {
                                 return value;
                             }
                         },
-                        min: 0 } }],
+                        min: 0
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             legend: { display: false },
             title: {
@@ -626,7 +663,12 @@ function loadTongDanGiaSuc(arrays) {
                                 return value;
                             }
                         },
-                        min: 0 } }],
+                        min: 0
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.2
+                }]
             },
             legend: { display: false },
             title: {
@@ -671,7 +713,10 @@ function loadThongKe(arrays) {
                                 return value;
                             }
                         },
-                        min: 0 } }],
+                        min: 0
+                    }
+                }],
+               
             },
             legend: { display: false },
             title: {
