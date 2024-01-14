@@ -177,27 +177,34 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
         complete: function (jqXHR, status) {
             let objectData = JSON.parse(jqXHR.responseText);
             console.log(objectData);
-            $('#coSoChanNuoiTrau').text("Cơ sở nuôi Trâu: " + objectData.objectThongKe.coSoChanNuoiTrau);
-            $('#coSoChanNuoiVit').text("Cơ sở nuôi Vịt: " + objectData.objectThongKe.coSoChanNuoiVit);
-            $('#coSoChanNuoiLon').text("Cơ sở nuôi Lợn: " + objectData.objectThongKe.coSoChanNuoiLon);
-            $('#coSoChanNuoiGa').text("Cơ sở nuôi Gà: " + objectData.objectThongKe.coSoChanNuoiGa);
-            $('#coSoChanNuoiBo').text("Cơ sở nuôi Bò: " + objectData.objectThongKe.coSoChanNuoiBo);
+            if (objectData != null) {
+                $('#coSoChanNuoiTrau').text("Cơ sở nuôi Trâu: " + objectData.objectThongKe.coSoChanNuoiTrau);
+                $('#coSoChanNuoiVit').text("Cơ sở nuôi Vịt: " + objectData.objectThongKe.coSoChanNuoiVit);
+                $('#coSoChanNuoiLon').text("Cơ sở nuôi Lợn: " + objectData.objectThongKe.coSoChanNuoiLon);
+                $('#coSoChanNuoiGa').text("Cơ sở nuôi Gà: " + objectData.objectThongKe.coSoChanNuoiGa);
+                $('#coSoChanNuoiBo').text("Cơ sở nuôi Bò: " + objectData.objectThongKe.coSoChanNuoiBo);
 
-            loadTongDanGiaSuc(objectData.dataTongDanGiaSuc);
-            loadTongDanGiaCam(objectData.dataTongDanGiaCam);
-            loadSanLuongThitGiaSuc(objectData.dataSanLuongThitGiaSuc);
-            loadSanLuongThitGiaCam(objectData.dataSanLuongThitGiaCam);
-            loadSanLuongTrung(objectData.dataSanLuongTrung);
-            loadSanLuongSua(objectData.dataSanLuongSua);
-            loadSanLuongSanXuatThucAn(objectData.dataSanLuongSanXuatThucAn);
-            loadSanLuongTieuThuThucAn(objectData.dataSanLuongTieuThuThucAn);
-            loadDichBenh(objectData.dataDichBenh);
-            loadTiemPhong(objectData.dataTiemPhong);
-            loadThongKe(objectData.dataThongKe);
-            //loadThongKeChanNuoi(objectData.dataThongKeChanNuoi);
-
-
-            $('.bieuDo').show();
+                loadTongDanGiaSuc(objectData.dataTongDanGiaSuc);
+                loadTongDanGiaCam(objectData.dataTongDanGiaCam);
+                loadSanLuongThitGiaSuc(objectData.dataSanLuongThitGiaSuc);
+                loadSanLuongThitGiaCam(objectData.dataSanLuongThitGiaCam);
+                loadSanLuongTrung(objectData.dataSanLuongTrung);
+                loadSanLuongSua(objectData.dataSanLuongSua);
+                loadSanLuongSanXuatThucAn(objectData.dataSanLuongSanXuatThucAn);
+                loadSanLuongTieuThuThucAn(objectData.dataSanLuongTieuThuThucAn);
+                loadDichBenh(objectData.dataDichBenh);
+                loadTiemPhong(objectData.dataTiemPhong);
+                loadThongKe(objectData.dataThongKe);
+                $('.bieuDo').show();
+                //loadThongKeChanNuoi(objectData.dataThongKeChanNuoi);
+            } else {
+                $('#coSoChanNuoiTrau').text("Cơ sở nuôi Trâu: 0");
+                $('#coSoChanNuoiVit').text("Cơ sở nuôi Vịt: 0");
+                $('#coSoChanNuoiLon').text("Cơ sở nuôi Lợn: 0");
+                $('#coSoChanNuoiGa').text("Cơ sở nuôi Gà: 0");
+                $('#coSoChanNuoiBo').text("Cơ sở nuôi Bò: 0");
+            }
+            
             $('.spinner-border').hide();
         }
     });
@@ -220,10 +227,18 @@ function loadDichBenh(arrays) {
             }]
         },
         options: {
-
             title: {
                 display: true,
                 text: "Biểu đồ dịch bệnh"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -247,10 +262,19 @@ function loadTiemPhong(arrays) {
             }]
         },
         options: {
-
+         
             title: {
                 display: true,
                 text: "Biểu đồ tiêm phòng"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -262,7 +286,7 @@ function loadSanLuongSanXuatThucAn(arrays) {
 
 
     new Chart("sanLuongSanXuatThucAnChart", {
-        type: "line",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
@@ -276,7 +300,25 @@ function loadSanLuongSanXuatThucAn(arrays) {
         options: {
             legend: { display: false },
             scales: {
-                yAxes: [{ ticks: { min: 0, max: Math.max(...yValues) } }],
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0, max: Math.max(...yValues) } }],
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -288,7 +330,7 @@ function loadSanLuongTieuThuThucAn(arrays) {
 
 
     new Chart("sanLuongTieuThuThucAnChart", {
-        type: "line",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
@@ -302,7 +344,27 @@ function loadSanLuongTieuThuThucAn(arrays) {
         options: {
             legend: { display: false },
             scales: {
-                yAxes: [{ ticks: { min: 0, max: Math.max(...yValues) } }],
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return  value;
+                            }
+                        },
+                        min: 0, max: Math.max(...yValues)
+                    }
+                }],
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -323,10 +385,31 @@ function loadSanLuongTrung(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0 } }],
+            },
             legend: { display: false },
             title: {
                 display: true,
                 text: "Biểu đồ sản lượng trứng"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -347,10 +430,31 @@ function loadSanLuongSua(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0 } }],
+            },
             legend: { display: false },
             title: {
                 display: true,
                 text: "Biểu đồ sản lượng sữa"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -374,10 +478,18 @@ function loadSanLuongThitGiaSuc(arrays) {
             }]
         },
         options: {
-
             title: {
                 display: true,
                 text: "Biểu đồ sản lượng thịt gia súc"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -404,6 +516,15 @@ function loadSanLuongThitGiaCam(arrays) {
             title: {
                 display: true,
                 text: "Biểu đồ sản lượng thịt gia cầm"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -423,10 +544,31 @@ function loadTongDanGiaCam(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0 } }],
+            },
             legend: { display: false },
             title: {
                 display: true,
                 text: "Biểu đồ tổng đàn gia cầm"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -447,10 +589,31 @@ function loadTongDanGiaSuc(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0 } }],
+            },
             legend: { display: false },
             title: {
                 display: true,
                 text: "Biểu đồ tổng đàn gia súc"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
@@ -471,10 +634,31 @@ function loadThongKe(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0 } }],
+            },
             legend: { display: false },
             title: {
                 display: true,
                 text: "Biểu đồ thống kê"
+            },
+            tooltips: {
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return value;
+                    }
+                }
             }
         }
     });
