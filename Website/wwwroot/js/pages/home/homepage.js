@@ -227,6 +227,20 @@ function loadDichBenh(arrays) {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0
+                    }
+                }],
+            },
             title: {
                 display: true,
                 text: "Biểu đồ dịch bệnh"
@@ -262,7 +276,20 @@ function loadTiemPhong(arrays) {
             }]
         },
         options: {
-         
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        callback: function (value, index, values) {
+                            if (parseInt(value) >= 1000) {
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            } else {
+                                return value;
+                            }
+                        },
+                        min: 0
+                    }
+                }],
+            },
             title: {
                 display: true,
                 text: "Biểu đồ tiêm phòng"
