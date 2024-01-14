@@ -1,7 +1,7 @@
 ﻿(function ($) {
     "use strict";
     $(document).on('ready', function () {
-        var provinceId = 36;
+        var provinceId = 51;
         var districtId = 0;
         var wardId = 0;
 
@@ -176,7 +176,7 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
         },
         complete: function (jqXHR, status) {
             let objectData = JSON.parse(jqXHR.responseText);
-            console.log(objectData);
+           /* console.log(objectData);*/
             $('#coSoChanNuoiTrau').text("Cơ sở nuôi Trâu: " + objectData.objectThongKe.coSoChanNuoiTrau);
             $('#coSoChanNuoiVit').text("Cơ sở nuôi Vịt: " + objectData.objectThongKe.coSoChanNuoiVit);
             $('#coSoChanNuoiLon').text("Cơ sở nuôi Lợn: " + objectData.objectThongKe.coSoChanNuoiLon);
@@ -211,7 +211,7 @@ function loadDichBenh(arrays) {
     }
 
     new Chart("dichBenhChart", {
-        type: "pie",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
@@ -238,7 +238,7 @@ function loadTiemPhong(arrays) {
     }
 
     new Chart("tiemPhongChart", {
-        type: "pie",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
@@ -262,13 +262,13 @@ function loadSanLuongSanXuatThucAn(arrays) {
 
 
     new Chart("sanLuongSanXuatThucAnChart", {
-        type: "line",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
                 fill: false,
                 lineTension: 0,
-                backgroundColor: "rgba(0,0,255,1.0)",
+                backgroundColor: "rgb(38, 152, 241)",
                 borderColor: "rgba(0,0,255,0.1)",
                 data: yValues
             }]
@@ -288,13 +288,13 @@ function loadSanLuongTieuThuThucAn(arrays) {
 
 
     new Chart("sanLuongTieuThuThucAnChart", {
-        type: "line",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
                 fill: false,
                 lineTension: 0,
-                backgroundColor: "rgba(0,0,255,1.0)",
+                backgroundColor: "rgb(38, 152, 241)",
                 borderColor: "rgba(0,0,255,0.1)",
                 data: yValues
             }]
@@ -318,7 +318,7 @@ function loadSanLuongTrung(arrays) {
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "rgb(38, 152, 241)",
                 data: yValues
             }]
         },
@@ -342,7 +342,7 @@ function loadSanLuongSua(arrays) {
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "rgb(38, 152, 241)",
                 data: yValues
             }]
         },
@@ -418,7 +418,7 @@ function loadTongDanGiaCam(arrays) {
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "rgb(38, 152, 241)",
                 data: yValues
             }]
         },
@@ -442,7 +442,7 @@ function loadTongDanGiaSuc(arrays) {
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "rgb(38, 152, 241)",
                 data: yValues
             }]
         },
@@ -466,7 +466,7 @@ function loadThongKe(arrays) {
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: "blue",
+                backgroundColor: "#007906",
                 data: yValues
             }]
         },

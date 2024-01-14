@@ -87,7 +87,7 @@ namespace Website.Controllers
             {
                 if (idTinhThanh.HasValue) paramsGetQuery += $"idTinhThanh={idTinhThanh}";
                 if (idQuanHuyen.HasValue) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"idQuanHuyen={idQuanHuyen}";
-                if (idQuanHuyen.HasValue) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"idXaPhuong={idXaPhuong}";
+                if (idXaPhuong.HasValue) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"idXaPhuong={idXaPhuong}";
                 if (fromDate != null && !string.IsNullOrEmpty(fromDate)) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") + $"fromDate={fromDate}";
                 if (toDate != null && !string.IsNullOrEmpty(toDate)) paramsGetQuery += (!string.IsNullOrEmpty(paramsGetQuery) ? "&" : "") +  $"toDate={toDate}";
 
