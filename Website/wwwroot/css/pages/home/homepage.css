@@ -75,6 +75,7 @@
     line-height: 70px;
     max-width: 435px;
     text-align: left;
+    text-transform:uppercase;
 }
 
 .item-header-content {

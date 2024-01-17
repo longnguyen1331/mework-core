@@ -194,7 +194,7 @@ function loadStatis(provinceId, districtId, wardId, fromDate, toDate) {
                 loadSanLuongTieuThuThucAn(objectData.dataSanLuongTieuThuThucAn);
                 loadDichBenh(objectData.dataDichBenh);
                 loadTiemPhong(objectData.dataTiemPhong);
-                loadThongKe(objectData.dataThongKe);
+              /*  loadThongKe(objectData.dataThongKe);*/
                 $('.bieuDo').show();
                 //loadThongKeChanNuoi(objectData.dataThongKeChanNuoi);
             } else {
@@ -222,11 +222,14 @@ function loadDichBenh(arrays) {
         data: {
             labels: xValues,
             datasets: [{
+                fill: false,
+                lineTension: 0,
                 backgroundColor: coloR,
                 data: yValues
             }]
         },
         options: {
+            legend: { display: false },
             scales: {
                 yAxes: [{
                     ticks: {
@@ -246,13 +249,13 @@ function loadDichBenh(arrays) {
             },
             title: {
                 display: true,
-                text: "Biểu đồ dịch bệnh"
+                text: "BIỂU ĐỒ DỊCH BỆNH (ĐVT: CA)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Ca';
                         return value;
                     }
                 }
@@ -274,11 +277,14 @@ function loadTiemPhong(arrays) {
         data: {
             labels: xValues,
             datasets: [{
+                fill: false,
+                lineTension: 0,
                 backgroundColor: coloR,
                 data: yValues
             }]
         },
         options: {
+            legend: { display: false },
             scales: {
                 yAxes: [{
                     ticks: {
@@ -298,13 +304,13 @@ function loadTiemPhong(arrays) {
             },
             title: {
                 display: true,
-                text: "Biểu đồ tiêm phòng"
+                text: "BIỂU ĐỒ TIÊM PHÒNG (ĐVT: CA)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Ca';
                         return value;
                     }
                 }
@@ -351,13 +357,13 @@ function loadSanLuongSanXuatThucAn(arrays) {
             },
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng sản xuất thức ăn"
+                text: "BIỂU ĐỒ SẢN LƯỢNG SẢN XUẤT THỨC ĂN (ĐVT: KG)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Kg';
                         return value;
                     }
                 }
@@ -372,7 +378,7 @@ function loadSanLuongTieuThuThucAn(arrays) {
 
 
     new Chart("sanLuongTieuThuThucAnChart", {
-        type: "bar",
+        type: "horizontalBar",
         data: {
             labels: xValues,
             datasets: [{
@@ -404,13 +410,13 @@ function loadSanLuongTieuThuThucAn(arrays) {
             },
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng tiêu thụ thức ăn"
+                text: "BIỂU ĐỒ SẢN LƯỢNG TIÊU THỤ THỨC ĂN (ĐVT: KG)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Kg';
                         return value;
                     }
                 }
@@ -454,13 +460,13 @@ function loadSanLuongTrung(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng trứng"
+                text: "BIỂU ĐỒ SẢN LƯỢNG TRỨNG (ĐVT: QUẢ)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Quả';
                         return value;
                     }
                 }
@@ -504,13 +510,13 @@ function loadSanLuongSua(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng sữa"
+                text: "BIỂU ĐỒ SẢN LƯỢNG SỮA (ĐVT: LÍT)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Lít';
                         return value;
                     }
                 }
@@ -539,13 +545,13 @@ function loadSanLuongThitGiaSuc(arrays) {
         options: {
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng thịt gia súc"
+                text: "BIỂU ĐỒ SẢN LƯỢNG THỊT GIA SÚC (ĐVT: KG)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Kg';
                         return value;
                     }
                 }
@@ -574,13 +580,13 @@ function loadSanLuongThitGiaCam(arrays) {
         options: {
             title: {
                 display: true,
-                text: "Biểu đồ sản lượng thịt gia cầm"
+                text: "BIỂU ĐỒ SẢN LƯỢT THỊT GIA CẦM (ĐVT: KG)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Kg';
                         return value;
                     }
                 }
@@ -623,13 +629,13 @@ function loadTongDanGiaCam(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Biểu đồ tổng đàn gia cầm"
+                text: "BIỂU ĐỒ TỔNG ĐÀN GIA CẦM (ĐVT: CON)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Con';
                         return value;
                     }
                 }
@@ -673,13 +679,13 @@ function loadTongDanGiaSuc(arrays) {
             legend: { display: false },
             title: {
                 display: true,
-                text: "Biểu đồ tổng đàn gia súc"
+                text: "BIỂU ĐỒ TỔNG ĐÀN GIA SÚC (ĐVT: CON)"
             },
             tooltips: {
                 callbacks: {
                     // this callback is used to create the tooltip label
                     label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' Con';
                         return value;
                     }
                 }
@@ -688,53 +694,6 @@ function loadTongDanGiaSuc(arrays) {
     });
 }
 
-function loadThongKe(arrays) {
-
-    const xValues = arrays.labels;
-    const yValues = arrays.data;
-
-    new Chart("thongKeChart", {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: "#007906",
-                data: yValues
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        callback: function (value, index, values) {
-                            if (parseInt(value) >= 1000) {
-                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                            } else {
-                                return value;
-                            }
-                        },
-                        min: 0
-                    }
-                }],
-               
-            },
-            legend: { display: false },
-            title: {
-                display: true,
-                text: "Biểu đồ thống kê"
-            },
-            tooltips: {
-                callbacks: {
-                    // this callback is used to create the tooltip label
-                    label: function (tooltipItem, data) {
-                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                        return value;
-                    }
-                }
-            }
-        }
-    });
-}
 function dynamicColors() {
     var r = Math.floor(Math.random() * 255);
     var g = Math.floor(Math.random() * 255);
